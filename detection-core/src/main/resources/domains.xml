@@ -78,12 +78,32 @@
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="mmsi" Type="MMSI" />
+                <ReferentialAttribute Name="Craft Type">
+                    <ToOneReference Relationship="3" Attribute="ID"></ToOneReference>
+                </ReferentialAttribute>
             </Class>
 
             <BinaryAssociation Rnum="2">
                 <ActivePerspective Phrase="is a report for" ViewedClass="Craft"
                     OnePerspective="true" Conditional="false" />
                 <PassivePerspective Phrase="has position report" ViewedClass="Craft Position"
+                    OnePerspective="false" Conditional="true" />
+            </BinaryAssociation>
+
+            <Class Name="Craft Type">
+                <IndependentAttribute Name="ID" Type="IntegerId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Name" Type="ShortString">
+                    <Identifier Number="2" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Description" Type="MediumString" />
+            </Class>
+            
+            <BinaryAssociation Rnum="3">
+                <ActivePerspective Phrase="is of type" ViewedClass="Craft Type"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="categorizes" ViewedClass="Craft"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
