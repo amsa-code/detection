@@ -89,6 +89,20 @@
                 <ReferentialAttribute Name="Craft">
                     <ToOneReference Relationship="2" Attribute="ID"></ToOneReference>
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <State Name="Processed" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Craft ID" Type="ArbitraryId" />
+                            <StateModelParameter Name="Region ID" Type="ArbitraryId" />
+                        </EventSignature>
+                    </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="Processed" ID="2">
+                        <EventSignature />
+                    </LocalEffectiveSignalingEvent>
+                    <Transition State="Created" Destination="Processed" EventID="1" />
+                </Lifecycle>
             </Class>
 
             <Class Name="Craft">
@@ -210,12 +224,14 @@
                     <State Name="Inside Region" />
                     <State Name="Outside Region" />
                     <CreationEvent Name="Create" ID="1" State="Created">
-                        <EventSignature>
-                            <StateModelParameter Name="Inside" Type="ArbitraryId" />
-                        </EventSignature>
+                        <EventSignature />
                     </CreationEvent>
-                    <LocalEffectiveSignalingEvent Name="In" ID="2" />
-                    <LocalEffectiveSignalingEvent Name="Out" ID="3" />
+                    <LocalEffectiveSignalingEvent Name="In" ID="2">
+                        <EventSignature />
+                    </LocalEffectiveSignalingEvent>
+                    <LocalEffectiveSignalingEvent Name="Out" ID="3">
+                        <EventSignature />
+                    </LocalEffectiveSignalingEvent>
                     <Transition State="Inside Region" Destination="Outside Region"
                         EventID="3" />
                     <Transition State="Created" Destination="Outside Region" EventID="3" />
