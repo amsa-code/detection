@@ -11,19 +11,19 @@
         ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
     <RealType Name="Latitude" Precision="20" LowerLimit="-90" UpperLimit="90" DefaultValue="0"
         Units="degrees" />
     <RealType Name="Longitude" Precision="20" LowerLimit="-180" UpperLimit="180"
         DefaultValue="0" Units="degrees" />
     <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-99999999" UpperLimit="99999999999"
         DefaultValue="0" Units="metres" />
-    <IntegerType Name="IntegerId" UpperLimit="99999999" LowerLimit="0" DefaultValue="0"
+    <IntegerType Name="ArbitraryId" UpperLimit="99999999" LowerLimit="0" DefaultValue="0"
         Units="record number" />
     <IntegerType Name="date" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
         LowerLimit="-9999999999999" />
     <IntegerType Name="timestamp" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
-        LowerLimit="-9999999999999" />
-    <IntegerType Name="time" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
         LowerLimit="-9999999999999" />
     <IntegerType Name="MMSI" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
         Units="mmsi" />
@@ -32,7 +32,7 @@
 
         <Subsystem Name="detection" Floor="1" Ceiling="30">
             <Class Name="Detection Rule">
-                <IndependentAttribute Name="ID" Type="IntegerId">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Name" Type="ShortString">
@@ -47,11 +47,17 @@
             </Class>
 
             <Class Name="Region">
-                <IndependentAttribute Name="ID" Type="IntegerId">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Name" Type="ShortString" />
                 <IndependentAttribute Name="Description" Type="MediumString" />
+                <ReferentialAttribute Name="Simple Region">
+                    <SpecializationReference Relationship="4" Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Composite Region">
+                    <SpecializationReference Relationship="4" Attribute="ID" />
+                </ReferentialAttribute>
             </Class>
 
             <BinaryAssociation Rnum="1">
@@ -62,9 +68,10 @@
             </BinaryAssociation>
 
             <Class Name="Craft Position">
-                <IndependentAttribute Name="ID" Type="IntegerId">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
+                <IndependentAttribute Name="Timestamp" Type="timestamp" />
                 <IndependentAttribute Name="Latitude" Type="Latitude" />
                 <IndependentAttribute Name="Longitude" Type="Longitude" />
                 <IndependentAttribute Name="Altitude Metres" Type="AltitudeMetres" />
@@ -74,7 +81,7 @@
             </Class>
 
             <Class Name="Craft">
-                <IndependentAttribute Name="ID" Type="IntegerId">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="mmsi" Type="MMSI" />
@@ -91,7 +98,7 @@
             </BinaryAssociation>
 
             <Class Name="Craft Type">
-                <IndependentAttribute Name="ID" Type="IntegerId">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Name" Type="ShortString">
@@ -99,13 +106,37 @@
                 </IndependentAttribute>
                 <IndependentAttribute Name="Description" Type="MediumString" />
             </Class>
-            
+
             <BinaryAssociation Rnum="3">
                 <ActivePerspective Phrase="is of type" ViewedClass="Craft Type"
                     OnePerspective="true" Conditional="false" />
                 <PassivePerspective Phrase="categorizes" ViewedClass="Craft"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
+
+            <Generalization Rnum="4" Superclass="Region">
+                <SpecializedClass Name="Simple Region" />
+                <SpecializedClass Name="Composite Region" />
+            </Generalization>
+
+            <Class Name="Simple Region">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Zip File Bytes" Type="Bytes" />
+                <ReferentialAttribute Name="Region">
+                    <GeneralizationReference Relationship="4" Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
+
+            <Class Name="Composite Region">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <ReferentialAttribute Name="Region">
+                    <GeneralizationReference Relationship="4" Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
 
         </Subsystem>
     </ModeledDomain>
