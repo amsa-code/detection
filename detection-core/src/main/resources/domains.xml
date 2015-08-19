@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Domains xmlns="http://www.miuml.org/metamodel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.miuml.org/metamodel https://raw.github.com/davidmoten/xuml-tools/master/miuml-jaxb/src/main/resources/miuml-metamodel.xsd  http://org.github/xuml-tools/miuml-metamodel-extensions https://raw.github.com/davidmoten/xuml-tools/master/miuml-jaxb/src/main/resources/xuml-tools-miuml-metamodel-extensions.xsd"
+	xmlns:xt="http://org.github/xuml-tools/miuml-metamodel-extensions">
+
+	<SymbolicType Name="string" MinLength="1" MaxLength="4096"
+		Prefix="" Suffix="" ValidationPattern=".*" DefaultValue="" />
+
+	<ModeledDomain Name="test-domain">
+
+		<Subsystem Name="test-domain" Floor="1" Ceiling="20">
+
+			<Class Name="A">
+				<IndependentAttribute Name="A one" Type="string">
+					<Identifier Number="1" />
+				</IndependentAttribute>
+			</Class>
+
+			<Class Name="B">
+				<IndependentAttribute Name="B one" Type="string">
+					<Identifier Number="1" />
+				</IndependentAttribute>
+				<ReferentialAttribute Name="B A one">
+					<ToOneReference Relationship="1" Attribute="A one" />
+				</ReferentialAttribute>
+			</Class>
+
+			<BinaryAssociation Rnum="1">
+				<ActivePerspective Phrase="characterizes"
+					ViewedClass="B" OnePerspective="false" Conditional="true" />
+				<PassivePerspective Phrase="is characterized by"
+					ViewedClass="A" OnePerspective="true" Conditional="false" />
+			</BinaryAssociation>
+
+		</Subsystem>
+	</ModeledDomain>
+
+</Domains>
