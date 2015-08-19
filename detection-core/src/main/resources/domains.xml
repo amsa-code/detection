@@ -264,6 +264,12 @@
                 <ReferentialAttribute Name="Detection">
                     <ToOneReference Relationship="11" Attribute="ID" />
                 </ReferentialAttribute>
+                <ReferentialAttribute Name="Message Template">
+                    <ToOneReference Relationship="12" Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Message Recipient">
+                    <ToOneReference Relationship="13" Attribute="ID" />
+                </ReferentialAttribute>
             </Class>
 
             <BinaryAssociation Rnum="11">
@@ -272,6 +278,57 @@
                 <PassivePerspective Phrase="provokes sending of" ViewedClass="Detection Message"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
+
+            <BinaryAssociation Rnum="12">
+                <ActivePerspective Phrase="is built from" ViewedClass="Message Template"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="templates" ViewedClass="Detection Message"
+                    OnePerspective="false" Conditional="true" />
+            </BinaryAssociation>
+
+            <Class Name="Message Recipient">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <ReferentialAttribute Name="Detected Craft">
+                    <SpecializationReference Relationship="14" Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Contact">
+                    <SpecializationReference Relationship="14" Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
+
+            <BinaryAssociation Rnum="13">
+                <ActivePerspective Phrase="is sent to" ViewedClass="Message Recipient"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="was sent" ViewedClass="Detection Message"
+                    OnePerspective="false" Conditional="true" />
+            </BinaryAssociation>
+
+            <Class Name="Detected Craft">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <ReferentialAttribute Name="Message Recipient">
+                    <GeneralizationReference Relationship="14" Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
+
+            <Class Name="Contact">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Email" Type="Email" />
+                <ReferentialAttribute Name="Message Recipient">
+                    <GeneralizationReference Relationship="14" Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
+
+            <Generalization Rnum="14" Superclass="Message Recipient">
+                <SpecializedClass Name="Detected Craft" />
+                <SpecializedClass Name="Contact" />
+            </Generalization>
+
         </Subsystem>
     </ModeledDomain>
 
