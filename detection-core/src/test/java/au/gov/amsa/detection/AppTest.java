@@ -1,4 +1,4 @@
-package my.stuff;
+package au.gov.amsa.detection;
 
 import xuml.tools.util.database.DerbyUtil;
 
@@ -6,6 +6,8 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import au.gov.amsa.detection.App;
 
 public class AppTest {
 	

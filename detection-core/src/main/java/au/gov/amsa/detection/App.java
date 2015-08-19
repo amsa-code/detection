@@ -1,9 +1,9 @@
-package my.stuff;
+package au.gov.amsa.detection;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import test.Context;
+import au.gov.amsa.detection.Context;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
