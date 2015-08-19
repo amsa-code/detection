@@ -1,38 +1,93 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Domains xmlns="http://www.miuml.org/metamodel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.miuml.org/metamodel https://raw.github.com/davidmoten/xuml-tools/master/miuml-jaxb/src/main/resources/miuml-metamodel.xsd  http://org.github/xuml-tools/miuml-metamodel-extensions https://raw.github.com/davidmoten/xuml-tools/master/miuml-jaxb/src/main/resources/xuml-tools-miuml-metamodel-extensions.xsd"
-	xmlns:xt="http://org.github/xuml-tools/miuml-metamodel-extensions">
+    xsi:schemaLocation="http://www.miuml.org/metamodel https://raw.github.com/davidmoten/xuml-tools/master/miuml-jaxb/src/main/resources/miuml-metamodel.xsd  http://org.github/xuml-tools/miuml-metamodel-extensions https://raw.github.com/davidmoten/xuml-tools/master/miuml-jaxb/src/main/resources/xuml-tools-miuml-metamodel-extensions.xsd"
+    xmlns:xt="http://org.github/xuml-tools/miuml-metamodel-extensions">
 
-	<SymbolicType Name="string" MinLength="1" MaxLength="4096"
-		Prefix="" Suffix="" ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="String" MinLength="1" MaxLength="4096" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="ShortString" MinLength="1" MaxLength="50" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="MediumString" MinLength="1" MaxLength="255" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
+    <RealType Name="Latitude" Precision="20" LowerLimit="-90" UpperLimit="90" DefaultValue="0"
+        Units="degrees" />
+    <RealType Name="Longitude" Precision="20" LowerLimit="-180" UpperLimit="180"
+        DefaultValue="0" Units="degrees" />
+    <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-99999999" UpperLimit="99999999999"
+        DefaultValue="0" Units="metres" />
+    <IntegerType Name="IntegerId" UpperLimit="99999999" LowerLimit="0" DefaultValue="0"
+        Units="record number" />
+    <IntegerType Name="date" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
+        LowerLimit="-9999999999999" />
+    <IntegerType Name="timestamp" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
+        LowerLimit="-9999999999999" />
+    <IntegerType Name="time" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
+        LowerLimit="-9999999999999" />
+    <IntegerType Name="MMSI" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
+        Units="mmsi" />
 
-	<ModeledDomain Name="test-domain">
+    <ModeledDomain Name="detection-domain">
 
-		<Subsystem Name="test-domain" Floor="1" Ceiling="20">
+        <Subsystem Name="detection" Floor="1" Ceiling="30">
+            <Class Name="Detection Rule">
+                <IndependentAttribute Name="ID" Type="IntegerId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Name" Type="ShortString">
+                    <Identifier Number="2" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Description" Type="MediumString" />
+                <IndependentAttribute Name="Start Time" Type="timestamp" />
+                <IndependentAttribute Name="End Time" Type="timestamp" />
+                <ReferentialAttribute Name="Region">
+                    <ToOneReference Relationship="1" Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
 
-			<Class Name="A">
-				<IndependentAttribute Name="A one" Type="string">
-					<Identifier Number="1" />
-				</IndependentAttribute>
-			</Class>
+            <Class Name="Region">
+                <IndependentAttribute Name="ID" Type="IntegerId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Name" Type="ShortString" />
+                <IndependentAttribute Name="Description" Type="MediumString" />
+            </Class>
 
-			<Class Name="B">
-				<IndependentAttribute Name="B one" Type="string">
-					<Identifier Number="1" />
-				</IndependentAttribute>
-				<ReferentialAttribute Name="B A one">
-					<ToOneReference Relationship="1" Attribute="A one" />
-				</ReferentialAttribute>
-			</Class>
+            <BinaryAssociation Rnum="1">
+                <ActivePerspective Phrase="detects positions in" ViewedClass="Region"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="is for" ViewedClass="Detection Rule"
+                    OnePerspective="false" Conditional="true" />
+            </BinaryAssociation>
 
-			<BinaryAssociation Rnum="1">
-				<ActivePerspective Phrase="characterizes"
-					ViewedClass="B" OnePerspective="false" Conditional="true" />
-				<PassivePerspective Phrase="is characterized by"
-					ViewedClass="A" OnePerspective="true" Conditional="false" />
-			</BinaryAssociation>
+            <Class Name="Craft Position">
+                <IndependentAttribute Name="ID" Type="IntegerId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Latitude" Type="Latitude" />
+                <IndependentAttribute Name="Longitude" Type="Longitude" />
+                <IndependentAttribute Name="Altitude Metres" Type="AltitudeMetres" />
+                <ReferentialAttribute Name="Craft">
+                    <ToOneReference Relationship="2" Attribute="ID"></ToOneReference>
+                </ReferentialAttribute>
+            </Class>
 
-		</Subsystem>
-	</ModeledDomain>
+            <Class Name="Craft">
+                <IndependentAttribute Name="ID" Type="IntegerId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="mmsi" Type="MMSI" />
+            </Class>
+
+            <BinaryAssociation Rnum="2">
+                <ActivePerspective Phrase="is a report for" ViewedClass="Craft"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="has position report" ViewedClass="Craft Position"
+                    OnePerspective="false" Conditional="true" />
+            </BinaryAssociation>
+
+        </Subsystem>
+    </ModeledDomain>
 
 </Domains>

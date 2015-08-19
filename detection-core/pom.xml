@@ -63,8 +63,8 @@
 						</goals>
 						<configuration>
 							<domainsXml>src/main/resources/domains.xml</domainsXml>
-							<domain>test-domain</domain>
-							<schema>test_domain</schema>
+							<domain>detection-domain</domain>
+							<schema>detection</schema>
 							<packageName>au.gov.amsa.detection.model</packageName>
 							<implementationPackageName>behaviour</implementationPackageName>
 							<implementationSourceDirectory>src/main/java</implementationSourceDirectory>

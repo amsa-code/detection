@@ -3,38 +3,33 @@ package au.gov.amsa.detection;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import au.gov.amsa.detection.Context;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
+import au.gov.amsa.detection.model.Context;
 
 public class App {
 
-	public static void startup() {
-		// create the entity manager factory
-		EntityManagerFactory emf = Persistence
-				.createEntityManagerFactory("testPersistenceUnit");
+    public static void startup() {
+        // create the entity manager factory
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("testPersistenceUnit");
 
-		// pass the EntityManagerFactory to the generated xuml Context
-		Context.setEntityManagerFactory(emf);
-		
-		// setup behaviour factories and assign them to Context here
-		
-		// set the behaviour factory for the class A
-		// A.setBehaviourFactory(createBehaviourFactory());
-		
-		// send any signals not processed from last shutdown
-		Context.sendSignalsInQueue();
-	}
-	
-	public static void shutdown() {
-		// shutdown the actor system
-		Context.stop();
+        // pass the EntityManagerFactory to the generated xuml Context
+        Context.setEntityManagerFactory(emf);
 
-		// close the entity manager factory if desired
-		Context.close();
+        // setup behaviour factories and assign them to Context here
 
-	}
-	
+        // set the behaviour factory for the class A
+        // A.setBehaviourFactory(createBehaviourFactory());
+
+        // send any signals not processed from last shutdown
+        Context.sendSignalsInQueue();
+    }
+
+    public static void shutdown() {
+        // shutdown the actor system
+        Context.stop();
+
+        // close the entity manager factory if desired
+        Context.close();
+
+    }
+
 }
