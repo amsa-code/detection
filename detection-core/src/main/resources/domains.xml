@@ -193,6 +193,8 @@
                 <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
+                <IndependentAttribute Name="Last Time Entered" Type="timestamp"/>
+                <IndependentAttribute Name="Last Time In Region" Type="timestamp"/>
                 <ReferentialAttribute Name="Region">
                     <AssociativeReference Relationship="5" Class="Region"
                         Attribute="ID" />
