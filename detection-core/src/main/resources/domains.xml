@@ -9,6 +9,12 @@
         ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="MediumString" MinLength="1" MaxLength="255" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="LongString" MinLength="1" MaxLength="65535" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="MessageSubject" MinLength="1" MaxLength="255" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="MessageBody" MinLength="1" MaxLength="65535" Prefix="" Suffix=""
+        ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
@@ -43,6 +49,9 @@
                 <IndependentAttribute Name="End Time" Type="timestamp" />
                 <ReferentialAttribute Name="Region">
                     <ToOneReference Relationship="1" Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Message Template">
+                    <ToOneReference Relationship="8" Attribute="ID" />
                 </ReferentialAttribute>
             </Class>
 
@@ -123,7 +132,7 @@
                 <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Zip File Bytes" Type="Bytes" />
+                <IndependentAttribute Name="Zipped Shapefile Bytes" Type="Bytes" />
                 <ReferentialAttribute Name="Region">
                     <GeneralizationReference Relationship="4" Attribute="ID" />
                 </ReferentialAttribute>
@@ -137,6 +146,71 @@
                     <GeneralizationReference Relationship="4" Attribute="ID" />
                 </ReferentialAttribute>
             </Class>
+
+            <Class Name="Region Craft">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <ReferentialAttribute Name="Region">
+                    <AssociativeReference Relationship="5" Class="Region"
+                        Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Craft">
+                    <AssociativeReference Relationship="5" Class="Craft"
+                        Attribute="ID" />
+                </ReferentialAttribute>
+            </Class>
+
+            <BinaryAssociation Rnum="5" AssociationClass="Region Craft">
+                <ActivePerspective Phrase="was in or out of" ViewedClass="Region"
+                    OnePerspective="false" Conditional="false" />
+                <PassivePerspective Phrase="contained or not" ViewedClass="Craft"
+                    OnePerspective="false" Conditional="false" />
+            </BinaryAssociation>
+
+            <Class Name="Detection">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <ReferentialAttribute Name="Craft Position">
+                    <ToOneReference Relationship="6" Attribute="ID"></ToOneReference>
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Detection Rule">
+                    <ToOneReference Relationship="7" Attribute="ID"></ToOneReference>
+                </ReferentialAttribute>
+            </Class>
+
+            <BinaryAssociation Rnum="6">
+                <ActivePerspective Phrase="triggers a" ViewedClass="Detection"
+                    OnePerspective="false" Conditional="true" />
+                <PassivePerspective Phrase="has position report" ViewedClass="Craft Position"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
+
+            <BinaryAssociation Rnum="7">
+                <ActivePerspective Phrase="has" ViewedClass="Detection"
+                    OnePerspective="false" Conditional="true" />
+                <PassivePerspective Phrase="pertains to" ViewedClass="Detection Rule"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
+
+            <Class Name="Message Template">
+                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Subject" Type="MessageSubject"/>
+                <IndependentAttribute Name="Body" Type="MessageBody"/>
+                <IndependentAttribute Name="StartTime" Type="timestamp"/>
+                <IndependentAttribute Name="EndTime" Type="timestamp"/>
+                <IndependentAttribute Name="ForceUpdateBeforeTime" Type="timestamp"/>
+            </Class>
+            
+            <BinaryAssociation Rnum="8">
+                <ActivePerspective Phrase="is default for" ViewedClass="Detection Rule"
+                    OnePerspective="false" Conditional="true" />
+                <PassivePerspective Phrase="has default" ViewedClass="Message Template"
+                    OnePerspective="true" Conditional="true" />
+            </BinaryAssociation>
 
         </Subsystem>
     </ModeledDomain>
