@@ -33,6 +33,8 @@
         LowerLimit="-9999999999999" />
     <IntegerType Name="MMSI" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
         Units="mmsi" />
+    <BooleanType Name="boolean" DefaultValue="false" />
+
 
     <ModeledDomain Name="detection-domain">
 
@@ -193,8 +195,8 @@
                 <IndependentAttribute Name="ID" Type="ArbitraryId">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Last Time Entered" Type="timestamp"/>
-                <IndependentAttribute Name="Last Time In Region" Type="timestamp"/>
+                <IndependentAttribute Name="Last Time Entered" Type="timestamp" />
+                <IndependentAttribute Name="Last Time In Region" Type="timestamp" />
                 <ReferentialAttribute Name="Region">
                     <AssociativeReference Relationship="5" Class="Region"
                         Attribute="ID" />
@@ -203,6 +205,24 @@
                     <AssociativeReference Relationship="5" Class="Craft"
                         Attribute="ID" />
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <State Name="Inside Region" />
+                    <State Name="Outside Region" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Inside" Type="ArbitraryId" />
+                        </EventSignature>
+                    </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="In" ID="2" />
+                    <LocalEffectiveSignalingEvent Name="Out" ID="3" />
+                    <Transition State="Inside Region" Destination="Outside Region"
+                        EventID="3" />
+                    <Transition State="Created" Destination="Outside Region" EventID="3" />
+                    <Transition State="Created" Destination="Inside Region" EventID="2" />
+                    <Transition State="Outside Region" Destination="Inside Region"
+                        EventID="2" />
+                </Lifecycle>
             </Class>
 
             <BinaryAssociation Rnum="5" AssociationClass="Region Craft">
