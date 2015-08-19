@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>my.stuff</groupId>
+	<groupId>au.gov.amsa</groupId>
 	<artifactId>detection-core</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -10,6 +10,8 @@
 	<name>${project.artifactId}</name>
 	<properties>
 		<xuml.tools.version>0.3</xuml.tools.version>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
 
 	<dependencies>
