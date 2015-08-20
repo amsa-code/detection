@@ -23,6 +23,8 @@
         Units="degrees" />
     <RealType Name="Longitude" Precision="20" LowerLimit="-180" UpperLimit="180"
         DefaultValue="0" Units="degrees" />
+    <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-10000" UpperLimit="99999999999"
+        DefaultValue="0" Units="metres" />
     <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-99999999" UpperLimit="99999999999"
         DefaultValue="0" Units="metres" />
     <SymbolicType Name="ArbitraryId" DefaultValue="" MinLength="1" MaxLength="32"
@@ -96,8 +98,9 @@
                         <EventSignature>
                             <StateModelParameter Name="Latitude" Type="Latitude" />
                             <StateModelParameter Name="Longitude" Type="Longitude" />
-                            <StateModelParameter Name="AltitudeMetres" Type="ArbitraryId" />
+                            <StateModelParameter Name="AltitudeMetres" Type="AltitudeMetres" />
                             <StateModelParameter Name="Time" Type="timestamp" />
+                            <StateModelParameter Name="Mmsi" Type="MMSI"/>
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Processed" ID="2">
