@@ -25,10 +25,4 @@ public class CraftPositionBehaviour implements Behaviour {
         self.setCraft_R2(craft);
     }
 
-    @Override
-    public void onEntryProcessed(Create event) {
-        // TODO Auto-generated method stub
-
-    }
-
 }

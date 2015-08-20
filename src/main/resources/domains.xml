@@ -93,7 +93,6 @@
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
-                    <State Name="Processed" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Latitude" Type="Latitude" />
@@ -103,10 +102,6 @@
                             <StateModelParameter Name="Mmsi" Type="MMSI"/>
                         </EventSignature>
                     </CreationEvent>
-                    <LocalEffectiveSignalingEvent Name="Processed" ID="2">
-                        <EventSignature />
-                    </LocalEffectiveSignalingEvent>
-                    <Transition State="Created" Destination="Processed" EventID="1" />
                 </Lifecycle>
             </Class>
 
