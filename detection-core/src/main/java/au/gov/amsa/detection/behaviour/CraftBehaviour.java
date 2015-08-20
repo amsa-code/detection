@@ -17,7 +17,7 @@ public class CraftBehaviour implements Craft.Behaviour {
     public void onEntryCreated(Create event) {
         self.setId(ArbitraryId.next());
         self.setMmsi(event.getMmsi());
-        CraftType.select();
+        self.setCraftType_R3(CraftType.find(event.getCraftTypeID()).get());
     }
 
 }

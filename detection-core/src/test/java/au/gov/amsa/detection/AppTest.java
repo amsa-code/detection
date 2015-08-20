@@ -24,7 +24,8 @@ public class AppTest {
 
         CraftType vessel = Context.create(CraftType.class, CraftType.Events.Create.builder()
                 .name("Vessel").description("A ship or other floating craft").build());
-        Context.create(Craft.class, Craft.Events.Create.builder().mmsi(123456789).build());
+        Context.create(Craft.class,
+                Craft.Events.Create.builder().mmsi(123456789).craftTypeID(vessel.getId()).build());
 
     }
 

@@ -268,9 +268,9 @@
 
             <BinaryAssociation Rnum="5" AssociationClass="Region Craft">
                 <ActivePerspective Phrase="was in or out of" ViewedClass="Region"
-                    OnePerspective="false" Conditional="false" />
+                    OnePerspective="false" Conditional="true" />
                 <PassivePerspective Phrase="contained or not" ViewedClass="Craft"
-                    OnePerspective="false" Conditional="false" />
+                    OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
             <Class Name="Detection">
