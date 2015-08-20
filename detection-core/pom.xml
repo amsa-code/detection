@@ -9,9 +9,9 @@
 
 	<name>${project.artifactId}</name>
 	<properties>
-		<xuml.tools.version>0.3.1</xuml.tools.version>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<xuml.tools.version>0.3.2-SNAPSHOT</xuml.tools.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -3,7 +3,11 @@ package au.gov.amsa.detection;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import au.gov.amsa.detection.behaviour.CraftBehaviour;
+import au.gov.amsa.detection.behaviour.CraftTypeBehaviour;
 import au.gov.amsa.detection.model.Context;
+import au.gov.amsa.detection.model.Craft;
+import au.gov.amsa.detection.model.CraftType;
 
 public class App {
 
@@ -18,6 +22,8 @@ public class App {
 
         // set the behaviour factory for the class A
         // A.setBehaviourFactory(createBehaviourFactory());
+        Craft.setBehaviourFactory(CraftBehaviour.class);
+        CraftType.setBehaviourFactory(CraftTypeBehaviour.class);
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();

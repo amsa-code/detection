@@ -25,8 +25,8 @@
         DefaultValue="0" Units="degrees" />
     <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-99999999" UpperLimit="99999999999"
         DefaultValue="0" Units="metres" />
-    <IntegerType Name="ArbitraryId" UpperLimit="99999999" LowerLimit="0" DefaultValue="0"
-        Units="record number" />
+    <SymbolicType Name="ArbitraryId" DefaultValue="" MinLength="1" MaxLength="32"
+        Prefix="" Suffix="" ValidationPattern=".*" />
     <IntegerType Name="date" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
         LowerLimit="-9999999999999" />
     <IntegerType Name="timestamp" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
@@ -94,8 +94,10 @@
                     <State Name="Processed" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
-                            <StateModelParameter Name="Craft ID" Type="ArbitraryId" />
-                            <StateModelParameter Name="Region ID" Type="ArbitraryId" />
+                            <StateModelParameter Name="Latitude" Type="Latitude" />
+                            <StateModelParameter Name="Longitude" Type="Longitude" />
+                            <StateModelParameter Name="AltitudeMetres" Type="ArbitraryId" />
+                            <StateModelParameter Name="Time" Type="timestamp" />
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Processed" ID="2">
@@ -113,6 +115,15 @@
                 <ReferentialAttribute Name="Craft Type">
                     <ToOneReference Relationship="3" Attribute="ID"></ToOneReference>
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Mmsi" Type="MMSI" />
+                            <StateModelParameter Name="Craft Type ID" Type="ArbitraryId" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
             </Class>
 
             <BinaryAssociation Rnum="2">
@@ -130,6 +141,20 @@
                     <Identifier Number="2" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Description" Type="MediumString" />
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Name" Type="ShortString" />
+                            <StateModelParameter Name="Description" Type="MediumString" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
+                <Extension>
+                    <xt:Find>
+                        <xt:Attribute name="Name" />
+                    </xt:Find>
+                </Extension>
             </Class>
 
             <BinaryAssociation Rnum="3">
@@ -179,9 +204,9 @@
 
             <BinaryAssociation Rnum="9" AssociationClass="Region Exclusion">
                 <ActivePerspective Phrase="excludes" ViewedClass="Region"
-                    OnePerspective="false" Conditional="false" />
+                    OnePerspective="false" Conditional="true" />
                 <PassivePerspective Phrase="is excluded from" ViewedClass="Composite Region"
-                    OnePerspective="false" Conditional="false" />
+                    OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
             <Class Name="Region Inclusion">
@@ -200,9 +225,9 @@
 
             <BinaryAssociation Rnum="10" AssociationClass="Region Inclusion">
                 <ActivePerspective Phrase="includes" ViewedClass="Region"
-                    OnePerspective="false" Conditional="false" />
+                    OnePerspective="false" Conditional="true" />
                 <PassivePerspective Phrase="is included in" ViewedClass="Composite Region"
-                    OnePerspective="false" Conditional="false" />
+                    OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
             <Class Name="Region Craft">
