@@ -21,6 +21,7 @@ public class CraftPositionBehaviour implements Behaviour {
         self.setLatitude(event.getLatitude());
         self.setLongitude(event.getLongitude());
         self.setAltitudeMetres(event.getAltitudeMetres());
+        // lookup the craft by mmsi
         Craft craft = Craft.select(Craft.Attribute.mmsi.eq(event.getMmsi())).one();
         self.setCraft_R2(craft);
     }
