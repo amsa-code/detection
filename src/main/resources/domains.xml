@@ -289,7 +289,14 @@
                     <State Name="Inside Region" />
                     <State Name="Outside Region" />
                     <CreationEvent Name="Create" ID="1" State="Created">
-                        <EventSignature />
+                        <EventSignature>
+                            <StateModelParameter Name="Latitude" Type="Latitude" />
+                            <StateModelParameter Name="Longitude" Type="Longitude" />
+                            <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
+                            <StateModelParameter Name="Time" Type="timestamp" />
+                            <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
+                        </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="In" ID="2">
                         <EventSignature>

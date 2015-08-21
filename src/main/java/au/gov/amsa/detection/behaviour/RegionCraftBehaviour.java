@@ -1,5 +1,8 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.util.Date;
+
+import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.RegionCraft;
 import au.gov.amsa.detection.model.RegionCraft.Behaviour;
 import au.gov.amsa.detection.model.RegionCraft.Events.Create;
@@ -22,8 +25,10 @@ public class RegionCraftBehaviour implements Behaviour {
 
     @Override
     public void onEntryCreated(Create event) {
-        // TODO Auto-generated method stub
-
+        self.setId(ArbitraryId.next());
+        self.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
+        self.setLastTimeEntered(new Date(Long.MIN_VALUE));
+        self.setLastTimeInRegion(new Date(Long.MIN_VALUE));
     }
 
     @Override
