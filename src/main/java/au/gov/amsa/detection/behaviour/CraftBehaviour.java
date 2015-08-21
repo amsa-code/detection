@@ -1,7 +1,5 @@
 package au.gov.amsa.detection.behaviour;
 
-import java.util.stream.Stream;
-
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Craft.Events.Create;
@@ -28,15 +26,12 @@ public class CraftBehaviour implements Craft.Behaviour {
 
     @Override
     public void onEntryHasPosition(Position event) {
-        DetectionRule.select().many()
-                //
-                .stream()
-                //
-                .flatMap(dr -> Stream.of(dr.getRegion_R1()))
-                //
-                .distinct()
-                //
-                .forEach(System.out::println);
+        // send the position to all detection rules
+        DetectionRule.select().many().stream()
+                .forEach(dr -> dr.signal(DetectionRule.Events.Position.builder()
+                        .altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
+                        .longitude(event.getLongitude()).time(event.getTime()).craftID(self.getId())
+                        .build()));
     }
 
 }
