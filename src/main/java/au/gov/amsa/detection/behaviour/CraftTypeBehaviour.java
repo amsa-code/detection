@@ -9,6 +9,7 @@ public class CraftTypeBehaviour implements Behaviour {
 
     private final CraftType self;
 
+    // use constructor injection
     public CraftTypeBehaviour(CraftType self) {
         this.self = self;
     }

@@ -18,16 +18,18 @@
     <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
-        ValidationPattern=".*" DefaultValue="" />
+        ValidationPattern=".*" DefaultValue=""></SymbolicType>
+    <SymbolicType Name="Craft Identifier Type" MinLength="1" MaxLength="255" Prefix=""
+        Suffix="" ValidationPattern=".*" DefaultValue="" />
+    <SymbolicType Name="Craft Identifier" MinLength="1" MaxLength="255" Prefix=""
+        Suffix="" ValidationPattern=".*" DefaultValue="" />
     <RealType Name="Latitude" Precision="20" LowerLimit="-90" UpperLimit="90" DefaultValue="0"
         Units="degrees" />
     <RealType Name="Longitude" Precision="20" LowerLimit="-180" UpperLimit="180"
         DefaultValue="0" Units="degrees" />
-    <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-10000" UpperLimit="99999999999"
+    <RealType Name="Altitude Metres" Precision="20" LowerLimit="-10000" UpperLimit="99999999999"
         DefaultValue="0" Units="metres" />
-    <RealType Name="AltitudeMetres" Precision="20" LowerLimit="-99999999" UpperLimit="99999999999"
-        DefaultValue="0" Units="metres" />
-    <SymbolicType Name="ArbitraryId" DefaultValue="" MinLength="1" MaxLength="32"
+    <SymbolicType Name="Arbitrary ID" DefaultValue="" MinLength="1" MaxLength="32"
         Prefix="" Suffix="" ValidationPattern=".*" />
     <IntegerType Name="date" Units="epoch ms" DefaultValue="0" UpperLimit="99999999999"
         LowerLimit="-9999999999999" />
@@ -42,7 +44,7 @@
 
         <Subsystem Name="detection" Floor="1" Ceiling="30">
             <Class Name="Detection Rule">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Name" Type="ShortString">
@@ -60,7 +62,7 @@
             </Class>
 
             <Class Name="Region">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Name" Type="ShortString" />
@@ -80,59 +82,43 @@
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
-            <Class Name="Craft Position">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
-                    <Identifier Number="1" />
-                </IndependentAttribute>
-                <IndependentAttribute Name="Timestamp" Type="timestamp" />
-                <IndependentAttribute Name="Latitude" Type="Latitude" />
-                <IndependentAttribute Name="Longitude" Type="Longitude" />
-                <IndependentAttribute Name="Altitude Metres" Type="AltitudeMetres" />
-                <ReferentialAttribute Name="Craft">
-                    <ToOneReference Relationship="2" Attribute="ID"></ToOneReference>
-                </ReferentialAttribute>
-                <Lifecycle>
-                    <State Name="Created" />
-                    <CreationEvent Name="Create" ID="1" State="Created">
-                        <EventSignature>
-                            <StateModelParameter Name="Latitude" Type="Latitude" />
-                            <StateModelParameter Name="Longitude" Type="Longitude" />
-                            <StateModelParameter Name="AltitudeMetres" Type="AltitudeMetres" />
-                            <StateModelParameter Name="Time" Type="timestamp" />
-                            <StateModelParameter Name="Mmsi" Type="MMSI"/>
-                        </EventSignature>
-                    </CreationEvent>
-                </Lifecycle>
-            </Class>
 
             <Class Name="Craft">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="mmsi" Type="MMSI" />
+                <IndependentAttribute Name="Identifier Type" Type="Craft Identifier Type" />
+                <IndependentAttribute Name="Identifier" Type="Craft Identifier" />
                 <ReferentialAttribute Name="Craft Type">
                     <ToOneReference Relationship="3" Attribute="ID"></ToOneReference>
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
+                    <State Name="HasPosition" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
+                            <StateModelParameter Name="Craft Identifier Type"
+                                Type="Craft Identifier Type" />
+                            <StateModelParameter Name="Craft Identifier" Type="Craft Identifier" />
                             <StateModelParameter Name="Mmsi" Type="MMSI" />
-                            <StateModelParameter Name="Craft Type ID" Type="ArbitraryId" />
+                            <StateModelParameter Name="Craft Type ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="Position" ID="2">
+                        <EventSignature>
+                            <StateModelParameter Name="Latitude" Type="Latitude" />
+                            <StateModelParameter Name="Longitude" Type="Longitude" />
+                            <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
+                            <StateModelParameter Name="Time" Type="timestamp" />
+                        </EventSignature>
+                    </LocalEffectiveSignalingEvent>
+                    <Transition State="Created" EventID="2" Destination="HasPosition" />
+                    <Transition State="HasPosition" EventID="2" Destination="HasPosition" />
                 </Lifecycle>
             </Class>
 
-            <BinaryAssociation Rnum="2">
-                <ActivePerspective Phrase="is a report for" ViewedClass="Craft"
-                    OnePerspective="true" Conditional="false" />
-                <PassivePerspective Phrase="has position report" ViewedClass="Craft Position"
-                    OnePerspective="false" Conditional="true" />
-            </BinaryAssociation>
-
             <Class Name="Craft Type">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Name" Type="ShortString">
@@ -168,7 +154,7 @@
             </Generalization>
 
             <Class Name="Simple Region">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Zipped Shapefile Bytes" Type="Bytes" />
@@ -178,7 +164,7 @@
             </Class>
 
             <Class Name="Composite Region">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Region">
@@ -187,7 +173,7 @@
             </Class>
 
             <Class Name="Region Exclusion">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Region">
@@ -208,7 +194,7 @@
             </BinaryAssociation>
 
             <Class Name="Region Inclusion">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Region">
@@ -229,7 +215,7 @@
             </BinaryAssociation>
 
             <Class Name="Region Craft">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Last Time Entered" Type="timestamp" />
@@ -272,10 +258,14 @@
             </BinaryAssociation>
 
             <Class Name="Detection">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <ReferentialAttribute Name="Craft Position">
+                <IndependentAttribute Name="Report Time" Type="timestamp" />
+                <IndependentAttribute Name="Report Latitude" Type="Latitude" />
+                <IndependentAttribute Name="Report Longitude" Type="Longitude" />
+                <IndependentAttribute Name="Report Altitude Metres" Type="Altitude Metres" />
+                <ReferentialAttribute Name="Craft">
                     <ToOneReference Relationship="6" Attribute="ID" />
                 </ReferentialAttribute>
                 <ReferentialAttribute Name="Detection Rule">
@@ -284,9 +274,9 @@
             </Class>
 
             <BinaryAssociation Rnum="6">
-                <ActivePerspective Phrase="triggers a" ViewedClass="Detection"
+                <ActivePerspective Phrase="position triggers a" ViewedClass="Detection"
                     OnePerspective="false" Conditional="true" />
-                <PassivePerspective Phrase="has position report" ViewedClass="Craft Position"
+                <PassivePerspective Phrase="triggered for" ViewedClass="Craft"
                     OnePerspective="true" Conditional="false" />
             </BinaryAssociation>
 
@@ -298,7 +288,7 @@
             </BinaryAssociation>
 
             <Class Name="Message Template">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Subject" Type="MessageSubject" />
@@ -316,7 +306,7 @@
             </BinaryAssociation>
 
             <Class Name="Detection Message">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Subject" Type="MessageSubject" />
@@ -348,7 +338,7 @@
             </BinaryAssociation>
 
             <Class Name="Message Recipient">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Detected Craft">
@@ -367,7 +357,7 @@
             </BinaryAssociation>
 
             <Class Name="Detected Craft">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Message Recipient">
@@ -376,7 +366,7 @@
             </Class>
 
             <Class Name="Contact">
-                <IndependentAttribute Name="ID" Type="ArbitraryId">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Email" Type="Email" />
