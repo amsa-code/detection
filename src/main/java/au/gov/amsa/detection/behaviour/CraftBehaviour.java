@@ -27,11 +27,11 @@ public class CraftBehaviour implements Craft.Behaviour {
     @Override
     public void onEntryHasPosition(Position event) {
         // send the position to all detection rules
-        DetectionRule.select().many().stream()
-                .forEach(dr -> dr.signal(DetectionRule.Events.Position.builder()
-                        .altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
-                        .longitude(event.getLongitude()).time(event.getTime()).craftID(self.getId())
-                        .build()));
+        au.gov.amsa.detection.model.DetectionRule.Events.Position position = DetectionRule.Events.Position
+                .builder().altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
+                .longitude(event.getLongitude()).time(event.getTime()).craftID(self.getId())
+                .build();
+        DetectionRule.select().many().stream().forEach(dr -> dr.signal(position));
     }
 
 }
