@@ -59,6 +59,27 @@
                 <ReferentialAttribute Name="Message Template">
                     <ToOneReference Relationship="8" Attribute="ID" />
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <State Name="Received Position" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Name" Type="MediumString" />
+                            <StateModelParameter Name="Description" Type="LongString" />
+                            <StateModelParameter Name="StartTime" Type="timestamp" />
+                            <StateModelParameter Name="EndTime" Type="timestamp" />
+                        </EventSignature>
+                    </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="Position" ID="2">
+                        <EventSignature>
+                            <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Latitude" Type="Latitude" />
+                            <StateModelParameter Name="Longitude" Type="Longitude" />
+                            <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
+                            <StateModelParameter Name="Time" Type="timestamp" />
+                        </EventSignature>
+                    </LocalEffectiveSignalingEvent>
+                </Lifecycle>
             </Class>
 
             <Class Name="Region">
@@ -161,6 +182,17 @@
                 <ReferentialAttribute Name="Region">
                     <GeneralizationReference Relationship="4" Attribute="ID" />
                 </ReferentialAttribute>
+
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Name" Type="ShortString" />
+                            <StateModelParameter Name="Description" Type="MediumString" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
+
             </Class>
 
             <Class Name="Composite Region">

@@ -5,9 +5,13 @@ import javax.persistence.Persistence;
 
 import au.gov.amsa.detection.behaviour.CraftBehaviour;
 import au.gov.amsa.detection.behaviour.CraftTypeBehaviour;
+import au.gov.amsa.detection.behaviour.DetectionRuleBehaviour;
+import au.gov.amsa.detection.behaviour.SimpleRegionBehaviour;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftType;
+import au.gov.amsa.detection.model.DetectionRule;
+import au.gov.amsa.detection.model.SimpleRegion;
 
 public class App {
 
@@ -22,6 +26,8 @@ public class App {
 
         Craft.setBehaviourFactory(CraftBehaviour.class);
         CraftType.setBehaviourFactory(CraftTypeBehaviour.class);
+        DetectionRule.setBehaviourFactory(DetectionRuleBehaviour.class);
+        SimpleRegion.setBehaviourFactory(SimpleRegionBehaviour.class);
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();
