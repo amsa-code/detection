@@ -1,0 +1,26 @@
+package au.gov.amsa.detection.behaviour;
+
+import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.model.DetectionRule;
+import au.gov.amsa.detection.model.DetectionRule.Behaviour;
+import au.gov.amsa.detection.model.DetectionRule.Events.Create;
+
+public class DetectionRuleBehaviour implements Behaviour {
+
+    private final DetectionRule self;
+
+    public DetectionRuleBehaviour(DetectionRule self) {
+        this.self = self;
+    }
+
+    @Override
+    public void onEntryCreated(Create event) {
+        self.setId(ArbitraryId.next());
+        self.setName(event.getName());
+        self.setDescription(event.getDescription());
+        self.setStartTime(event.getStartTime());
+        self.setEndTime(event.getStartTime());
+
+    }
+
+}
