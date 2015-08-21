@@ -68,6 +68,7 @@
                             <StateModelParameter Name="Description" Type="LongString" />
                             <StateModelParameter Name="StartTime" Type="timestamp" />
                             <StateModelParameter Name="EndTime" Type="timestamp" />
+                            <StateModelParameter Name="Region ID" Type="Arbitrary ID"/>
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Position" ID="2">

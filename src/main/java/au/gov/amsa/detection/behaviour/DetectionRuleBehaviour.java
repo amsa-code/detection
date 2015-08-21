@@ -4,6 +4,7 @@ import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.DetectionRule.Behaviour;
 import au.gov.amsa.detection.model.DetectionRule.Events.Create;
+import au.gov.amsa.detection.model.Region;
 
 public class DetectionRuleBehaviour implements Behaviour {
 
@@ -20,7 +21,7 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setDescription(event.getDescription());
         self.setStartTime(event.getStartTime());
         self.setEndTime(event.getStartTime());
-
+        self.setRegion_R1(Region.find(event.getRegionID()).get());
     }
 
 }
