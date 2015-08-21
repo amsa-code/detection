@@ -39,11 +39,15 @@ public class RegionBehaviour implements Behaviour {
             rc.setCraft_R5(Craft.find(event.getCraftID()).get());
             rc.setRegion_R5(self);
         }
-        if (contains(event.getLatitude(), event.getLongitude())) {
-            if (rc.getLastTimeInRegion().before(event.getTime()))
-                rc.setLastTimeInRegion(event.getTime());
-        } else {
 
+        if (contains(event.getLatitude(), event.getLongitude())) {
+            rc.signal(RegionCraft.Events.In.builder().altitudeMetres(event.getAltitudeMetres())
+                    .latitude(event.getLatitude()).longitude(event.getLongitude())
+                    .time(event.getTime()).build());
+        } else {
+            rc.signal(RegionCraft.Events.Out.builder().altitudeMetres(event.getAltitudeMetres())
+                    .latitude(event.getLatitude()).longitude(event.getLongitude())
+                    .time(event.getTime()).build());
         }
     }
 
