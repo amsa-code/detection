@@ -1,5 +1,7 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.util.List;
+
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Region;
@@ -23,10 +25,25 @@ public class RegionBehaviour implements Behaviour {
 
     @Override
     public void onEntryHasPosition(Position event) {
+        List<RegionCraft> list = Context.em()
+                .createQuery(
+                        "select rc from RegionCraft where region.id=:region_id and craft.id=:craft_id",
+                        RegionCraft.class)
+                .setParameter("region_id", self.getId())
+                .setParameter("craft_id", event.getCraftID()).getResultList();
+        RegionCraft rc;
+        if (list.size() > 0) {
+            rc = list.get(1);
+        } else {
+            rc = Context.create(RegionCraft.class, RegionCraft.Events.Create.builder().build());
+            rc.setCraft_R5(Craft.find(event.getCraftID()).get());
+            rc.setRegion_R5(self);
+        }
         if (contains(event.getLatitude(), event.getLongitude())) {
-            Craft craft = Craft.find(event.getCraftID()).get();
-            RegionCraft rc = Context.create(RegionCraft.class,
-                    RegionCraft.Events.Create.builder().build());
+            if (rc.getLastTimeInRegion().before(event.getTime()))
+                rc.setLastTimeInRegion(event.getTime());
+        } else {
+
         }
     }
 

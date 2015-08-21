@@ -273,11 +273,14 @@
                 </IndependentAttribute>
                 <IndependentAttribute Name="Last Time Entered" Type="timestamp" />
                 <IndependentAttribute Name="Last Time In Region" Type="timestamp" />
+                <IndependentAttribute Name="Last Exit Time From Region" Type="timestamp" />
                 <ReferentialAttribute Name="Region">
+                    <Identifier Number="2" />
                     <AssociativeReference Relationship="5" Class="Region"
                         Attribute="ID" />
                 </ReferentialAttribute>
                 <ReferentialAttribute Name="Craft">
+                    <Identifier Number="2" />
                     <AssociativeReference Relationship="5" Class="Craft"
                         Attribute="ID" />
                 </ReferentialAttribute>
