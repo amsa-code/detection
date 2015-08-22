@@ -21,7 +21,7 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setName(event.getName());
         self.setDescription(event.getDescription());
         self.setStartTime(event.getStartTime());
-        self.setEndTime(event.getStartTime());
+        self.setEndTime(event.getEndTime());
         self.setRegion_R1(Region.find(event.getRegionID()).get());
     }
 
@@ -29,7 +29,11 @@ public class DetectionRuleBehaviour implements Behaviour {
     public void onEntryReceivedPosition(Position event) {
         if (event.getTime().after(self.getStartTime())
                 && event.getTime().before(self.getEndTime())) {
-            self.getRegion_R1().signal(null);
+            self.getRegion_R1()
+                    .signal(Region.Events.Position.builder()
+                            .altitudeMetres(event.getAltitudeMetres()).craftID(event.getCraftID())
+                            .latitude(event.getLatitude()).longitude(event.getLongitude())
+                            .time(event.getTime()).build());
         }
     }
 

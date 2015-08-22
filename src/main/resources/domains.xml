@@ -296,6 +296,7 @@
                             <StateModelParameter Name="Time" Type="timestamp" />
                             <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
                             <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Inside" Type="boolean"/>
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="In" ID="2">
