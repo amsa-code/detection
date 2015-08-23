@@ -19,7 +19,8 @@ public class RegionBehaviour implements Behaviour {
 
     @Override
     public void onEntryCreated(Create event) {
-        throw new RuntimeException("doesn't get called");
+        System.exit(1);
+        throw new RuntimeException("should not be called");
     }
 
     @Override

@@ -31,8 +31,11 @@ public class RegionCraftBehaviour implements Behaviour {
         self.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
         self.setLastTimeEntered(new Date(Long.MIN_VALUE));
         self.setLastTimeInRegion(new Date(Long.MIN_VALUE));
-        self.setCraft_R5(Craft.find(event.getCraftID()).get());
-        self.setRegion_R5(Region.find(event.getRegionID()).get());
+        Region region = Region.find(event.getRegionID()).get();
+        Craft craft = Craft.find(event.getCraftID()).get();
+        self.setCraft_R5(craft);
+        self.setRegion_R5(region);
+
         if (event.getInside()) {
             self.signal(RegionCraft.Events.In.builder().altitudeMetres(event.getAltitudeMetres())
                     .latitude(event.getLatitude()).longitude(event.getLongitude())
