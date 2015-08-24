@@ -59,8 +59,7 @@ public class RegionBehaviour implements Behaviour {
                         .forEach(dr -> dr.signal(DetectionRule.Events.PositionInRegion.builder()
                                 .altitudeMetres(event.getAltitudeMetres())
                                 .craftID(event.getCraftID()).latitude(event.getLatitude())
-                                .longitude(event.getLongitude()).regionID(self.getId())
-                                .time(event.getTime()).build()));
+                                .longitude(event.getLongitude()).time(event.getTime()).build()));
             } else {
                 rc.setLastTimeEntered(event.getTime());
                 rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));

@@ -61,7 +61,6 @@
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
-                    <State Name="Received Position" />
                     <State Name="Position In Region" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
@@ -72,30 +71,18 @@
                             <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </CreationEvent>
-                    <LocalEffectiveSignalingEvent Name="Position" ID="2">
-                        <EventSignature>
-                            <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
-                            <StateModelParameter Name="Latitude" Type="Latitude" />
-                            <StateModelParameter Name="Longitude" Type="Longitude" />
-                            <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
-                            <StateModelParameter Name="Time" Type="timestamp" />
-                        </EventSignature>
-                    </LocalEffectiveSignalingEvent>
                     <LocalEffectiveSignalingEvent Name="Position In Region"
-                        ID="3">
+                        ID="2">
                         <EventSignature>
                             <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
                             <StateModelParameter Name="Latitude" Type="Latitude" />
                             <StateModelParameter Name="Longitude" Type="Longitude" />
                             <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
                             <StateModelParameter Name="Time" Type="timestamp" />
-                            <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
-                    <Transition State="Created" EventID="2" Destination="Received Position" />
-                    <Transition State="Received Position" EventID="2" Destination="Received Position" />
-                    <Transition State="Received Position" EventID="3" Destination="Position In Region" />
-                    <Transition State="Position In Region" EventID="2" Destination="Received Position" />
+                    <Transition State="Created" EventID="2" Destination="Position In Region" />
+                    <Transition State="Position In Region" EventID="2" Destination="Position In Region" />
                 </Lifecycle>
             </Class>
 

@@ -1,11 +1,14 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.util.function.Predicate;
+
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Craft.Events.Create;
 import au.gov.amsa.detection.model.Craft.Events.Position;
 import au.gov.amsa.detection.model.CraftType;
 import au.gov.amsa.detection.model.DetectionRule;
+import au.gov.amsa.detection.model.Region;
 
 public class CraftBehaviour implements Craft.Behaviour {
 
@@ -27,11 +30,24 @@ public class CraftBehaviour implements Craft.Behaviour {
     @Override
     public void onEntryHasPosition(Position event) {
         // send the position to all detection rules
-        au.gov.amsa.detection.model.DetectionRule.Events.Position position = DetectionRule.Events.Position
-                .builder().altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
+        Region.Events.Position position = Region.Events.Position.builder()
+                .altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
                 .longitude(event.getLongitude()).time(event.getTime()).craftID(self.getId())
                 .build();
-        DetectionRule.select().many().stream().forEach(dr -> dr.signal(position));
+
+        Predicate<DetectionRule> isInTimeRange = dr -> (dr.getStartTime().before(position.getTime())
+                || dr.getStartTime().equals(position.getTime()))
+                && dr.getEndTime().after(position.getTime());
+
+        DetectionRule.select().many().stream()
+                //
+                .filter(isInTimeRange)
+                //
+                .map(dr -> dr.getRegion_R1())
+                //
+                .distinct()
+                //
+                .forEach(r -> r.signal(position));
     }
 
 }
