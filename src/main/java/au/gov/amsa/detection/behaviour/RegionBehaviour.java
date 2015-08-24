@@ -1,8 +1,11 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.util.Date;
 import java.util.List;
 
+import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Context;
+import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.Region.Behaviour;
 import au.gov.amsa.detection.model.Region.Events.Create;
@@ -35,23 +38,33 @@ public class RegionBehaviour implements Behaviour {
         RegionCraft rc;
         if (list.size() > 0) {
             rc = list.get(0);
+            if (inside) {
+                rc.signal(RegionCraft.Events.In.builder().altitudeMetres(event.getAltitudeMetres())
+                        .latitude(event.getLatitude()).longitude(event.getLongitude())
+                        .time(event.getTime()).build());
+            } else {
+                rc.signal(RegionCraft.Events.Out.builder().altitudeMetres(event.getAltitudeMetres())
+                        .latitude(event.getLatitude()).longitude(event.getLongitude())
+                        .time(event.getTime()).build());
+            }
         } else {
-            rc = Context.create(RegionCraft.class,
-                    RegionCraft.Events.Create.builder().altitudeMetres(event.getAltitudeMetres())
-                            .craftID(event.getCraftID()).latitude(event.getLatitude())
-                            .longitude(event.getLongitude()).regionID(self.getId()).inside(inside)
-                            .time(event.getTime()).build());
+            // Creation of RegionCraft that also sets its new state without
+            // triggering state machine
+            rc = RegionCraft.create(ArbitraryId.next());
+            if (inside) {
+                rc.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
+                rc.setLastTimeEntered(event.getTime());
+                rc.setState(RegionCraft.State.INSIDE_REGION.toString());
+            } else {
+                rc.setLastTimeEntered(event.getTime());
+                rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));
+                rc.setState(RegionCraft.State.OUTSIDE_REGION.toString());
+            }
+            rc.setCraft_R5(Craft.find(event.getCraftID()).get());
+            rc.setRegion_R5(self);
+            rc.persist(Context.em());
         }
 
-        if (contains(event.getLatitude(), event.getLongitude())) {
-            rc.signal(RegionCraft.Events.In.builder().altitudeMetres(event.getAltitudeMetres())
-                    .latitude(event.getLatitude()).longitude(event.getLongitude())
-                    .time(event.getTime()).build());
-        } else {
-            rc.signal(RegionCraft.Events.Out.builder().altitudeMetres(event.getAltitudeMetres())
-                    .latitude(event.getLatitude()).longitude(event.getLongitude())
-                    .time(event.getTime()).build());
-        }
     }
 
     private boolean contains(Double latitude, Double longitude) {
