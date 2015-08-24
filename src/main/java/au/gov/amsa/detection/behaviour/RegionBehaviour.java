@@ -6,6 +6,7 @@ import java.util.List;
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
+import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.Region.Behaviour;
 import au.gov.amsa.detection.model.Region.Events.Create;
@@ -54,6 +55,12 @@ public class RegionBehaviour implements Behaviour {
                 rc.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
                 rc.setLastTimeEntered(event.getTime());
                 rc.setState(RegionCraft.State.INSIDE_REGION.toString());
+                self.getDetectionRule_R1()
+                        .forEach(dr -> dr.signal(DetectionRule.Events.PositionInRegion.builder()
+                                .altitudeMetres(event.getAltitudeMetres())
+                                .craftID(event.getCraftID()).latitude(event.getLatitude())
+                                .longitude(event.getLongitude()).regionID(self.getId())
+                                .time(event.getTime()).build()));
             } else {
                 rc.setLastTimeEntered(event.getTime());
                 rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));
