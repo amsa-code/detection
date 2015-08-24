@@ -62,6 +62,7 @@
                 <Lifecycle>
                     <State Name="Created" />
                     <State Name="Received Position" />
+                    <State Name="Position In Region" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Name" Type="MediumString" />
@@ -80,8 +81,21 @@
                             <StateModelParameter Name="Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
+                    <LocalEffectiveSignalingEvent Name="Position In Region"
+                        ID="3">
+                        <EventSignature>
+                            <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Latitude" Type="Latitude" />
+                            <StateModelParameter Name="Longitude" Type="Longitude" />
+                            <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
+                            <StateModelParameter Name="Time" Type="timestamp" />
+                            <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
+                        </EventSignature>
+                    </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="Received Position" />
                     <Transition State="Received Position" EventID="2" Destination="Received Position" />
+                    <Transition State="Received Position" EventID="3" Destination="Position In Region" />
+                    <Transition State="Position In Region" EventID="2" Destination="Received Position" />
                 </Lifecycle>
             </Class>
 
@@ -322,14 +336,14 @@
                 </Lifecycle>
             </Class>
 
-            <BinaryAssociation Rnum="5" >
+            <BinaryAssociation Rnum="5">
                 <ActivePerspective Phrase="relates to craft via" ViewedClass="Region Craft"
                     OnePerspective="false" Conditional="true" />
                 <PassivePerspective Phrase="relates craft to" ViewedClass="Region"
                     OnePerspective="true" Conditional="false" />
             </BinaryAssociation>
-            
-            <BinaryAssociation Rnum="15" >
+
+            <BinaryAssociation Rnum="15">
                 <ActivePerspective Phrase="relates region to" ViewedClass="Craft"
                     OnePerspective="true" Conditional="false" />
                 <PassivePerspective Phrase="relates to region via" ViewedClass="Region Craft"

@@ -5,6 +5,7 @@ import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.DetectionRule.Behaviour;
 import au.gov.amsa.detection.model.DetectionRule.Events.Create;
 import au.gov.amsa.detection.model.DetectionRule.Events.Position;
+import au.gov.amsa.detection.model.DetectionRule.Events.PositionInRegion;
 import au.gov.amsa.detection.model.Region;
 
 public class DetectionRuleBehaviour implements Behaviour {
@@ -35,6 +36,12 @@ public class DetectionRuleBehaviour implements Behaviour {
                             .latitude(event.getLatitude()).longitude(event.getLongitude())
                             .time(event.getTime()).build());
         }
+    }
+
+    @Override
+    public void onEntryPositionInRegion(PositionInRegion event) {
+        // TODO Auto-generated method stub
+
     }
 
 }
