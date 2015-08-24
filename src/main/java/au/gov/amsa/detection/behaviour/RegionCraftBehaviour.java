@@ -15,20 +15,23 @@ public class RegionCraftBehaviour implements Behaviour {
     }
 
     @Override
-    public void onEntryOutsideRegion(Out event) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void onEntryCreated(Create event) {
         throw new RuntimeException("not expected");
     }
 
     @Override
-    public void onEntryInsideRegion(In event) {
-        // TODO Auto-generated method stub
+    public void onEntryOutsideRegion(Out event) {
+        if (self.getLastExitTimeFromRegion().before(self.getLastTimeInRegion())) {
+            self.setLastExitTimeFromRegion(event.getTime());
+        }
+    }
 
+    @Override
+    public void onEntryInsideRegion(In event) {
+        if (self.getLastExitTimeFromRegion().after(self.getLastTimeInRegion())) {
+            self.setLastTimeEntered(event.getTime());
+            self.setLastTimeInRegion(event.getTime());
+        }
     }
 
 }

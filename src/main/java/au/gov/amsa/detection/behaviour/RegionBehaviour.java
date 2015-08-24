@@ -22,7 +22,6 @@ public class RegionBehaviour implements Behaviour {
 
     @Override
     public void onEntryCreated(Create event) {
-        System.exit(1);
         throw new RuntimeException("should not be called");
     }
 
