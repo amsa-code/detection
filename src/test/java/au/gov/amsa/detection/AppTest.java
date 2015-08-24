@@ -82,7 +82,6 @@ public class AppTest {
             t.printStackTrace();
         for (String line : lines)
             System.out.println(line);
-        Thread.sleep(1000000);
     }
 
     @AfterClass

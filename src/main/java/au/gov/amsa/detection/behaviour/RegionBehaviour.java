@@ -30,7 +30,7 @@ public class RegionBehaviour implements Behaviour {
     public void onEntryHasPosition(Position event) {
         List<RegionCraft> list = Context.em()
                 .createQuery(
-                        "select rc from RegionCraft rc where region_R5.id=:region_id and craft_R5.id=:craft_id",
+                        "select rc from RegionCraft rc where region_R5.id=:region_id and craft_R15.id=:craft_id",
                         RegionCraft.class)
                 .setParameter("region_id", self.getId())
                 .setParameter("craft_id", event.getCraftID()).getResultList();
@@ -61,10 +61,8 @@ public class RegionBehaviour implements Behaviour {
                 rc.setState(RegionCraft.State.OUTSIDE_REGION.toString());
             }
             Craft craft = Craft.find(event.getCraftID()).get();
-            rc.setCraft_R5(craft);
             rc.setRegion_R5(self);
-            craft.getRegionCraft_R5().add(rc);
-            self.getRegionCraft_R5().add(rc);
+            rc.setCraft_R15(craft);
             rc.persist(Context.em());
         }
 

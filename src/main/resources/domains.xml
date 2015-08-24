@@ -276,13 +276,11 @@
                 <IndependentAttribute Name="Last Exit Time From Region" Type="timestamp" />
                 <ReferentialAttribute Name="Region">
                     <Identifier Number="2" />
-                    <AssociativeReference Relationship="5" Class="Region"
-                        Attribute="ID" />
+                    <ToOneReference Relationship="5" Attribute="ID" />
                 </ReferentialAttribute>
                 <ReferentialAttribute Name="Craft">
                     <Identifier Number="2" />
-                    <AssociativeReference Relationship="5" Class="Craft"
-                        Attribute="ID" />
+                    <ToOneReference Relationship="15" Attribute="ID" />
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
@@ -296,7 +294,7 @@
                             <StateModelParameter Name="Time" Type="timestamp" />
                             <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
                             <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
-                            <StateModelParameter Name="Inside" Type="boolean"/>
+                            <StateModelParameter Name="Inside" Type="boolean" />
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="In" ID="2">
@@ -324,10 +322,17 @@
                 </Lifecycle>
             </Class>
 
-            <BinaryAssociation Rnum="5" AssociationClass="Region Craft">
-                <ActivePerspective Phrase="was in or out of" ViewedClass="Region"
+            <BinaryAssociation Rnum="5" >
+                <ActivePerspective Phrase="relates to craft via" ViewedClass="Region Craft"
                     OnePerspective="false" Conditional="true" />
-                <PassivePerspective Phrase="contained or not" ViewedClass="Craft"
+                <PassivePerspective Phrase="relates craft to" ViewedClass="Region"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
+            
+            <BinaryAssociation Rnum="15" >
+                <ActivePerspective Phrase="relates region to" ViewedClass="Craft"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="relates to region via" ViewedClass="Region Craft"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
