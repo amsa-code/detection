@@ -60,8 +60,11 @@ public class RegionBehaviour implements Behaviour {
                 rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));
                 rc.setState(RegionCraft.State.OUTSIDE_REGION.toString());
             }
-            rc.setCraft_R5(Craft.find(event.getCraftID()).get());
+            Craft craft = Craft.find(event.getCraftID()).get();
+            rc.setCraft_R5(craft);
             rc.setRegion_R5(self);
+            craft.getRegionCraft_R5().add(rc);
+            self.getRegionCraft_R5().add(rc);
             rc.persist(Context.em());
         }
 
