@@ -30,17 +30,21 @@ public class AppTest {
                 SimpleRegion.Events.Create.builder().name("EEZ")
                         .description("Australian Exclusive Economic Zone")
                         .zippedShapefileBytes(new byte[] { 1, 2, 3 }).build());
+
         Context.create(DetectionRule.class,
                 DetectionRule.Events.Create.builder().name("Name")
                         .description(
                                 "detect entry into Australian EEZ and send information to vessels")
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
                 .regionID(region.getRegion_R4().getId()).build());
+
         CraftType vessel = Context.create(CraftType.class, CraftType.Events.Create.builder()
                 .name("Vessel").description("A ship or other floating craft").build());
+
         Craft craft = Context.create(Craft.class,
                 Craft.Events.Create.builder().mmsi(123456789).craftTypeID(vessel.getId())
                         .craftIdentifier("123456789").craftIdentifierType("MMSI").build());
+
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
                 .longitude(142.0).time(new Date()).build());
 
