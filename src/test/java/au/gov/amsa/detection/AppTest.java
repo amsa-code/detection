@@ -1,5 +1,7 @@
 package au.gov.amsa.detection;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 
 import org.junit.AfterClass;
@@ -11,15 +13,17 @@ import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftType;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.SimpleRegion;
-import xuml.tools.model.compiler.runtime.SignalProcessorListenerUtilLogging;
+import xuml.tools.model.compiler.runtime.SignalProcessorListenerTesting;
 import xuml.tools.util.database.DerbyUtil;
 
 public class AppTest {
 
+    private static final SignalProcessorListenerTesting listener = new SignalProcessorListenerTesting();
+
     @BeforeClass
     public static void setup() {
         DerbyUtil.disableDerbyLog();
-        Context.setEntityActorListenerFactory(id -> new SignalProcessorListenerUtilLogging());
+        Context.setEntityActorListenerFactory(id -> listener);
         App.startup();
     }
 
@@ -48,9 +52,14 @@ public class AppTest {
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
                 .longitude(142.0).time(new Date()).build());
 
+        Context.sendSignalsInQueue();
+
         // wait for asynchronous processing to complete
         Thread.sleep(5000);
-
+        for (Exception e : listener.exceptions()) {
+            e.printStackTrace();
+        }
+        assertTrue(listener.exceptions().isEmpty());
     }
 
     @AfterClass

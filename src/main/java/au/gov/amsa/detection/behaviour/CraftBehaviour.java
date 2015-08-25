@@ -3,6 +3,7 @@ package au.gov.amsa.detection.behaviour;
 import java.util.function.Predicate;
 
 import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.Util;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Craft.Events.Create;
 import au.gov.amsa.detection.model.Craft.Events.Position;
@@ -35,9 +36,8 @@ public class CraftBehaviour implements Craft.Behaviour {
                 .longitude(event.getLongitude()).time(event.getTime()).craftID(self.getId())
                 .build();
 
-        Predicate<DetectionRule> isInTimeRange = dr -> (dr.getStartTime().before(position.getTime())
-                || dr.getStartTime().equals(position.getTime()))
-                && dr.getEndTime().after(position.getTime());
+        Predicate<DetectionRule> isInTimeRange = dr -> Util.between(position.getTime(),
+                dr.getStartTime(), dr.getEndTime());
 
         DetectionRule.select().many().stream()
                 //
