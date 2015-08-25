@@ -19,7 +19,7 @@ import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.RegionCraft;
 import au.gov.amsa.detection.model.SimpleRegion;
 
-public class App {
+public final class App {
 
     public static void startup() {
         // create the entity manager factory

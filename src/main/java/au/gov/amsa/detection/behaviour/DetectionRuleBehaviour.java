@@ -97,6 +97,9 @@ public class DetectionRuleBehaviour implements Behaviour {
             detection.relateAcrossR7(self);
             detection.setState(Detection.State.CREATED.toString());
             detection.persist(Context.em());
+
+            // because detection is not self this signal will run in a distinct
+            // transaction after this method has had its transaction committed
             detection.signal(
                     Detection.Events.Send.builder().sendTime(detection.getCreatedTime()).build());
         }
