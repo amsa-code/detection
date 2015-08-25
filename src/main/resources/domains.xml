@@ -211,6 +211,7 @@
                         <EventSignature>
                             <StateModelParameter Name="Name" Type="ShortString" />
                             <StateModelParameter Name="Description" Type="MediumString" />
+                            <StateModelParameter Name="Zipped Shapefile Bytes" Type="Bytes"/>
                         </EventSignature>
                     </CreationEvent>
                 </Lifecycle>

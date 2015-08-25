@@ -18,7 +18,7 @@ public class SimpleRegionBehaviour implements Behaviour {
     @Override
     public void onEntryCreated(Create event) {
         self.setId(ArbitraryId.next());
-        self.setZippedShapefileBytes("B64 encoded zip archive bytes");
+        self.setZippedShapefileBytes(event.getZippedShapefileBytes());
         Region region = Region.create(ArbitraryId.next());
         region.setName(event.getName());
         region.setDescription(event.getDescription());
