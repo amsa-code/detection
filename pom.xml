@@ -14,6 +14,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
+
+        <!-- compile dependencies -->
+
         <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>xuml-model-compiler-runtime</artifactId>
@@ -25,6 +28,19 @@
             <version>${xuml.tools.version}</version>
             <type>pom</type>
         </dependency>
+       <dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+        <dependency>
+            <groupId>com.github.davidmoten</groupId>
+            <artifactId>grumpy-core</artifactId>
+            <version>0.2.3</version>
+        </dependency>
+
+        <!-- test dependencies -->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

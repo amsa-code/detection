@@ -5,6 +5,10 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import com.github.davidmoten.grumpy.core.Position;
+
 import au.gov.amsa.detection.Streams;
 import au.gov.amsa.detection.Util;
 import au.gov.amsa.detection.model.Detection;
@@ -70,8 +74,12 @@ public class DetectionBehaviour implements Behaviour {
         s = replaceParameter(s, "${position.lat}", self.getReportLatitude().toString());
         s = replaceParameter(s, "${position.lon}", self.getReportLongitude().toString());
         // TODO
-        s = replaceParameter(s, "${position.latlon.formatted}",
-                self.getReportLongitude().toString());
+        String latFormatted = StringEscapeUtils.ESCAPE_HTML4.translate(
+                Position.toDegreesMinutesDecimalMinutesLatitude(self.getReportLatitude()));
+        String lonFormatted = StringEscapeUtils.ESCAPE_HTML4.translate(
+                Position.toDegreesMinutesDecimalMinutesLongitude(self.getReportLongitude()));
+        s = replaceParameter(s, "${position.lat.formatted.html}", latFormatted);
+        s = replaceParameter(s, "${position.lon.formatted.html}", lonFormatted);
         s = replaceParameter(s, "${detection.rule.name}", self.getDetectionRule_R7().getName());
         s = replaceParameter(s, "${detection.rule.description}",
                 self.getDetectionRule_R7().getName());
