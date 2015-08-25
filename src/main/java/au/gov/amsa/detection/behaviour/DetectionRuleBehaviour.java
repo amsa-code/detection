@@ -1,7 +1,5 @@
 package au.gov.amsa.detection.behaviour;
 
-import static com.google.common.base.Optional.fromNullable;
-
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -9,6 +7,7 @@ import java.util.stream.Stream;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.Streams;
 import au.gov.amsa.detection.Util;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
@@ -107,21 +106,7 @@ public class DetectionRuleBehaviour implements Behaviour {
     }
 
     private Stream<MessageTemplate> getTemplates(Date now) {
-        return self.getMessageRecipient_R16().stream().flatMap(recipient -> {
-            // get the recipient-specific message template if exists
-            Optional<MessageTemplate> recipientMessageTemplate = fromNullable(
-                    recipient.getMessageTemplate_R17());
-            if (recipientMessageTemplate.isPresent())
-                return Stream.of(recipientMessageTemplate.get());
-            else {
-                // otherwise look for a default template
-                Optional<MessageTemplate> template = fromNullable(self.getMessageTemplate_R8());
-                if (template.isPresent())
-                    return Stream.of(template.get());
-                else
-                    return Stream.empty();
-            }
-        })
+        return Streams.fromNullable(self.getMessageTemplate_R8())
                 // only between time range
                 .filter(template -> Util.between(now, template.getStartTime(),
                         template.getEndTime()));

@@ -56,15 +56,15 @@ public class AppTest {
 
         // wait for asynchronous processing to complete
         Thread.sleep(5000);
-        for (Exception e : listener.exceptions()) {
-            e.printStackTrace();
-        }
         assertTrue(listener.exceptions().isEmpty());
     }
 
     @AfterClass
     public static void shutdown() {
         App.shutdown();
+        for (Exception e : listener.exceptions()) {
+            e.printStackTrace();
+        }
     }
 
 }

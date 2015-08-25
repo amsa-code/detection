@@ -464,9 +464,6 @@
                 <ReferentialAttribute Name="Detection Rule">
                     <SpecializationReference Relationship="16" Attribute="ID" />
                 </ReferentialAttribute>
-                <ReferentialAttribute Name="Message Template">
-                    <ToOneReference Attribute="ID" Relationship="17" />
-                </ReferentialAttribute>
             </Class>
 
             <BinaryAssociation Rnum="13">
@@ -507,12 +504,6 @@
                     OnePerspective="true" Conditional="true" ViewedClass="Detection Rule" />
             </BinaryAssociation>
 
-            <BinaryAssociation Rnum="17">
-                <ActivePerspective Phrase="receives messages based on"
-                    OnePerspective="true" Conditional="true" ViewedClass="Message Template" />
-                <PassivePerspective Phrase="templates messages for"
-                    OnePerspective="false" Conditional="true" ViewedClass="Message Recipient" />
-            </BinaryAssociation>
             <BinaryAssociation Rnum="18">
                 <ActivePerspective Phrase="has latest" OnePerspective="true"
                     Conditional="true" ViewedClass="Detection" />
