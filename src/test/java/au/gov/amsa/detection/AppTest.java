@@ -24,7 +24,7 @@ public class AppTest {
     }
 
     @Test
-    public void testApp() {
+    public void testApp() throws InterruptedException {
 
         SimpleRegion region = Context.create(SimpleRegion.class,
                 SimpleRegion.Events.Create.builder().name("EEZ")
@@ -47,6 +47,9 @@ public class AppTest {
 
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
                 .longitude(142.0).time(new Date()).build());
+
+        // wait for asynchronous processing to complete
+        Thread.sleep(5000);
 
     }
 

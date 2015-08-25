@@ -211,7 +211,8 @@
                         <EventSignature>
                             <StateModelParameter Name="Name" Type="ShortString" />
                             <StateModelParameter Name="Description" Type="MediumString" />
-                            <StateModelParameter Name="Zipped Shapefile Bytes" Type="Bytes"/>
+                            <StateModelParameter Name="Zipped Shapefile Bytes"
+                                Type="Bytes" />
                         </EventSignature>
                     </CreationEvent>
                 </Lifecycle>
@@ -352,6 +353,20 @@
                 <ReferentialAttribute Name="Detection Rule">
                     <ToOneReference Relationship="7" Attribute="ID" />
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Report Time" Type="timestamp" />
+                            <StateModelParameter Name="Report Latitude" Type="Latitude" />
+                            <StateModelParameter Name="Report Longitude" Type="Longitude" />
+                            <StateModelParameter Name="Report Altitude Metres"
+                                Type="Altitude Metres" />
+                            <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
             </Class>
 
             <BinaryAssociation Rnum="6">
@@ -377,6 +392,9 @@
                 <IndependentAttribute Name="StartTime" Type="timestamp" />
                 <IndependentAttribute Name="EndTime" Type="timestamp" />
                 <IndependentAttribute Name="ForceUpdateBeforeTime" Type="timestamp" />
+                <ReferentialAttribute Name="Message Recipient">
+                    <ToOneReference Attribute="ID" Relationship="17" />
+                </ReferentialAttribute>
             </Class>
 
             <BinaryAssociation Rnum="8">
@@ -428,6 +446,9 @@
                 <ReferentialAttribute Name="Contact">
                     <SpecializationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
+                <ReferentialAttribute Name="Detection Rule">
+                    <SpecializationReference Relationship="16" Attribute="ID" />
+                </ReferentialAttribute>
             </Class>
 
             <BinaryAssociation Rnum="13">
@@ -460,6 +481,21 @@
                 <SpecializedClass Name="Detected Craft" />
                 <SpecializedClass Name="Contact" />
             </Generalization>
+
+            <BinaryAssociation Rnum="16">
+                <ActivePerspective Phrase="has" OnePerspective="false"
+                    Conditional="true" ViewedClass="Message Recipient" />
+                <PassivePerspective Phrase="receives messages for"
+                    OnePerspective="true" Conditional="true" ViewedClass="Detection Rule" />
+            </BinaryAssociation>
+
+            <BinaryAssociation Rnum="17">
+                <ActivePerspective Phrase="receives messages based on"
+                    OnePerspective="false" Conditional="true" ViewedClass="Message Template" />
+                <PassivePerspective Phrase="templates messages for"
+                    OnePerspective="true" Conditional="true" ViewedClass="Message Recipient" />
+            </BinaryAssociation>
+
 
         </Subsystem>
     </ModeledDomain>
