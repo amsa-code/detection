@@ -3,7 +3,6 @@ package au.gov.amsa.detection.behaviour;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Matcher;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -89,7 +88,10 @@ public class DetectionBehaviour implements Behaviour {
     }
 
     private String replaceParameter(String s, String param, String value) {
-        return s.replaceAll(Matcher.quoteReplacement(param), value);
+        String paramAdjusted = param.replace("$", "\\$").replace("{", "\\{").replace("}", "\\}");
+        System.out.println(
+                "replacing in '" + s + "', param='" + paramAdjusted + "', value='" + value + "'");
+        return s.replaceAll(paramAdjusted, value);
     }
 
 }

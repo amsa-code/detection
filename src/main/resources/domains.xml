@@ -410,6 +410,21 @@
                 <IndependentAttribute Name="StartTime" Type="timestamp" />
                 <IndependentAttribute Name="EndTime" Type="timestamp" />
                 <IndependentAttribute Name="ForceUpdateBeforeTime" Type="timestamp" />
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Subject" Type="MessageSubject" />
+                            <StateModelParameter Name="Body" Type="MessageBody" />
+                            <StateModelParameter Name="StartTime" Type="timestamp" />
+                            <StateModelParameter Name="EndTime" Type="timestamp" />
+                            <StateModelParameter Name="ForceUpdateBeforeTime"
+                                Type="timestamp" />
+                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID"/>
+                        </EventSignature>
+                    </CreationEvent>
+                    
+                </Lifecycle>
             </Class>
 
             <BinaryAssociation Rnum="8">
