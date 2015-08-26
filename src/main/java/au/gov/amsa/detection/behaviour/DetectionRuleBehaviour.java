@@ -8,7 +8,6 @@ import com.google.common.base.Optional;
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.Streams;
 import au.gov.amsa.detection.Util;
-import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Detection;
 import au.gov.amsa.detection.model.DetectionRule;
@@ -93,7 +92,7 @@ public class DetectionRuleBehaviour implements Behaviour {
             self.setDetection_R18(detection);
             detection.relateAcrossR7(self);
             detection.setState(Detection.State.CREATED);
-            detection.persist(Context.em());
+            detection.persist();
 
             // because detection is not self this signal will run in a distinct
             // transaction after this method has had its transaction committed

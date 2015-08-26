@@ -1,13 +1,12 @@
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
     http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
-	version="1.0">
+    version="1.0">
 
-	<persistence-unit name="testPersistenceUnit">
-		<class>au.gov.amsa.detection.model.Craft</class>
-		<class>au.gov.amsa.detection.model.CraftPosition</class>
-		<class>au.gov.amsa.detection.model.CraftType</class>
+    <persistence-unit name="testPersistenceUnit">
+        <class>au.gov.amsa.detection.model.Craft</class>
+        <class>au.gov.amsa.detection.model.CraftPosition</class>
+        <class>au.gov.amsa.detection.model.CraftType</class>
         <class>au.gov.amsa.detection.model.Region</class>
         <class>au.gov.amsa.detection.model.RegionCraft</class>
         <class>au.gov.amsa.detection.model.RegionInclusion</class>
@@ -21,9 +20,10 @@
         <class>au.gov.amsa.detection.model.MessageRecipient</class>
         <class>au.gov.amsa.detection.model.DetectedCraft</class>
         <class>au.gov.amsa.detection.model.Contact</class>
-		<class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
-		<exclude-unlisted-classes>true</exclude-unlisted-classes>
-		<properties>
+        <class>au.gov.amsa.detection.model.CompositeRegionMember</class>
+        <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
             <property name="hibernate.dialect" value="au.gov.amsa.util.hibernate.ImprovedH2Dialect" />
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
@@ -32,6 +32,6 @@
             <property name="hibernate.connection.pool_size" value="5" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
-		</properties>
-	</persistence-unit>
+        </properties>
+    </persistence-unit>
 </persistence>

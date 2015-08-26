@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import au.gov.amsa.detection.ArbitraryId;
-import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectedCraft.Behaviour;
@@ -31,7 +30,7 @@ public class DetectedCraftBehaviour implements Behaviour {
         r.setDetectionRule_R16(DetectionRule.find(event.getDetectionRuleID()).get());
         r.setState(MessageRecipient.State.CREATED);
         self.relateAcrossR14(r);
-        r.persist(Context.em());
+        r.persist();
     }
 
     @Override
