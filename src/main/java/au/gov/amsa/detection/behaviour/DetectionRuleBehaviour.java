@@ -1,7 +1,6 @@
 package au.gov.amsa.detection.behaviour;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import com.google.common.base.Optional;
@@ -21,9 +20,6 @@ import au.gov.amsa.detection.model.Region;
 
 public class DetectionRuleBehaviour implements Behaviour {
 
-    private static final long RESEND_INTERVAL_MS = TimeUnit.DAYS.toMillis(30);
-    private static final long BEEN_OUTSIDE_RESEND_INTERVAL_MS = TimeUnit.DAYS.toMillis(7);
-
     private final DetectionRule self;
 
     public DetectionRuleBehaviour(DetectionRule self) {
@@ -37,6 +33,8 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setDescription(event.getDescription());
         self.setStartTime(event.getStartTime());
         self.setEndTime(event.getEndTime());
+        self.setResendIntervalSOut(event.getResendIntervalSOut());
+        self.setResendIntervalS(event.getResendIntervalS());
         self.setRegion_R1(Region.find(event.getRegionID()).get());
     }
 
@@ -67,14 +65,14 @@ public class DetectionRuleBehaviour implements Behaviour {
                         .isPresent();
                 if (forcedUpdateRequired) {
                     createDetection = true;
-                } else if (event.getTime().getTime()
-                        - latestDetection.get().getCreatedTime().getTime() >= RESEND_INTERVAL_MS) {
+                } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
+                        .getTime() >= self.getResendIntervalS() * 1000) {
                     createDetection = true;
                 } else if (event.getLastTimeEntered().getTime()
-                        - event.getLastExitTimeFromRegion()
-                                .getTime() >= BEEN_OUTSIDE_RESEND_INTERVAL_MS
+                        - event.getLastExitTimeFromRegion().getTime() >= self
+                                .getResendIntervalSOut() * 1000
                         && event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                                .getTime() >= BEEN_OUTSIDE_RESEND_INTERVAL_MS) {
+                                .getTime() >= self.getResendIntervalSOut() * 1000) {
                     createDetection = true;
                 } else
                     createDetection = false;

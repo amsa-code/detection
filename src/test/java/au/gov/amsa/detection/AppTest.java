@@ -3,6 +3,7 @@ package au.gov.amsa.detection;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -41,6 +42,8 @@ public class AppTest {
                         .description(
                                 "detect entry into Australian EEZ and send information to vessels")
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
+                .resendIntervalS((int) TimeUnit.DAYS.toSeconds(30))
+                .resendIntervalSOut((int) TimeUnit.DAYS.toSeconds(7))
                 .regionID(region.getRegion_R4().getId()).build());
 
         MessageTemplate.create(MessageTemplate.Events.Create.builder()

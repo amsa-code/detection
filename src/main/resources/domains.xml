@@ -37,6 +37,8 @@
         LowerLimit="-9999999999999" />
     <IntegerType Name="MMSI" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
         Units="mmsi" />
+    <IntegerType Name="Interval Seconds" LowerLimit="0" UpperLimit="999999999"
+        DefaultValue="0" Units="mmsi" />
     <BooleanType Name="boolean" DefaultValue="false" />
 
 
@@ -53,6 +55,8 @@
                 <IndependentAttribute Name="Description" Type="MediumString" />
                 <IndependentAttribute Name="Start Time" Type="timestamp" />
                 <IndependentAttribute Name="End Time" Type="timestamp" />
+                <IndependentAttribute Name="Resend Interval S" Type="Interval Seconds" />
+                <IndependentAttribute Name="Resend Interval S Out" Type="Interval Seconds" />
                 <ReferentialAttribute Name="Region">
                     <ToOneReference Relationship="1" Attribute="ID" />
                 </ReferentialAttribute>
@@ -72,6 +76,9 @@
                             <StateModelParameter Name="StartTime" Type="timestamp" />
                             <StateModelParameter Name="EndTime" Type="timestamp" />
                             <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Resend Interval S" Type="Interval Seconds" />
+                            <StateModelParameter Name="Resend Interval S Out"
+                                Type="Interval Seconds" />
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Position In Region"
