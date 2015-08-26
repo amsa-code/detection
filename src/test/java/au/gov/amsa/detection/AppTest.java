@@ -42,8 +42,12 @@ public class AppTest {
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
                 .regionID(region.getRegion_R4().getId()).build());
 
-        MessageTemplate.create(MessageTemplate.Events.Create.builder().body("Hi there")
-                .subject("${craft.identity}").startTime(new Date(0))
+        MessageTemplate.create(MessageTemplate.Events.Create.builder()
+                .body("Your vessel identified by ${craft.identifier.type}"
+                        + " ${craft.identifier} was detected entering ${region.name}"
+                        + " at ${position.time} with position ${position.lat.formatted.html}"
+                        + " ${position.lon.formatted.html}. Please be aware of the following:")
+                .subject("Welcome to the Australian EEZ").startTime(new Date(0))
                 .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
                 .detectionRuleID(dr.getId()).build());
 

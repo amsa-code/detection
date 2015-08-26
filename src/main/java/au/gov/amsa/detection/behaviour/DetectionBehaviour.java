@@ -5,6 +5,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.davidmoten.grumpy.core.Position;
 
@@ -17,6 +19,8 @@ import au.gov.amsa.detection.model.Detection.Events.Send;
 import au.gov.amsa.detection.model.DetectionRule;
 
 public class DetectionBehaviour implements Behaviour {
+
+    private static Logger log = LoggerFactory.getLogger(DetectionBehaviour.class);
 
     private final Detection self;
 
@@ -40,6 +44,7 @@ public class DetectionBehaviour implements Behaviour {
                 .forEach(template -> {
                     String subject = replaceParameters(template.getSubject());
                     String body = replaceParameters(template.getBody());
+                    log.info("email is\n{}\n--------------\n{}--------------", subject, body);
                 });
 
         // message template might use these parameters:
@@ -89,8 +94,6 @@ public class DetectionBehaviour implements Behaviour {
 
     private String replaceParameter(String s, String param, String value) {
         String paramAdjusted = param.replace("$", "\\$").replace("{", "\\{").replace("}", "\\}");
-        System.out.println(
-                "replacing in '" + s + "', param='" + paramAdjusted + "', value='" + value + "'");
         return s.replaceAll(paramAdjusted, value);
     }
 
