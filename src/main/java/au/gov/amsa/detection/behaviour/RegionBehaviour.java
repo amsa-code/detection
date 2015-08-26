@@ -28,12 +28,9 @@ public class RegionBehaviour implements Behaviour {
 
     @Override
     public void onEntryHasPosition(Position event) {
-        List<RegionCraft> list = Context.em()
-                .createQuery(
-                        "select rc from RegionCraft rc where region_R5.id=:region_id and craft_R15.id=:craft_id",
-                        RegionCraft.class)
-                .setParameter("region_id", self.getId())
-                .setParameter("craft_id", event.getCraftID()).getResultList();
+        List<RegionCraft> list = RegionCraft.select(RegionCraft.Attribute.craft_R15_id
+                .eq(event.getCraftID()).and(RegionCraft.Attribute.region_R5_id.eq(self.getId())))
+                .many();
         boolean inside = contains(event.getLatitude(), event.getLongitude());
         RegionCraft rc;
         if (list.size() > 0) {
