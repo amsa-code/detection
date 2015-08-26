@@ -23,7 +23,7 @@ public class SimpleRegionBehaviour implements Behaviour {
         region.setName(event.getName());
         region.setDescription(event.getDescription());
         region.setSimpleRegion_R4(self);
-        region.setState(Region.State.CREATED.name());
+        region.setState(Region.State.CREATED);
         self.setRegion_R4(region);
         region.setSimpleRegion_R4(self);
         Context.em().persist(region);

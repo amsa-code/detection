@@ -5,7 +5,9 @@ import javax.persistence.Persistence;
 
 import au.gov.amsa.detection.behaviour.CraftBehaviour;
 import au.gov.amsa.detection.behaviour.CraftTypeBehaviour;
+import au.gov.amsa.detection.behaviour.DetectedCraftBehaviour;
 import au.gov.amsa.detection.behaviour.DetectionBehaviour;
+import au.gov.amsa.detection.behaviour.DetectionMessageBehaviour;
 import au.gov.amsa.detection.behaviour.DetectionRuleBehaviour;
 import au.gov.amsa.detection.behaviour.MessageTemplateBehaviour;
 import au.gov.amsa.detection.behaviour.RegionBehaviour;
@@ -14,7 +16,9 @@ import au.gov.amsa.detection.behaviour.SimpleRegionBehaviour;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftType;
+import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.Detection;
+import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.Region;
@@ -40,6 +44,8 @@ public final class App {
         RegionCraft.setBehaviourFactory(RegionCraftBehaviour.class);
         Detection.setBehaviourFactory(DetectionBehaviour.class);
         MessageTemplate.setBehaviourFactory(MessageTemplateBehaviour.class);
+        DetectionMessage.setBehaviourFactory(DetectionMessageBehaviour.class);
+        DetectedCraft.setBehaviourFactory(DetectedCraftBehaviour.class);
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();

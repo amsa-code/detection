@@ -11,6 +11,7 @@ import org.junit.Test;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftType;
+import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.SimpleRegion;
@@ -50,6 +51,9 @@ public class AppTest {
                 .subject("Welcome to the Australian EEZ").startTime(new Date(0))
                 .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
                 .detectionRuleID(dr.getId()).build());
+
+        DetectedCraft dc = DetectedCraft
+                .create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId()).build());
 
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")
                 .description("A ship or other floating craft").build());

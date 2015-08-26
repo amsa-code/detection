@@ -94,7 +94,7 @@ public class DetectionRuleBehaviour implements Behaviour {
             detection.setDetectionRule_R18(self);
             self.setDetection_R18(detection);
             detection.relateAcrossR7(self);
-            detection.setState(Detection.State.CREATED.toString());
+            detection.setState(Detection.State.CREATED);
             detection.persist(Context.em());
 
             // because detection is not self this signal will run in a distinct

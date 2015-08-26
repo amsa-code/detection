@@ -10,8 +10,8 @@ import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.Region.Behaviour;
-import au.gov.amsa.detection.model.Region.Events.Create;
 import au.gov.amsa.detection.model.Region.Events.Position;
+import au.gov.amsa.detection.model.Region.Events.StateSignature_Created;
 import au.gov.amsa.detection.model.RegionCraft;
 
 public class RegionBehaviour implements Behaviour {
@@ -23,7 +23,7 @@ public class RegionBehaviour implements Behaviour {
     }
 
     @Override
-    public void onEntryCreated(Create event) {
+    public void onEntryCreated(StateSignature_Created event) {
         throw new RuntimeException("should not be called");
     }
 
@@ -56,7 +56,7 @@ public class RegionBehaviour implements Behaviour {
         if (inside) {
             rc.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
             rc.setLastTimeEntered(event.getTime());
-            rc.setState(RegionCraft.State.INSIDE_REGION.toString());
+            rc.setState(RegionCraft.State.INSIDE_REGION);
             self.getDetectionRule_R1()
                     .forEach(dr -> dr.signal(DetectionRule.Events.PositionInRegion.builder()
                             .altitudeMetres(event.getAltitudeMetres()).craftID(event.getCraftID())
@@ -65,7 +65,7 @@ public class RegionBehaviour implements Behaviour {
         } else {
             rc.setLastTimeEntered(event.getTime());
             rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));
-            rc.setState(RegionCraft.State.OUTSIDE_REGION.toString());
+            rc.setState(RegionCraft.State.OUTSIDE_REGION);
         }
         Craft craft = Craft.find(event.getCraftID()).get();
         rc.setRegion_R5(self);

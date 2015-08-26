@@ -107,7 +107,7 @@
                 <Lifecycle>
                     <State Name="Created" />
                     <State Name="HasPosition" />
-                    <CreationEvent Name="Create" ID="1" State="Created"/>
+                    <CreationEvent Name="Create" ID="1" State="Created" />
                     <LocalEffectiveSignalingEvent Name="Position" ID="2">
                         <EventSignature>
                             <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
@@ -436,31 +436,38 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
+                <ReferentialAttribute Name="Message Recipient">
+                    <ToOneReference Relationship="13" Attribute="ID" />
+                </ReferentialAttribute>
                 <IndependentAttribute Name="Subject" Type="MessageSubject" />
                 <IndependentAttribute Name="Body" Type="MessageBody" />
                 <IndependentAttribute Name="SentTime" Type="timestamp" />
                 <ReferentialAttribute Name="Detection">
                     <ToOneReference Relationship="11" Attribute="ID" />
                 </ReferentialAttribute>
-                <ReferentialAttribute Name="Message Template">
-                    <ToOneReference Relationship="12" Attribute="ID" />
-                </ReferentialAttribute>
-                <ReferentialAttribute Name="Message Recipient">
-                    <ToOneReference Relationship="13" Attribute="ID" />
-                </ReferentialAttribute>
+
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Subject" Type="MessageSubject" />
+                            <StateModelParameter Name="Body" Type="MessageBody" />
+                            <StateModelParameter Name="SentTime" Type="timestamp" />
+                            <StateModelParameter Name="Detection ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Message Template ID"
+                                Type="Arbitrary ID" />
+                            <StateModelParameter Name="Message Recipient ID"
+                                Type="Arbitrary ID" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
+
             </Class>
 
             <BinaryAssociation Rnum="11">
                 <ActivePerspective Phrase="is notification of" ViewedClass="Detection"
                     OnePerspective="true" Conditional="false" />
                 <PassivePerspective Phrase="provokes sending of" ViewedClass="Detection Message"
-                    OnePerspective="false" Conditional="true" />
-            </BinaryAssociation>
-
-            <BinaryAssociation Rnum="12">
-                <ActivePerspective Phrase="is built from" ViewedClass="Message Template"
-                    OnePerspective="true" Conditional="false" />
-                <PassivePerspective Phrase="templates" ViewedClass="Detection Message"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
@@ -497,6 +504,14 @@
                 <ReferentialAttribute Name="Message Recipient">
                     <GeneralizationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
             </Class>
 
             <Class Name="Contact">
@@ -518,7 +533,7 @@
                 <ActivePerspective Phrase="has" OnePerspective="false"
                     Conditional="true" ViewedClass="Message Recipient" />
                 <PassivePerspective Phrase="receives messages for"
-                    OnePerspective="true" Conditional="true" ViewedClass="Detection Rule" />
+                    OnePerspective="true" Conditional="false" ViewedClass="Detection Rule" />
             </BinaryAssociation>
 
             <BinaryAssociation Rnum="18">
