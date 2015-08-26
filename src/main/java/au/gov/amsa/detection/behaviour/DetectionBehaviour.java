@@ -42,26 +42,13 @@ public class DetectionBehaviour implements Behaviour {
                 .filter(template -> Util.between(event.getSendTime(), template.getStartTime(),
                         template.getEndTime()))
                 .forEach(template -> {
+                    // max of one template found
                     String subject = replaceParameters(template.getSubject());
                     String body = replaceParameters(template.getBody());
-                    log.info("email is\n{}\n--------------\n{}--------------", subject, body);
+                    log.info("email is\n" + "{}\n" + "--------------\n" + "{}\n" + "--------------",
+                            subject, body);
+                    dr.getMessageRecipient_R16().stream();
                 });
-
-        // message template might use these parameters:
-        // ${craft.identifier.type}
-        // ${craft.identifier}
-        // ${craft.type}
-        // ${craft.name}
-        // ${ais.type}
-        // ${craft.length.metres}
-        // ${craft.width.metres}
-        // ${position.time}
-        // ${position.lat}
-        // ${position.lon}
-        // ${position.latlon.formatted}
-        // ${detection.rule.name}
-        // ${detection.rule.description}
-        // ${region.name}
 
     }
 
@@ -77,7 +64,6 @@ public class DetectionBehaviour implements Behaviour {
                 dtf.format(Instant.ofEpochMilli(self.getReportTime().getTime())));
         s = replaceParameter(s, "${position.lat}", self.getReportLatitude().toString());
         s = replaceParameter(s, "${position.lon}", self.getReportLongitude().toString());
-        // TODO
         String latFormatted = StringEscapeUtils.ESCAPE_HTML4.translate(
                 Position.toDegreesMinutesDecimalMinutesLatitude(self.getReportLatitude()));
         String lonFormatted = StringEscapeUtils.ESCAPE_HTML4.translate(
