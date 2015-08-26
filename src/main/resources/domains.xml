@@ -39,6 +39,8 @@
         Units="mmsi" />
     <IntegerType Name="Interval Seconds" LowerLimit="0" UpperLimit="999999999"
         DefaultValue="0" Units="mmsi" />
+    <IntegerType Name="Order" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
+        Units="ordinal" />
     <BooleanType Name="boolean" DefaultValue="false" />
 
 
@@ -239,45 +241,34 @@
                 </ReferentialAttribute>
             </Class>
 
-            <Class Name="Region Exclusion">
+            <Class Name="Composite Region Member">
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
+                <IndependentAttribute Name="Include" Type="boolean" />
                 <ReferentialAttribute Name="Region">
-                    <AssociativeReference Relationship="9" Class="Region"
-                        Attribute="ID" />
+                    <ToOneReference Relationship="9" Attribute="ID" />
                 </ReferentialAttribute>
                 <ReferentialAttribute Name="Composite Region">
-                    <AssociativeReference Relationship="9" Class="Composite Region"
-                        Attribute="ID" />
+                    <Identifier Number="2" />
+                    <ToOneReference Relationship="10" Attribute="ID" />
                 </ReferentialAttribute>
+                <IndependentAttribute Name="Order" Type="Order">
+                    <Identifier Number="2" />
+                </IndependentAttribute>
             </Class>
 
-            <BinaryAssociation Rnum="9" AssociationClass="Region Exclusion">
-                <ActivePerspective Phrase="excludes" ViewedClass="Region"
-                    OnePerspective="false" Conditional="true" />
-                <PassivePerspective Phrase="is excluded from" ViewedClass="Composite Region"
+            <BinaryAssociation Rnum="9">
+                <ActivePerspective Phrase="has member" ViewedClass="Region"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="is" ViewedClass="Composite Region Member"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
-            <Class Name="Region Inclusion">
-                <IndependentAttribute Name="ID" Type="Arbitrary ID">
-                    <Identifier Number="1" />
-                </IndependentAttribute>
-                <ReferentialAttribute Name="Region">
-                    <AssociativeReference Relationship="10" Class="Region"
-                        Attribute="ID" />
-                </ReferentialAttribute>
-                <ReferentialAttribute Name="Composite Region">
-                    <AssociativeReference Relationship="10" Class="Composite Region"
-                        Attribute="ID" />
-                </ReferentialAttribute>
-            </Class>
-
-            <BinaryAssociation Rnum="10" AssociationClass="Region Inclusion">
-                <ActivePerspective Phrase="includes" ViewedClass="Region"
-                    OnePerspective="false" Conditional="true" />
-                <PassivePerspective Phrase="is included in" ViewedClass="Composite Region"
+            <BinaryAssociation Rnum="10">
+                <ActivePerspective Phrase="has member" ViewedClass="Composite Region"
+                    OnePerspective="true" Conditional="false" />
+                <PassivePerspective Phrase="is" ViewedClass="Composite Region Member"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
