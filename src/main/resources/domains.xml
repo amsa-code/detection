@@ -493,7 +493,18 @@
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
-                    <CreationEvent Name="Create" ID="1" State="Created" />
+                    <State Name="Sent" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature></EventSignature>
+                    </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="Send" ID="2">
+                        <EventSignature>
+                            <StateModelParameter Name="Detection Message ID"
+                                Type="Arbitrary ID" />
+                        </EventSignature>
+                    </LocalEffectiveSignalingEvent>
+                    <Transition State="Created" EventID="2" Destination="Sent" />
+                    <Transition State="Sent" EventID="2" Destination="Sent" />
                 </Lifecycle>
             </Class>
 
@@ -513,11 +524,20 @@
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
+                    <State Name="Sent" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="Send" ID="2">
+                        <EventSignature>
+                            <StateModelParameter Name="Detection Message ID"
+                                Type="Arbitrary ID" />
+                        </EventSignature>
+                    </LocalEffectiveSignalingEvent>
+                    <Transition State="Created" EventID="2" Destination="Sent" />
+                    <Transition State="Sent" EventID="2" Destination="Sent" />
                 </Lifecycle>
             </Class>
 

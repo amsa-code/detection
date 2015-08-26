@@ -5,6 +5,7 @@ import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectedCraft.Behaviour;
 import au.gov.amsa.detection.model.DetectedCraft.Events.Create;
+import au.gov.amsa.detection.model.DetectedCraft.Events.Send;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageRecipient;
 
@@ -24,6 +25,11 @@ public class DetectedCraftBehaviour implements Behaviour {
         r.setState(MessageRecipient.State.CREATED);
         self.relateAcrossR14(r);
         r.persist(Context.em());
+    }
+
+    @Override
+    public void onEntrySent(Send event) {
+        System.out.println("SENDING to DETECTED CRAFT");
     }
 
 }

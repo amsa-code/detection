@@ -16,7 +16,9 @@ import au.gov.amsa.detection.model.Detection;
 import au.gov.amsa.detection.model.Detection.Behaviour;
 import au.gov.amsa.detection.model.Detection.Events.Create;
 import au.gov.amsa.detection.model.Detection.Events.Send;
+import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionRule;
+import au.gov.amsa.detection.model.MessageRecipient;
 
 public class DetectionBehaviour implements Behaviour {
 
@@ -47,7 +49,14 @@ public class DetectionBehaviour implements Behaviour {
                     String body = replaceParameters(template.getBody());
                     log.info("email is\n" + "{}\n" + "--------------\n" + "{}\n" + "--------------",
                             subject, body);
-                    dr.getMessageRecipient_R16().stream();
+                    dr.getMessageRecipient_R16().stream().forEach(r -> {
+                        DetectionMessage m = DetectionMessage.create(
+                                DetectionMessage.Events.Create.builder().body(body).subject(subject)
+                                        .detectionID(self.getId()).messageRecipientID(r.getId())
+                                        .messageTemplateID(template.getId()).build());
+                        r.signal(MessageRecipient.Events.Send.builder()
+                                .detectionMessageID(m.getId()).build());
+                    });
                 });
 
     }
