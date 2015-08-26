@@ -107,9 +107,7 @@
                 <Lifecycle>
                     <State Name="Created" />
                     <State Name="HasPosition" />
-                    <CreationEvent Name="Create" ID="1" State="Created">
-                        <EventSignature />
-                    </CreationEvent>
+                    <CreationEvent Name="Create" ID="1" State="Created"/>
                     <LocalEffectiveSignalingEvent Name="Position" ID="2">
                         <EventSignature>
                             <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
@@ -420,10 +418,10 @@
                             <StateModelParameter Name="EndTime" Type="timestamp" />
                             <StateModelParameter Name="ForceUpdateBeforeTime"
                                 Type="timestamp" />
-                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID"/>
+                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </CreationEvent>
-                    
+
                 </Lifecycle>
             </Class>
 
@@ -479,6 +477,10 @@
                 <ReferentialAttribute Name="Detection Rule">
                     <SpecializationReference Relationship="16" Attribute="ID" />
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created" />
+                </Lifecycle>
             </Class>
 
             <BinaryAssociation Rnum="13">
