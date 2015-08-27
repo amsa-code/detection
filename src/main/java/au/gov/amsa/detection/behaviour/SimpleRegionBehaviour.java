@@ -21,9 +21,8 @@ public class SimpleRegionBehaviour implements Behaviour {
         Region region = Region.create(ArbitraryId.next());
         region.setName(event.getName());
         region.setDescription(event.getDescription());
-        region.setSimpleRegion_R4(self);
+        region.relateAcrossR4(self);
         region.setState(Region.State.CREATED);
-        self.setRegion_R4(region);
         region.persist();
     }
 

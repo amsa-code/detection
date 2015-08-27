@@ -5,7 +5,6 @@ import java.util.Date;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
-import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.Region;
@@ -70,9 +69,9 @@ public class RegionBehaviour implements Behaviour {
             rc.setState(RegionCraft.State.OUTSIDE_REGION);
         }
         Craft craft = Craft.find(event.getCraftID()).get();
-        rc.setRegion_R5(self);
-        rc.setCraft_R15(craft);
-        rc.persist(Context.em());
+        rc.relateAcrossR5(self);
+        rc.relateAcrossR15(craft);
+        rc.persist();
     }
 
     private boolean contains(Double latitude, Double longitude) {

@@ -25,7 +25,7 @@ public class CraftBehaviour implements Craft.Behaviour {
         self.setId(ArbitraryId.next());
         self.setIdentifier(event.getCraftIdentifier());
         self.setIdentifierType(event.getCraftIdentifierType());
-        self.setCraftType_R3(CraftType.find(event.getCraftTypeID()).get());
+        self.relateAcrossR3(CraftType.find(event.getCraftTypeID()).get());
     }
 
     @Override

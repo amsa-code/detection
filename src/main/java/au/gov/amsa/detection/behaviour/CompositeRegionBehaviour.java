@@ -24,7 +24,7 @@ public class CompositeRegionBehaviour implements Behaviour {
         region.setDescription(event.getDescription());
         region.setCompositeRegion_R4(self);
         region.setState(Region.State.CREATED);
-        self.setRegion_R4(region);
+        region.relateAcrossR4(self);
         region.persist();
     }
 
@@ -35,7 +35,6 @@ public class CompositeRegionBehaviour implements Behaviour {
 
         // create without using state machine
         CompositeRegionMember m = CompositeRegionMember.create(ArbitraryId.next());
-        m.setCompositeRegion_R10(self);
         m.setInclude(event.getInclude());
         m.setOrder(nextOrder);
         m.relateAcrossR10(self);

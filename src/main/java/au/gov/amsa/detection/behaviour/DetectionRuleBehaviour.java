@@ -81,15 +81,14 @@ public class DetectionRuleBehaviour implements Behaviour {
         if (createDetection) {
             Detection detection = Detection.create(ArbitraryId.next());
             Craft craft = Craft.find(event.getCraftID()).get();
-            detection.setCraft_R6(craft);
+            detection.relateAcrossR6(craft);
             detection.setReportAltitudeMetres(event.getAltitudeMetres());
             detection.setReportLatitude(event.getLatitude());
             detection.setReportLongitude(event.getLongitude());
             detection.setReportTime(event.getTime());
             detection.setCreatedTime(new Date());
             // establish latest detection for rule
-            detection.setDetectionRule_R18(self);
-            self.setDetection_R18(detection);
+            detection.relateAcrossR18(self);
             detection.relateAcrossR7(self);
             detection.setState(Detection.State.CREATED);
             detection.persist();
