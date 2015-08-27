@@ -6,10 +6,7 @@ import au.gov.amsa.detection.model.CompositeRegionMember.Events.Create;
 
 public class CompositeRegionMemberBehaviour implements Behaviour {
 
-    private final CompositeRegionMember self;
-
     public CompositeRegionMemberBehaviour(CompositeRegionMember self) {
-        this.self = self;
     }
 
     @Override
