@@ -275,6 +275,14 @@
                 <IndependentAttribute Name="Order" Type="Order">
                     <Identifier Number="2" />
                 </IndependentAttribute>
+                <Lifecycle>
+                    <State Name="Created"/>
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <!--  Not used because state machine not used to instanitate -->
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
             </Class>
 
             <BinaryAssociation Rnum="9">

@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftType;
@@ -37,6 +38,12 @@ public class AppTest {
                 .description("Australian Exclusive Economic Zone")
                 .zippedShapefileBytes(new byte[] { 1, 2, 3 }).build());
 
+        CompositeRegion compositeRegion = CompositeRegion
+                .create(CompositeRegion.Events.Create.builder().name("Outside EEZ")
+                        .description("Australian Exclusive Economic Zone as composite").build());
+        compositeRegion.signal(CompositeRegion.Events.AddRegion.builder()
+                .regionID(region.getRegion_R4().getId()).include(false).build());
+
         DetectionRule dr = DetectionRule
                 .create(DetectionRule.Events.Create.builder().name("Name")
                         .description(
@@ -55,7 +62,7 @@ public class AppTest {
                 .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
                 .detectionRuleID(dr.getId()).build());
 
-        DetectedCraft dc = DetectedCraft
+        DetectedCraft
                 .create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId()).build());
 
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")

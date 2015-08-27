@@ -50,10 +50,10 @@ public class DetectionBehaviour implements Behaviour {
                     log.info("email is\n" + "{}\n" + "--------------\n" + "{}\n" + "--------------",
                             subject, body);
                     dr.getMessageRecipient_R16().stream().forEach(r -> {
-                        DetectionMessage m = DetectionMessage.create(
-                                DetectionMessage.Events.Create.builder().body(body).subject(subject)
-                                        .detectionID(self.getId()).messageRecipientID(r.getId())
-                                        .messageTemplateID(template.getId()).build());
+                        DetectionMessage m = DetectionMessage.create(DetectionMessage.Events.Create
+                                .builder().body(body).subject(subject).detectionID(self.getId())
+                                .messageRecipientID(r.getId()).messageTemplateID(template.getId())
+                                .sentTime(event.getSendTime()).build());
                         r.signal(MessageRecipient.Events.Send.builder()
                                 .detectionMessageID(m.getId()).build());
                     });

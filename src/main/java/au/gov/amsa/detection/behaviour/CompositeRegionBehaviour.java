@@ -5,6 +5,7 @@ import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.CompositeRegion.Behaviour;
 import au.gov.amsa.detection.model.CompositeRegion.Events.AddRegion;
 import au.gov.amsa.detection.model.CompositeRegion.Events.Create;
+import au.gov.amsa.detection.model.CompositeRegionMember;
 import au.gov.amsa.detection.model.Region;
 
 public class CompositeRegionBehaviour implements Behaviour {
@@ -29,7 +30,18 @@ public class CompositeRegionBehaviour implements Behaviour {
 
     @Override
     public void onEntryHasMembers(AddRegion event) {
+        int nextOrder = self.getCompositeRegionMember_R10().stream().mapToInt(m -> m.getOrder())
+                .max().orElse(0) + 10;
 
+        // create without using state machine
+        CompositeRegionMember m = CompositeRegionMember.create(ArbitraryId.next());
+        m.setCompositeRegion_R10(self);
+        m.setInclude(event.getInclude());
+        m.setOrder(nextOrder);
+        m.relateAcrossR10(self);
+        m.relateAcrossR9(Region.find(event.getRegionID()).get());
+        m.setState(CompositeRegionMember.State.CREATED);
+        m.persist();
     }
 
 }

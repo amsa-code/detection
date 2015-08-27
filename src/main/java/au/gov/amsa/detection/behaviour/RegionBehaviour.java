@@ -61,6 +61,8 @@ public class RegionBehaviour implements Behaviour {
                     .forEach(dr -> dr.signal(DetectionRule.Events.PositionInRegion.builder()
                             .altitudeMetres(event.getAltitudeMetres()).craftID(event.getCraftID())
                             .latitude(event.getLatitude()).longitude(event.getLongitude())
+                            .lastTimeEntered(rc.getLastTimeEntered())
+                            .lastExitTimeFromRegion(rc.getLastExitTimeFromRegion())
                             .time(event.getTime()).build()));
         } else {
             rc.setLastTimeEntered(event.getTime());
