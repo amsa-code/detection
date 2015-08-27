@@ -2,9 +2,11 @@ package au.gov.amsa.detection;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,11 +34,14 @@ public class AppTest {
     }
 
     @Test
-    public void testApp() throws InterruptedException {
+    public void testApp() throws InterruptedException, IOException {
+
+        byte[] bytes = IOUtils.toByteArray(
+                AppTest.class.getResourceAsStream("/shapefile-coral-sea-atba-polygon.zip"));
 
         SimpleRegion region = SimpleRegion.create(SimpleRegion.Events.Create.builder().name("EEZ")
-                .description("Australian Exclusive Economic Zone")
-                .zippedShapefileBytes(new byte[] { 1, 2, 3 }).build());
+                .description("Australian Exclusive Economic Zone").zippedShapefileBytes(bytes)
+                .build());
 
         CompositeRegion compositeRegion = CompositeRegion
                 .create(CompositeRegion.Events.Create.builder().name("Outside EEZ")

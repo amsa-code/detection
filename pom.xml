@@ -28,15 +28,20 @@
             <version>${xuml.tools.version}</version>
             <type>pom</type>
         </dependency>
-       <dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.4</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
         <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>grumpy-core</artifactId>
             <version>0.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>au.gov.amsa.risky</groupId>
+            <artifactId>geotools-extras</artifactId>
+            <version>0.4.1.1-SNAPSHOT</version>
         </dependency>
 
         <!-- test dependencies -->
