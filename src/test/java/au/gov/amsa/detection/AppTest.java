@@ -46,6 +46,7 @@ public class AppTest {
         CompositeRegion compositeRegion = CompositeRegion
                 .create(CompositeRegion.Events.Create.builder().name("Outside EEZ")
                         .description("Australian Exclusive Economic Zone as composite").build());
+
         compositeRegion.signal(CompositeRegion.Events.AddRegion.builder()
                 .regionID(region.getRegion_R4().getId()).include(false).build());
 
@@ -77,8 +78,15 @@ public class AppTest {
                 .create(Craft.Events.Create.builder().mmsi(123456789).craftTypeID(vessel.getId())
                         .craftIdentifier("123456789").craftIdentifierType("MMSI").build());
 
+        long t = TimeUnit.DAYS.toMillis(100);
+
+        // in EEZ
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
-                .longitude(142.0).time(new Date()).build());
+                .longitude(142.0).time(new Date(t)).build());
+
+        // in coral sea ATBA
+        craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-17.020463)
+                .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
 
         Context.sendSignalsInQueue();
 

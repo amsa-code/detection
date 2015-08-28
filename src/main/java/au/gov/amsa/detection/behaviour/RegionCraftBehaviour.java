@@ -38,7 +38,8 @@ public class RegionCraftBehaviour implements Behaviour {
         PositionInRegion positionInRegion = DetectionRule.Events.PositionInRegion.builder()
                 .altitudeMetres(event.getAltitudeMetres()).craftID(self.getCraft_R15().getId())
                 .latitude(event.getLatitude()).longitude(event.getLongitude()).time(event.getTime())
-                .build();
+                .lastTimeEntered(self.getLastTimeEntered())
+                .lastExitTimeFromRegion(self.getLastExitTimeFromRegion()).build();
 
         self.getRegion_R5().getDetectionRule_R1().forEach(dr -> dr.signal(positionInRegion));
     }
