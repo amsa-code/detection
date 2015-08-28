@@ -30,13 +30,9 @@ public class CompositeRegionBehaviour implements Behaviour {
 
     @Override
     public void onEntryHasMembers(AddRegion event) {
-        int nextOrder = self.getCompositeRegionMember_R10().stream().mapToInt(m -> m.getOrder())
-                .max().orElse(0) + 10;
-
         // create without using state machine
         CompositeRegionMember m = CompositeRegionMember.create(ArbitraryId.next());
         m.setInclude(event.getInclude());
-        m.setOrder(nextOrder);
         m.relateAcrossR10(self);
         m.relateAcrossR9(Region.find(event.getRegionID()).get());
         m.setState(CompositeRegionMember.State.CREATED);
