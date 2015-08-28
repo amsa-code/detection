@@ -1,10 +1,12 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.Shapefiles;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.Region;
@@ -12,6 +14,7 @@ import au.gov.amsa.detection.model.Region.Behaviour;
 import au.gov.amsa.detection.model.Region.Events.Position;
 import au.gov.amsa.detection.model.Region.Events.StateSignature_Created;
 import au.gov.amsa.detection.model.RegionCraft;
+import au.gov.amsa.gt.Shapefile;
 
 public class RegionBehaviour implements Behaviour {
 
@@ -75,7 +78,15 @@ public class RegionBehaviour implements Behaviour {
     }
 
     private boolean contains(Double latitude, Double longitude) {
-        return true;
+        if (self.getSimpleRegion_R4() != null) {
+            Shapefile shapefile = Shapefiles.instance().get(self.getName(), () -> {
+                byte[] bytes = self.getSimpleRegion_R4().getZippedShapefileBytes();
+                return Shapefile.fromZip(new ByteArrayInputStream(bytes));
+            });
+            return shapefile.contains(latitude, longitude);
+        } else {
+            return true;
+        }
     }
 
 }
