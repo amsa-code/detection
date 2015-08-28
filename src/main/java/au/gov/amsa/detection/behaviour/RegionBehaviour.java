@@ -14,6 +14,7 @@ import au.gov.amsa.detection.model.Region.Behaviour;
 import au.gov.amsa.detection.model.Region.Events.Position;
 import au.gov.amsa.detection.model.Region.Events.StateSignature_Created;
 import au.gov.amsa.detection.model.RegionCraft;
+import au.gov.amsa.detection.model.SimpleRegion;
 import au.gov.amsa.gt.Shapefile;
 
 public class RegionBehaviour implements Behaviour {
@@ -34,7 +35,7 @@ public class RegionBehaviour implements Behaviour {
         Optional<RegionCraft> rc = RegionCraft.select(RegionCraft.Attribute.craft_R15_id
                 .eq(event.getCraftID()).and(RegionCraft.Attribute.region_R5_id.eq(self.getId())))
                 .one();
-        boolean inside = contains(event.getLatitude(), event.getLongitude());
+        boolean inside = contains(self, event.getLatitude(), event.getLongitude());
         if (rc.isPresent()) {
             if (inside) {
                 rc.get().signal(RegionCraft.Events.In.builder()
@@ -77,16 +78,33 @@ public class RegionBehaviour implements Behaviour {
         rc.persist();
     }
 
-    private boolean contains(Double latitude, Double longitude) {
-        if (self.getSimpleRegion_R4() != null) {
-            Shapefile shapefile = Shapefiles.instance().get(self.getName(), () -> {
-                byte[] bytes = self.getSimpleRegion_R4().getZippedShapefileBytes();
-                return Shapefile.fromZip(new ByteArrayInputStream(bytes));
-            });
-            return shapefile.contains(latitude, longitude);
+    private static boolean contains(Region region, Double lat, Double lon) {
+        if (region.getSimpleRegion_R4() != null) {
+            return simpleRegionContains(region.getSimpleRegion_R4(), lat, lon);
         } else {
-            return true;
+            return compositeRegionContains(region, lat, lon);
         }
+    }
+
+    private static boolean simpleRegionContains(SimpleRegion region, Double lat, Double lon) {
+        // get shapefile from cache
+        Shapefile shapefile = Shapefiles.instance().get(region.getRegion_R4().getName(), () -> {
+            byte[] bytes = region.getZippedShapefileBytes();
+            return Shapefile.fromZip(new ByteArrayInputStream(bytes));
+        });
+        return shapefile.contains(lat, lon);
+    }
+
+    private static boolean compositeRegionContains(Region region, Double lat, Double lon) {
+        // region is CompositeRegion
+        return region.getCompositeRegion_R4().getCompositeRegionMember_R10().stream()
+                .allMatch(crm -> {
+                    if (crm.getInclude()) {
+                        return contains(crm.getRegion_R9(), lat, lon);
+                    } else {
+                        return !contains(crm.getRegion_R9(), lat, lon);
+                    }
+                });
     }
 
 }

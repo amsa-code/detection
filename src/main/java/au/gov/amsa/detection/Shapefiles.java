@@ -19,7 +19,7 @@ public class Shapefiles {
         return Holder.INSTANCE;
     }
 
-    private final Cache<String, Shapefile> cache = CacheBuilder.<String, Shapefile> newBuilder()
+    private final Cache<String, Shapefile> cache = CacheBuilder.newBuilder()
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     public Shapefile get(String key, Callable<Shapefile> creator) {

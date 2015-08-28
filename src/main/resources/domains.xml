@@ -39,8 +39,6 @@
         Units="mmsi" />
     <IntegerType Name="Interval Seconds" LowerLimit="0" UpperLimit="999999999"
         DefaultValue="0" Units="mmsi" />
-    <IntegerType Name="Order" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
-        Units="ordinal" />
     <BooleanType Name="boolean" DefaultValue="false" />
 
 
@@ -105,7 +103,9 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Name" Type="ShortString" />
+                <IndependentAttribute Name="Name" Type="ShortString" >
+                    <Identifier Number="2"/>
+                </IndependentAttribute>
                 <IndependentAttribute Name="Description" Type="MediumString" />
                 <ReferentialAttribute Name="Simple Region">
                     <SpecializationReference Relationship="4" Attribute="ID" />
@@ -272,9 +272,6 @@
                     <Identifier Number="2" />
                     <ToOneReference Relationship="10" Attribute="ID" />
                 </ReferentialAttribute>
-                <IndependentAttribute Name="Order" Type="Order">
-                    <Identifier Number="2" />
-                </IndependentAttribute>
                 <Lifecycle>
                     <State Name="Created"/>
                     <CreationEvent Name="Create" ID="1" State="Created">
