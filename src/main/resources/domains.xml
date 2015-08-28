@@ -103,8 +103,8 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Name" Type="ShortString" >
-                    <Identifier Number="2"/>
+                <IndependentAttribute Name="Name" Type="ShortString">
+                    <Identifier Number="2" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Description" Type="MediumString" />
                 <ReferentialAttribute Name="Simple Region">
@@ -273,10 +273,10 @@
                     <ToOneReference Relationship="10" Attribute="ID" />
                 </ReferentialAttribute>
                 <Lifecycle>
-                    <State Name="Created"/>
+                    <State Name="Created" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
-                            <!--  Not used because state machine not used to instanitate -->
+                            <!-- Not used because state machine not used to instanitate -->
                         </EventSignature>
                     </CreationEvent>
                 </Lifecycle>
@@ -497,6 +497,8 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
+                <IndependentAttribute Name="Start Time" Type="timestamp" />
+                <IndependentAttribute Name="End Time" Type="timestamp" />
                 <ReferentialAttribute Name="Detected Craft">
                     <SpecializationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
@@ -543,6 +545,8 @@
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Start Time" Type="timestamp"/>
+                            <StateModelParameter Name="End Time" Type="timestamp"/>
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Send" ID="2">

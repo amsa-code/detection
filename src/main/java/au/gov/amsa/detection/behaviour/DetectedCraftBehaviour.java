@@ -27,6 +27,8 @@ public class DetectedCraftBehaviour implements Behaviour {
     public void onEntryCreated(Create event) {
         self.setId(ArbitraryId.next());
         MessageRecipient r = MessageRecipient.create(ArbitraryId.next());
+        r.setStartTime(event.getStartTime());
+        r.setEndTime(event.getEndTime());
         r.relateAcrossR16(DetectionRule.find(event.getDetectionRuleID()).get());
         r.setState(MessageRecipient.State.CREATED);
         r.relateAcrossR14(self);

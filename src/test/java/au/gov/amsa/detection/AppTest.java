@@ -5,11 +5,14 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.Context;
@@ -25,6 +28,8 @@ import xuml.tools.util.database.DerbyUtil;
 public class AppTest {
 
     private static final SignalProcessorListenerTesting listener = new SignalProcessorListenerTesting();
+
+    private static final Logger log = LoggerFactory.getLogger(AppTest.class);
 
     @BeforeClass
     public static void setup() {
@@ -68,8 +73,8 @@ public class AppTest {
                 .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
                 .detectionRuleID(dr.getId()).build());
 
-        DetectedCraft
-                .create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId()).build());
+        DetectedCraft.create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId())
+                .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).build());
 
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")
                 .description("A ship or other floating craft").build());
@@ -84,14 +89,20 @@ public class AppTest {
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
                 .longitude(142.0).time(new Date(t)).build());
 
-        // in coral sea ATBA
-        craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-17.020463)
-                .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
+        IntStream.range(0, 1).forEach(i -> {
+            // in coral sea ATBA
+            craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-17.020463)
+                    .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
+        });
 
-        Context.sendSignalsInQueue();
-
+        long count;
+        do {
+            Thread.sleep(1000);
+            count = Context.queueSize();
+            log.info("queueSize = " + count);
+        } while (count > 0);
+        Thread.sleep(1000);
         // wait for asynchronous processing to complete
-        Thread.sleep(5000);
         assertTrue(listener.exceptions().isEmpty());
     }
 
