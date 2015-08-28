@@ -22,6 +22,7 @@ import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.SimpleRegion;
+import xuml.tools.model.compiler.runtime.QueuedSignal;
 import xuml.tools.model.compiler.runtime.SignalProcessorListenerTesting;
 import xuml.tools.util.database.DerbyUtil;
 
@@ -97,13 +98,16 @@ public class AppTest {
 
         long count;
         do {
+            assertTrue(listener.exceptions().isEmpty());
             Thread.sleep(1000);
             count = Context.queueSize();
             log.info("queueSize = " + count);
+            for (QueuedSignal s : Context.queuedSignals()) {
+                log.info(s.toString());
+            }
         } while (count > 0);
         Thread.sleep(1000);
         // wait for asynchronous processing to complete
-        assertTrue(listener.exceptions().isEmpty());
     }
 
     @AfterClass
