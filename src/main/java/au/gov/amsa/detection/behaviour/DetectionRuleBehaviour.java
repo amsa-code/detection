@@ -34,14 +34,25 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setEndTime(event.getEndTime());
         self.setResendIntervalSOut(event.getResendIntervalSOut());
         self.setResendIntervalS(event.getResendIntervalS());
-        self.setRegion_R1(Region.find(event.getRegionID()).get());
+        self.relateAcrossR1(Region.find(event.getRegionID()).get());
     }
 
     @Override
     public void onEntryPositionInRegion(PositionInRegion event) {
 
         // create a detection only if certain criteria satisfied
+        if (shouldCreateDetection(event)) {
+            Detection detection = createNewDetection(event);
 
+            // because detection is not self this signal will run in a distinct
+            // transaction after this method has had its transaction committed
+            detection.signal(
+                    Detection.Events.Send.builder().sendTime(detection.getCreatedTime()).build());
+        }
+
+    }
+
+    private boolean shouldCreateDetection(PositionInRegion event) {
         final boolean createDetection;
         if ((event.getTime().after(self.getStartTime()) || event.getTime().equals(event.getTime()))
                 && event.getTime().before(self.getEndTime())) {
@@ -58,7 +69,7 @@ public class DetectionRuleBehaviour implements Behaviour {
                 // time
                 createDetection = false;
             } else {
-                Stream<MessageTemplate> templates = getTemplates(new Date(now));
+                Stream<MessageTemplate> templates = getTemplate(new Date(now));
                 boolean forcedUpdateRequired = templates.filter(t -> latestDetection.get()
                         .getCreatedTime().before(t.getForceUpdateBeforeTime())).findAny()
                         .isPresent();
@@ -78,30 +89,27 @@ public class DetectionRuleBehaviour implements Behaviour {
             }
         } else
             createDetection = false;
-        if (createDetection) {
-            Detection detection = Detection.create(ArbitraryId.next());
-            Craft craft = Craft.find(event.getCraftID()).get();
-            detection.relateAcrossR6(craft);
-            detection.setReportAltitudeMetres(event.getAltitudeMetres());
-            detection.setReportLatitude(event.getLatitude());
-            detection.setReportLongitude(event.getLongitude());
-            detection.setReportTime(event.getTime());
-            detection.setCreatedTime(new Date());
-            // establish latest detection for rule
-            detection.relateAcrossR18(self);
-            detection.relateAcrossR7(self);
-            detection.setState(Detection.State.CREATED);
-            detection.persist();
-
-            // because detection is not self this signal will run in a distinct
-            // transaction after this method has had its transaction committed
-            detection.signal(
-                    Detection.Events.Send.builder().sendTime(detection.getCreatedTime()).build());
-        }
-
+        return createDetection;
     }
 
-    private Stream<MessageTemplate> getTemplates(Date now) {
+    private Detection createNewDetection(PositionInRegion event) {
+        Detection detection = Detection.create(ArbitraryId.next());
+        Craft craft = Craft.find(event.getCraftID()).get();
+        detection.relateAcrossR6(craft);
+        detection.setReportAltitudeMetres(event.getAltitudeMetres());
+        detection.setReportLatitude(event.getLatitude());
+        detection.setReportLongitude(event.getLongitude());
+        detection.setReportTime(event.getTime());
+        detection.setCreatedTime(new Date());
+        // establish latest detection for rule
+        detection.relateAcrossR18(self);
+        detection.relateAcrossR7(self);
+        detection.setState(Detection.State.CREATED);
+        detection.persist();
+        return detection;
+    }
+
+    private Stream<MessageTemplate> getTemplate(Date now) {
         return Streams.fromNullable(self.getMessageTemplate_R8())
                 // only between time range
                 .filter(template -> Util.between(now, template.getStartTime(),
