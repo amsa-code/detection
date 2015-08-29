@@ -9,7 +9,7 @@ import com.google.common.cache.CacheBuilder;
 
 import au.gov.amsa.gt.Shapefile;
 
-public class Shapefiles {
+public final class Shapefiles {
 
     public static class Holder {
         private static final Shapefiles INSTANCE = new Shapefiles();
