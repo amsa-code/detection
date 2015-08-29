@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
@@ -21,7 +22,6 @@ import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.SimpleRegion;
-import xuml.tools.model.compiler.runtime.QueuedSignal;
 import xuml.tools.model.compiler.runtime.SignalProcessorListenerTesting;
 import xuml.tools.util.database.DerbyUtil;
 
@@ -89,15 +89,13 @@ public class AppTest {
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
                 .longitude(142.0).time(new Date(t)).build());
 
+        IntStream.range(0, 100).forEach(i -> {
+            // in coral sea ATBA
+            craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-17.020463)
+                    .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
+        });
+
         waitForSignalsToBeProcessed();
-
-        // IntStream.range(0, 1).forEach(i -> {
-        // // in coral sea ATBA
-        // craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-17.020463)
-        // .longitude(150.738315).time(new Date(t +
-        // TimeUnit.DAYS.toMillis(365))).build());
-        // });
-
     }
 
     public static void waitForSignalsToBeProcessed() {
@@ -109,9 +107,9 @@ public class AppTest {
                 Thread.sleep(1000);
                 count = Context.queueSize();
                 log.info("queueSize = " + count);
-                for (QueuedSignal s : Context.queuedSignals()) {
-                    log.info(s.toString());
-                }
+                // for (QueuedSignal s : Context.queuedSignals()) {
+                // log.info(s.toString());
+                // }
             } while (count > 0);
             // wait for asynchronous processing to complete
             Thread.sleep(1000);

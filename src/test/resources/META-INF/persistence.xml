@@ -30,7 +30,7 @@
             <property name="hibernate.connection.url"
                 value="jdbc:h2:mem:test-db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DETECTION" />
             <property name="hibernate.connection.pool_size" value="5" />
-            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.format_sql" value="true" />
         </properties>
     </persistence-unit>
