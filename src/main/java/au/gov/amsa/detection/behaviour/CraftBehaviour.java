@@ -47,7 +47,7 @@ public class CraftBehaviour implements Craft.Behaviour {
                 //
                 .distinct()
                 //
-                .forEach(r -> r.signal(position));
+                .forEach(region -> region.signal(position));
     }
 
 }
