@@ -19,8 +19,11 @@ public class DetectedCraftBehaviour implements Behaviour {
 
     private static final Logger log = LoggerFactory.getLogger(DetectedCraftBehaviour.class);
 
-    public DetectedCraftBehaviour(DetectedCraft self) {
+    private final CraftSender craftSender;
+
+    public DetectedCraftBehaviour(DetectedCraft self, CraftSender craftSender) {
         this.self = self;
+        this.craftSender = craftSender;
     }
 
     @Override
@@ -39,8 +42,8 @@ public class DetectedCraftBehaviour implements Behaviour {
     public void onEntrySent(Send event) {
         DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
         Craft craft = m.getDetection_R11().getCraft_R6();
-        log.info(String.format("SENDING to DETECTED CRAFT %s %s", craft.getIdentifierType(),
-                craft.getIdentifier()));
+        craftSender.send(craft.getIdentifierType(), craft.getIdentifier(), m.getSubject(),
+                m.getBody());
     }
 
 }

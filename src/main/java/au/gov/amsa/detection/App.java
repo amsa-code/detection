@@ -6,8 +6,9 @@ import javax.persistence.Persistence;
 import au.gov.amsa.detection.behaviour.CompositeRegionBehaviour;
 import au.gov.amsa.detection.behaviour.CompositeRegionMemberBehaviour;
 import au.gov.amsa.detection.behaviour.CraftBehaviour;
+import au.gov.amsa.detection.behaviour.CraftSender;
 import au.gov.amsa.detection.behaviour.CraftTypeBehaviour;
-import au.gov.amsa.detection.behaviour.DetectedCraftBehaviour;
+import au.gov.amsa.detection.behaviour.DetectedCraftBehaviourFactory;
 import au.gov.amsa.detection.behaviour.DetectionBehaviour;
 import au.gov.amsa.detection.behaviour.DetectionMessageBehaviour;
 import au.gov.amsa.detection.behaviour.DetectionRuleBehaviour;
@@ -33,7 +34,7 @@ import au.gov.amsa.detection.model.SimpleRegion;
 
 public final class App {
 
-    public static void startup() {
+    public static void startup(CraftSender craftSender) {
         // create the entity manager factory
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("testPersistenceUnit");
 
@@ -51,10 +52,10 @@ public final class App {
         Detection.setBehaviourFactory(DetectionBehaviour.class);
         MessageTemplate.setBehaviourFactory(MessageTemplateBehaviour.class);
         DetectionMessage.setBehaviourFactory(DetectionMessageBehaviour.class);
-        DetectedCraft.setBehaviourFactory(DetectedCraftBehaviour.class);
         MessageRecipient.setBehaviourFactory(MessageRecipientBehaviour.class);
         CompositeRegion.setBehaviourFactory(CompositeRegionBehaviour.class);
         CompositeRegionMember.setBehaviourFactory(CompositeRegionMemberBehaviour.class);
+        DetectedCraft.setBehaviourFactory(new DetectedCraftBehaviourFactory(craftSender));
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();
