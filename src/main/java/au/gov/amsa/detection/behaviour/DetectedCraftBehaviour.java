@@ -1,8 +1,5 @@
 package au.gov.amsa.detection.behaviour;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectedCraft;
@@ -16,8 +13,6 @@ import au.gov.amsa.detection.model.MessageRecipient;
 public class DetectedCraftBehaviour implements Behaviour {
 
     private final DetectedCraft self;
-
-    private static final Logger log = LoggerFactory.getLogger(DetectedCraftBehaviour.class);
 
     private final CraftSender craftSender;
 
