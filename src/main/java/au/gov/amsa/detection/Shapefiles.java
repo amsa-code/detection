@@ -11,7 +11,7 @@ import au.gov.amsa.gt.Shapefile;
 
 public final class Shapefiles {
 
-    public static class Holder {
+    public static final class Holder {
         private static final Shapefiles INSTANCE = new Shapefiles();
     }
 

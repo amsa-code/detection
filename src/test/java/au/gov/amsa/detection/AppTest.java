@@ -35,7 +35,8 @@ public class AppTest {
     public static void setup() {
         DerbyUtil.disableDerbyLog();
         Context.setEntityActorListenerFactory(id -> listener);
-        App.startup(new CraftSenderViaInmarsat(), new ContactSenderViaEmail());
+        App.startup("testPersistenceUnit", new CraftSenderViaInmarsat(),
+                new ContactSenderViaEmail());
     }
 
     @Test

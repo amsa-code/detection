@@ -37,9 +37,14 @@ import au.gov.amsa.detection.model.SimpleRegion;
 
 public final class App {
 
-    public static void startup(CraftSender craftSender, ContactSender contactSender) {
+    private App() {
+        // private constructor
+    }
+
+    public static void startup(String persistenceUnit, CraftSender craftSender,
+            ContactSender contactSender) {
         // create the entity manager factory
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("testPersistenceUnit");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit);
 
         // pass the EntityManagerFactory to the generated xuml Context
         Context.setEntityManagerFactory(emf);
@@ -71,7 +76,6 @@ public final class App {
 
         // close the entity manager factory if desired
         Context.close();
-
     }
 
 }

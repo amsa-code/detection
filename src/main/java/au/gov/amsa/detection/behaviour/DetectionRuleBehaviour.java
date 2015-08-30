@@ -59,7 +59,6 @@ public class DetectionRuleBehaviour implements Behaviour {
 
             long now = System.currentTimeMillis();
             Optional<Detection> latestDetection = Optional.fromNullable(self.getDetection_R18());
-            // Optional<Detection> latestDetection = Optional.absent();
 
             if (!latestDetection.isPresent()) {
                 createDetection = true;
