@@ -1,30 +1,43 @@
 package au.gov.amsa.detection.behaviour;
 
+import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Contact;
 import au.gov.amsa.detection.model.Contact.Behaviour;
 import au.gov.amsa.detection.model.Contact.Events.Create;
 import au.gov.amsa.detection.model.Contact.Events.Send;
+import au.gov.amsa.detection.model.Craft;
+import au.gov.amsa.detection.model.DetectionMessage;
+import au.gov.amsa.detection.model.DetectionRule;
+import au.gov.amsa.detection.model.MessageRecipient;
 
 public class ContactBehaviour implements Behaviour {
 
-    private final Contact contact;
+    private final Contact self;
     private final ContactSender sender;
 
-    public ContactBehaviour(Contact contact, ContactSender sender) {
-        this.contact = contact;
+    public ContactBehaviour(Contact self, ContactSender sender) {
+        this.self = self;
         this.sender = sender;
     }
 
     @Override
     public void onEntryCreated(Create event) {
-        // TODO Auto-generated method stub
-
+        self.setId(ArbitraryId.next());
+        self.setEmail(event.getEmail());
+        MessageRecipient r = MessageRecipient.create(ArbitraryId.next());
+        r.setStartTime(event.getStartTime());
+        r.setEndTime(event.getEndTime());
+        r.relateAcrossR16(DetectionRule.find(event.getDetectionRuleID()).get());
+        r.setState(MessageRecipient.State.CREATED);
+        r.relateAcrossR14(self);
+        r.persist();
     }
 
     @Override
     public void onEntrySent(Send event) {
-        // TODO Auto-generated method stub
-
+        DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
+        Craft craft = m.getDetection_R11().getCraft_R6();
+        sender.send(self.getEmail(), m.getSubject(), m.getBody());
     }
 
 }
