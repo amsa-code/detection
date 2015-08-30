@@ -6,15 +6,15 @@ import au.gov.amsa.detection.model.DetectedCraft.BehaviourFactory;
 
 public class DetectedCraftBehaviourFactory implements BehaviourFactory {
 
-    private final CraftSender craftSender;
+    private final CraftSender sender;
 
-    public DetectedCraftBehaviourFactory(CraftSender craftSender) {
-        this.craftSender = craftSender;
+    public DetectedCraftBehaviourFactory(CraftSender sender) {
+        this.sender = sender;
     }
 
     @Override
     public Behaviour create(DetectedCraft entity) {
-        return new DetectedCraftBehaviour(entity, craftSender);
+        return new DetectedCraftBehaviour(entity, sender);
     }
 
 }

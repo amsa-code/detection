@@ -16,7 +16,7 @@
     <SymbolicType Name="MessageBody" MinLength="1" MaxLength="65535" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
-        ValidationPattern=".*" DefaultValue="" />
+        ValidationPattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" DefaultValue="" />
     <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue=""></SymbolicType>
     <SymbolicType Name="Craft Identifier Type" MinLength="1" MaxLength="255" Prefix=""
@@ -545,8 +545,8 @@
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
-                            <StateModelParameter Name="Start Time" Type="timestamp"/>
-                            <StateModelParameter Name="End Time" Type="timestamp"/>
+                            <StateModelParameter Name="Start Time" Type="timestamp" />
+                            <StateModelParameter Name="End Time" Type="timestamp" />
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Send" ID="2">
@@ -568,6 +568,26 @@
                 <ReferentialAttribute Name="Message Recipient">
                     <GeneralizationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <State Name="Sent" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Email" Type="Email"/>
+                            <StateModelParameter Name="Start Time" Type="timestamp" />
+                            <StateModelParameter Name="End Time" Type="timestamp" />
+                        </EventSignature>
+                    </CreationEvent>
+                    <LocalEffectiveSignalingEvent Name="Send" ID="2">
+                        <EventSignature>
+                            <StateModelParameter Name="Detection Message ID"
+                                Type="Arbitrary ID" />
+                        </EventSignature>
+                    </LocalEffectiveSignalingEvent>
+                    <Transition State="Created" EventID="2" Destination="Sent" />
+                    <Transition State="Sent" EventID="2" Destination="Sent" />
+                </Lifecycle>
             </Class>
 
             <Generalization Rnum="14" Superclass="Message Recipient">
