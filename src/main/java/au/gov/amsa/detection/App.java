@@ -19,6 +19,7 @@ import au.gov.amsa.detection.behaviour.MessageTemplateBehaviour;
 import au.gov.amsa.detection.behaviour.RegionBehaviour;
 import au.gov.amsa.detection.behaviour.RegionCraftBehaviour;
 import au.gov.amsa.detection.behaviour.SimpleRegionBehaviour;
+import au.gov.amsa.detection.behaviour.SimpleRegionTypeBehaviour;
 import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.CompositeRegionMember;
 import au.gov.amsa.detection.model.Contact;
@@ -34,6 +35,7 @@ import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.RegionCraft;
 import au.gov.amsa.detection.model.SimpleRegion;
+import au.gov.amsa.detection.model.SimpleRegionType;
 
 public final class App {
 
@@ -65,6 +67,7 @@ public final class App {
         CompositeRegionMember.setBehaviourFactory(CompositeRegionMemberBehaviour.class);
         DetectedCraft.setBehaviourFactory(new DetectedCraftBehaviourFactory(craftSender));
         Contact.setBehaviourFactory(new ContactBehaviourFactory(contactSender));
+        SimpleRegionType.setBehaviourFactory(SimpleRegionTypeBehaviour.class);
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();

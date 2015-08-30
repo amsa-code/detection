@@ -16,7 +16,8 @@
     <SymbolicType Name="MessageBody" MinLength="1" MaxLength="65535" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
-        ValidationPattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" DefaultValue="" />
+        ValidationPattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"
+        DefaultValue="" />
     <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue=""></SymbolicType>
     <SymbolicType Name="Craft Identifier Type" MinLength="1" MaxLength="255" Prefix=""
@@ -209,11 +210,33 @@
                 <SpecializedClass Name="Composite Region" />
             </Generalization>
 
+            <Class Name="Simple Region Type">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Name" Type="ShortString">
+                    <Identifier Number="2" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Description" Type="MediumString" />
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Name" Type="ShortString" />
+                            <StateModelParameter Name="Description" Type="MediumString" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
+            </Class>
+
             <Class Name="Simple Region">
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Zipped Shapefile Bytes" Type="Bytes" />
+                <IndependentAttribute Name="Bytes" Type="Bytes" />
+                <ReferentialAttribute Name="Type">
+                    <ToOneReference Attribute="ID" Relationship="19" />
+                </ReferentialAttribute>
                 <ReferentialAttribute Name="Region">
                     <GeneralizationReference Relationship="4" Attribute="ID" />
                 </ReferentialAttribute>
@@ -224,8 +247,9 @@
                         <EventSignature>
                             <StateModelParameter Name="Name" Type="ShortString" />
                             <StateModelParameter Name="Description" Type="MediumString" />
-                            <StateModelParameter Name="Zipped Shapefile Bytes"
-                                Type="Bytes" />
+                            <StateModelParameter Name="Simple Region Type ID"
+                                Type="Arbitrary ID" />
+                            <StateModelParameter Name="Bytes" Type="Bytes" />
                         </EventSignature>
                     </CreationEvent>
                 </Lifecycle>
@@ -574,7 +598,7 @@
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
-                            <StateModelParameter Name="Email" Type="Email"/>
+                            <StateModelParameter Name="Email" Type="Email" />
                             <StateModelParameter Name="Start Time" Type="timestamp" />
                             <StateModelParameter Name="End Time" Type="timestamp" />
                         </EventSignature>
@@ -608,6 +632,14 @@
                 <PassivePerspective Phrase="is latest for" OnePerspective="true"
                     Conditional="true" ViewedClass="Detection Rule" />
             </BinaryAssociation>
+
+            <BinaryAssociation Rnum="19">
+                <ActivePerspective Phrase="is categorized by" OnePerspective="true"
+                    Conditional="false" ViewedClass="Simple Region Type" />
+                <PassivePerspective Phrase="categorizes" OnePerspective="false"
+                    Conditional="true" ViewedClass="Simple Region" />
+            </BinaryAssociation>
+
         </Subsystem>
     </ModeledDomain>
 

@@ -22,6 +22,7 @@ import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.SimpleRegion;
+import au.gov.amsa.detection.model.SimpleRegionType;
 import xuml.tools.model.compiler.runtime.SignalProcessorListenerTesting;
 import xuml.tools.util.database.DerbyUtil;
 
@@ -45,9 +46,13 @@ public class AppTest {
         byte[] bytes = IOUtils.toByteArray(
                 AppTest.class.getResourceAsStream("/shapefile-coral-sea-atba-polygon.zip"));
 
+        SimpleRegionType srt = SimpleRegionType
+                .create(SimpleRegionType.Events.Create.builder().name("Zipped Shapefile")
+                        .description("ArcGIS Shapefile format as zipped archive").build());
+
         SimpleRegion region = SimpleRegion.create(SimpleRegion.Events.Create.builder().name("EEZ")
-                .description("Australian Exclusive Economic Zone").zippedShapefileBytes(bytes)
-                .build());
+                .description("Australian Exclusive Economic Zone").bytes(bytes)
+                .simpleRegionTypeID(srt.getId()).build());
 
         CompositeRegion compositeRegion = CompositeRegion
                 .create(CompositeRegion.Events.Create.builder().name("Outside EEZ")

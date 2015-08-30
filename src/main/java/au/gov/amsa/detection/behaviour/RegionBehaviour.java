@@ -89,7 +89,7 @@ public class RegionBehaviour implements Behaviour {
     private static boolean simpleRegionContains(SimpleRegion region, Double lat, Double lon) {
         // get shapefile from cache
         Shapefile shapefile = Shapefiles.instance().get(region.getRegion_R4().getName(), () -> {
-            byte[] bytes = region.getZippedShapefileBytes();
+            byte[] bytes = region.getBytes();
             return Shapefile.fromZip(new ByteArrayInputStream(bytes));
         });
         return shapefile.contains(lat, lon);
