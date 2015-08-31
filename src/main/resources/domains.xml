@@ -58,6 +58,8 @@
                 <IndependentAttribute Name="End Time" Type="timestamp" />
                 <IndependentAttribute Name="Resend Interval S" Type="Interval Seconds" />
                 <IndependentAttribute Name="Resend Interval S Out" Type="Interval Seconds" />
+                <IndependentAttribute Name="Must Have Been Outside Before Send"
+                    Type="boolean" />
                 <ReferentialAttribute Name="Region">
                     <ToOneReference Relationship="1" Attribute="ID" />
                 </ReferentialAttribute>
@@ -80,6 +82,8 @@
                             <StateModelParameter Name="Resend Interval S" Type="Interval Seconds" />
                             <StateModelParameter Name="Resend Interval S Out"
                                 Type="Interval Seconds" />
+                            <StateModelParameter Name="Must Have Been Outside Before Send"
+                                Type="boolean" />
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Position In Region"
@@ -93,6 +97,8 @@
                             <StateModelParameter Name="Last Time Entered" Type="timestamp" />
                             <StateModelParameter Name="Last Exit Time From Region"
                                 Type="timestamp" />
+                            <StateModelParameter Name="Has Been Outside Region"
+                                Type="boolean" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="Position In Region" />

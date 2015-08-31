@@ -24,6 +24,15 @@ public class RegionCraftBehaviour implements Behaviour {
 
     @Override
     public void onEntryInside(In event) {
+        in(event, true);
+    }
+
+    @Override
+    public void onEntryNeverOutside(In event) {
+        in(event, false);
+    }
+
+    private void in(In event, boolean hasBeenOutside) {
         if (self.getLastExitTimeFromRegion().after(self.getLastTimeInRegion())) {
             self.setLastTimeEntered(event.getTime());
             self.setLastTimeInRegion(event.getTime());
@@ -31,17 +40,10 @@ public class RegionCraftBehaviour implements Behaviour {
         PositionInRegion positionInRegion = DetectionRule.Events.PositionInRegion.builder()
                 .altitudeMetres(event.getAltitudeMetres()).craftID(self.getCraft_R15().getId())
                 .latitude(event.getLatitude()).longitude(event.getLongitude()).time(event.getTime())
-                .lastTimeEntered(self.getLastTimeEntered())
+                .lastTimeEntered(self.getLastTimeEntered()).hasBeenOutsideRegion(hasBeenOutside)
                 .lastExitTimeFromRegion(self.getLastExitTimeFromRegion()).build();
 
         self.getRegion_R5().getDetectionRule_R1().forEach(dr -> dr.signal(positionInRegion));
-    }
-
-    @Override
-    public void onEntryNeverOutside(In event) {
-        if (self.getLastTimeInRegion().before(event.getTime())) {
-            self.setLastTimeInRegion(event.getTime());
-        }
     }
 
     @Override

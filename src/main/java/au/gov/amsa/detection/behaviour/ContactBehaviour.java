@@ -5,7 +5,6 @@ import au.gov.amsa.detection.model.Contact;
 import au.gov.amsa.detection.model.Contact.Behaviour;
 import au.gov.amsa.detection.model.Contact.Events.Create;
 import au.gov.amsa.detection.model.Contact.Events.Send;
-import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageRecipient;
@@ -36,7 +35,6 @@ public class ContactBehaviour implements Behaviour {
     @Override
     public void onEntrySent(Send event) {
         DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
-        Craft craft = m.getDetection_R11().getCraft_R6();
         sender.send(self.getEmail(), m.getSubject(), m.getBody());
     }
 

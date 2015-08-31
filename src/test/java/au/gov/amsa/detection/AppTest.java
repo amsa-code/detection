@@ -66,6 +66,7 @@ public class AppTest {
                         .description(
                                 "detect entry into Australian EEZ and send information to vessels")
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
+                .mustHaveBeenOutsideBeforeSend(true)
                 .resendIntervalS((int) TimeUnit.DAYS.toSeconds(30))
                 .resendIntervalSOut((int) TimeUnit.DAYS.toSeconds(7))
                 .regionID(region.getRegion_R4().getId()).build());
