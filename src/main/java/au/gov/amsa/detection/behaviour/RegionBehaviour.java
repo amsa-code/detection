@@ -59,7 +59,7 @@ public class RegionBehaviour implements Behaviour {
         if (inside) {
             rc.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
             rc.setLastTimeEntered(event.getTime());
-            rc.setState(RegionCraft.State.INSIDE_REGION);
+            rc.setState(RegionCraft.State.NEVER_OUTSIDE);
             self.getDetectionRule_R1()
                     .forEach(dr -> dr.signal(DetectionRule.Events.PositionInRegion.builder()
                             .altitudeMetres(event.getAltitudeMetres()).craftID(event.getCraftID())
@@ -70,7 +70,7 @@ public class RegionBehaviour implements Behaviour {
         } else {
             rc.setLastTimeEntered(event.getTime());
             rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));
-            rc.setState(RegionCraft.State.OUTSIDE_REGION);
+            rc.setState(RegionCraft.State.OUTSIDE);
         }
         Craft craft = Craft.find(event.getCraftID()).get();
         rc.relateAcrossR5(self);

@@ -337,8 +337,9 @@
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
-                    <State Name="Inside Region" />
-                    <State Name="Outside Region" />
+                    <State Name="Never Outside" />
+                    <State Name="Outside" />
+                    <State Name="Inside" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Latitude" Type="Latitude" />
@@ -366,12 +367,10 @@
                             <StateModelParameter Name="Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
-                    <Transition State="Inside Region" Destination="Outside Region"
-                        EventID="3" />
-                    <Transition State="Created" Destination="Outside Region" EventID="3" />
-                    <Transition State="Created" Destination="Inside Region" EventID="2" />
-                    <Transition State="Outside Region" Destination="Inside Region"
-                        EventID="2" />
+                    <Transition State="Inside" Destination="Outside" EventID="3" />
+                    <Transition State="Created" Destination="Never Outside" EventID="2" />
+                    <Transition State="Created" Destination="Outside" EventID="3" />
+                    <Transition State="Outside" Destination="Inside" EventID="2" />
                 </Lifecycle>
             </Class>
 
