@@ -40,6 +40,8 @@
         Units="mmsi" />
     <IntegerType Name="Interval Seconds" LowerLimit="0" UpperLimit="999999999"
         DefaultValue="0" Units="mmsi" />
+    <SymbolicType Name="Craft Identifier Pattern" DefaultValue=".*" MinLength="1"
+        MaxLength="512" ValidationPattern=".*" Prefix="" Suffix="" />
     <BooleanType Name="boolean" DefaultValue="false" />
 
 
@@ -58,8 +60,8 @@
                 <IndependentAttribute Name="End Time" Type="timestamp" />
                 <IndependentAttribute Name="Resend Interval S" Type="Interval Seconds" />
                 <IndependentAttribute Name="Resend Interval S Out" Type="Interval Seconds" />
-                <IndependentAttribute Name="Must Have Been Outside Before Send"
-                    Type="boolean" />
+                <IndependentAttribute Name="Must Cross" Type="boolean" />
+                <IndependentAttribute Name="Craft Identifier Pattern" Type="Craft Identifier Pattern" />
                 <ReferentialAttribute Name="Region">
                     <ToOneReference Relationship="1" Attribute="ID" />
                 </ReferentialAttribute>
@@ -82,8 +84,9 @@
                             <StateModelParameter Name="Resend Interval S" Type="Interval Seconds" />
                             <StateModelParameter Name="Resend Interval S Out"
                                 Type="Interval Seconds" />
-                            <StateModelParameter Name="Must Have Been Outside Before Send"
-                                Type="boolean" />
+                            <StateModelParameter Name="Must Cross" Type="boolean" />
+                            <StateModelParameter Name="Craft Identifier Pattern"
+                                Type="Craft Identifier Pattern" />
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Position In Region"

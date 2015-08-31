@@ -1,6 +1,7 @@
 package au.gov.amsa.detection.behaviour;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import com.google.common.base.Optional;
@@ -34,7 +35,10 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setEndTime(event.getEndTime());
         self.setResendIntervalSOut(event.getResendIntervalSOut());
         self.setResendIntervalS(event.getResendIntervalS());
+        self.setMustCross(event.getMustCross());
+        self.setCraftIdentifierPattern(event.getCraftIdentifierPattern());
         self.relateAcrossR1(Region.find(event.getRegionID()).get());
+
     }
 
     @Override
@@ -54,43 +58,50 @@ public class DetectionRuleBehaviour implements Behaviour {
 
     private boolean shouldCreateDetection(PositionInRegion event) {
         final boolean createDetection;
-        if (self.getMustHaveBeenOutsideBeforeSend() && !event.getHasBeenOutsideRegion()) {
+        if (self.getMustCross() && !event.getHasBeenOutsideRegion()) {
             createDetection = false;
-        } else if ((event.getTime().after(self.getStartTime())
-                || event.getTime().equals(event.getTime()))
-                && event.getTime().before(self.getEndTime())) {
-
-            long now = System.currentTimeMillis();
-            Optional<Detection> latestDetection = Optional.fromNullable(self.getDetection_R18());
-
-            if (!latestDetection.isPresent()) {
-                createDetection = true;
-            } else
-                if (Util.beforeOrEquals(event.getTime(), latestDetection.get().getReportTime())) {
-                // ignore if position time before latest detection position
-                // time
+        } else {
+            Craft craft = Craft.find(event.getCraftID()).get();
+            String craftIdentifier = craft.getIdentifierType() + "=" + craft.getIdentifier();
+            if (!Pattern.matches(self.getCraftIdentifierPattern(), craftIdentifier))
                 createDetection = false;
-            } else {
-                Stream<MessageTemplate> templates = getTemplate(new Date(now));
-                boolean forcedUpdateRequired = templates.filter(t -> latestDetection.get()
-                        .getCreatedTime().before(t.getForceUpdateBeforeTime())).findAny()
-                        .isPresent();
-                if (forcedUpdateRequired) {
+            else if ((event.getTime().after(self.getStartTime())
+                    || event.getTime().equals(event.getTime()))
+                    && event.getTime().before(self.getEndTime())) {
+
+                long now = System.currentTimeMillis();
+                Optional<Detection> latestDetection = Optional
+                        .fromNullable(self.getDetection_R18());
+
+                if (!latestDetection.isPresent()) {
                     createDetection = true;
-                } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                        .getTime() >= self.getResendIntervalS() * 1000) {
-                    createDetection = true;
-                } else if (event.getLastTimeEntered().getTime()
-                        - event.getLastExitTimeFromRegion().getTime() >= self
-                                .getResendIntervalSOut() * 1000
-                        && event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                                .getTime() >= self.getResendIntervalSOut() * 1000) {
-                    createDetection = true;
-                } else
+                } else if (Util.beforeOrEquals(event.getTime(),
+                        latestDetection.get().getReportTime())) {
+                    // ignore if position time before latest detection position
+                    // time
                     createDetection = false;
-            }
-        } else
-            createDetection = false;
+                } else {
+                    Stream<MessageTemplate> templates = getTemplate(new Date(now));
+                    boolean forcedUpdateRequired = templates.filter(t -> latestDetection.get()
+                            .getCreatedTime().before(t.getForceUpdateBeforeTime())).findAny()
+                            .isPresent();
+                    if (forcedUpdateRequired) {
+                        createDetection = true;
+                    } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
+                            .getTime() >= self.getResendIntervalS() * 1000) {
+                        createDetection = true;
+                    } else if (event.getLastTimeEntered().getTime()
+                            - event.getLastExitTimeFromRegion().getTime() >= self
+                                    .getResendIntervalSOut() * 1000
+                            && event.getTime().getTime() - latestDetection.get().getCreatedTime()
+                                    .getTime() >= self.getResendIntervalSOut() * 1000) {
+                        createDetection = true;
+                    } else
+                        createDetection = false;
+                }
+            } else
+                createDetection = false;
+        }
         return createDetection;
     }
 

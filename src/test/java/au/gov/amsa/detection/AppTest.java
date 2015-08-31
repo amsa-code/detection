@@ -65,11 +65,11 @@ public class AppTest {
                 .create(DetectionRule.Events.Create.builder().name("Name")
                         .description(
                                 "detect entry into Australian EEZ and send information to vessels")
-                .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
-                .mustHaveBeenOutsideBeforeSend(true)
+                .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).mustCross(true)
                 .resendIntervalS((int) TimeUnit.DAYS.toSeconds(30))
                 .resendIntervalSOut((int) TimeUnit.DAYS.toSeconds(7))
-                .regionID(region.getRegion_R4().getId()).build());
+                .craftIdentifierPattern("MMSI=5.*").regionID(region.getRegion_R4().getId())
+                .build());
 
         MessageTemplate.create(MessageTemplate.Events.Create.builder()
                 .body("Your vessel identified by ${craft.identifier.type}"
@@ -88,7 +88,7 @@ public class AppTest {
 
         Craft craft = Craft
                 .create(Craft.Events.Create.builder().mmsi(123456789).craftTypeID(vessel.getId())
-                        .craftIdentifier("123456789").craftIdentifierType("MMSI").build());
+                        .craftIdentifier("523456789").craftIdentifierType("MMSI").build());
 
         long t = TimeUnit.DAYS.toMillis(100);
 
