@@ -54,7 +54,10 @@ public class DetectionRuleBehaviour implements Behaviour {
 
     private boolean shouldCreateDetection(PositionInRegion event) {
         final boolean createDetection;
-        if ((event.getTime().after(self.getStartTime()) || event.getTime().equals(event.getTime()))
+        if (self.getMustHaveBeenOutsideBeforeSend() && !event.getHasBeenOutsideRegion()) {
+            createDetection = false;
+        } else if ((event.getTime().after(self.getStartTime())
+                || event.getTime().equals(event.getTime()))
                 && event.getTime().before(self.getEndTime())) {
 
             long now = System.currentTimeMillis();
