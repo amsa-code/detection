@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
+import au.gov.amsa.detection.model.CraftIdentifierType;
 import au.gov.amsa.detection.model.CraftType;
 import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectionRule;
@@ -86,9 +87,13 @@ public class AppTest {
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")
                 .description("A ship or other floating craft").build());
 
-        Craft craft = Craft
-                .create(Craft.Events.Create.builder().mmsi(123456789).craftTypeID(vessel.getId())
-                        .craftIdentifier("523456789").craftIdentifierType("MMSI").build());
+        CraftIdentifierType cit = CraftIdentifierType
+                .create(CraftIdentifierType.Events.Create.builder().name("MMSI")
+                        .description("Maritime Mobile Service Identifier used by a vessel only")
+                        .craftTypeID(vessel.getId()).build());
+
+        Craft craft = Craft.create(Craft.Events.Create.builder().craftIdentifierTypeName("MMSI")
+                .craftTypeID(vessel.getId()).craftIdentifier("523456789").build());
 
         long t = TimeUnit.DAYS.toMillis(100);
 

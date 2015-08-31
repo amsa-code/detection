@@ -7,7 +7,7 @@ import au.gov.amsa.detection.Util;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Craft.Events.Create;
 import au.gov.amsa.detection.model.Craft.Events.Position;
-import au.gov.amsa.detection.model.CraftType;
+import au.gov.amsa.detection.model.CraftIdentifierType;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.Region;
 
@@ -24,8 +24,9 @@ public class CraftBehaviour implements Craft.Behaviour {
     public void onEntryCreated(Create event) {
         self.setId(ArbitraryId.next());
         self.setIdentifier(event.getCraftIdentifier());
-        self.setIdentifierType(event.getCraftIdentifierType());
-        self.relateAcrossR3(CraftType.find(event.getCraftTypeID()).get());
+        self.setCraftIdentifierType_R20(CraftIdentifierType
+                .select(CraftIdentifierType.Attribute.name.eq(event.getCraftIdentifierTypeName()))
+                .one().get());
     }
 
     @Override

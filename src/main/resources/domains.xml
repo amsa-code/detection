@@ -20,8 +20,6 @@
         DefaultValue="" />
     <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue=""></SymbolicType>
-    <SymbolicType Name="Craft Identifier Type" MinLength="1" MaxLength="255" Prefix=""
-        Suffix="" ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Craft Identifier" MinLength="1" MaxLength="255" Prefix=""
         Suffix="" ValidationPattern=".*" DefaultValue="" />
     <RealType Name="Latitude" Precision="20" LowerLimit="-90" UpperLimit="90" DefaultValue="0"
@@ -153,20 +151,18 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Identifier Type" Type="Craft Identifier Type" />
-                <IndependentAttribute Name="Identifier" Type="Craft Identifier" />
-                <ReferentialAttribute Name="Craft Type">
-                    <ToOneReference Relationship="3" Attribute="ID"></ToOneReference>
+                <ReferentialAttribute Name="Identifier Type">
+                    <ToOneReference Attribute="ID" Relationship="20" />
                 </ReferentialAttribute>
+                <IndependentAttribute Name="Identifier" Type="Craft Identifier" />
                 <Lifecycle>
                     <State Name="Created" />
                     <State Name="HasPosition" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
-                            <StateModelParameter Name="Craft Identifier Type"
-                                Type="Craft Identifier Type" />
                             <StateModelParameter Name="Craft Identifier" Type="Craft Identifier" />
-                            <StateModelParameter Name="Mmsi" Type="MMSI" />
+                            <StateModelParameter Name="Craft Identifier Type Name"
+                                Type="ShortString" />
                             <StateModelParameter Name="Craft Type ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </CreationEvent>
@@ -180,6 +176,29 @@
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="HasPosition" />
                     <Transition State="HasPosition" EventID="2" Destination="HasPosition" />
+                </Lifecycle>
+            </Class>
+
+            <Class Name="Craft Identifier Type">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Name" Type="ShortString">
+                    <Identifier Number="2" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Description" Type="MediumString" />
+                <ReferentialAttribute Name="Craft Type">
+                    <ToOneReference Relationship="3" Attribute="ID"></ToOneReference>
+                </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Name" Type="ShortString" />
+                            <StateModelParameter Name="Description" Type="MediumString" />
+                            <StateModelParameter Name="Craft Type ID" Type="Arbitrary ID" />
+                        </EventSignature>
+                    </CreationEvent>
                 </Lifecycle>
             </Class>
 
@@ -208,9 +227,9 @@
             </Class>
 
             <BinaryAssociation Rnum="3">
-                <ActivePerspective Phrase="is of type" ViewedClass="Craft Type"
+                <ActivePerspective Phrase="is for craft of" ViewedClass="Craft Type"
                     OnePerspective="true" Conditional="false" />
-                <PassivePerspective Phrase="categorizes" ViewedClass="Craft"
+                <PassivePerspective Phrase="categorizes" ViewedClass="Craft Identifier Type"
                     OnePerspective="false" Conditional="true" />
             </BinaryAssociation>
 
@@ -647,6 +666,14 @@
                 <PassivePerspective Phrase="categorizes" OnePerspective="false"
                     Conditional="true" ViewedClass="Simple Region" />
             </BinaryAssociation>
+
+            <BinaryAssociation Rnum="20">
+                <ActivePerspective Phrase="has identifier categorized by"
+                    OnePerspective="true" Conditional="false" ViewedClass="Craft Identifier Type" />
+                <PassivePerspective Phrase="categorizes identifier of"
+                    OnePerspective="false" Conditional="true" ViewedClass="Craft" />
+            </BinaryAssociation>
+
 
         </Subsystem>
     </ModeledDomain>

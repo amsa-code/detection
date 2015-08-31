@@ -6,6 +6,7 @@
     <persistence-unit name="testPersistenceUnit">
         <class>au.gov.amsa.detection.model.Craft</class>
         <class>au.gov.amsa.detection.model.CraftPosition</class>
+        <class>au.gov.amsa.detection.model.CraftIdentifierType</class>
         <class>au.gov.amsa.detection.model.CraftType</class>
         <class>au.gov.amsa.detection.model.Region</class>
         <class>au.gov.amsa.detection.model.RegionCraft</class>

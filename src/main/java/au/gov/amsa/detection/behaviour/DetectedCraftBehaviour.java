@@ -37,8 +37,8 @@ public class DetectedCraftBehaviour implements Behaviour {
     public void onEntrySent(Send event) {
         DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
         Craft craft = m.getDetection_R11().getCraft_R6();
-        craftSender.send(craft.getIdentifierType(), craft.getIdentifier(), m.getSubject(),
-                m.getBody());
+        craftSender.send(craft.getCraftIdentifierType_R20().getName(), craft.getIdentifier(),
+                m.getSubject(), m.getBody());
     }
 
 }

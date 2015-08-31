@@ -62,7 +62,8 @@ public class DetectionRuleBehaviour implements Behaviour {
             createDetection = false;
         } else {
             Craft craft = Craft.find(event.getCraftID()).get();
-            String craftIdentifier = craft.getIdentifierType() + "=" + craft.getIdentifier();
+            String craftIdentifier = craft.getCraftIdentifierType_R20().getName() + "="
+                    + craft.getIdentifier();
             if (!Pattern.matches(self.getCraftIdentifierPattern(), craftIdentifier))
                 createDetection = false;
             else if ((event.getTime().after(self.getStartTime())

@@ -66,9 +66,11 @@ public class DetectionBehaviour implements Behaviour {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm 'UTC'")
                 .withZone(ZoneOffset.UTC);
 
-        s = replaceParameter(s, "${craft.identifier.type}", self.getCraft_R6().getIdentifierType());
+        s = replaceParameter(s, "${craft.identifier.type}",
+                self.getCraft_R6().getCraftIdentifierType_R20().getName());
         s = replaceParameter(s, "${craft.identifier}", self.getCraft_R6().getIdentifier());
-        s = replaceParameter(s, "${craft.type}", self.getCraft_R6().getCraftType_R3().getName());
+        s = replaceParameter(s, "${craft.type}",
+                self.getCraft_R6().getCraftIdentifierType_R20().getCraftType_R3().getName());
         s = replaceParameter(s, "${position.time}",
                 dtf.format(Instant.ofEpochMilli(self.getReportTime().getTime())));
         s = replaceParameter(s, "${position.lat}", self.getReportLatitude().toString());
