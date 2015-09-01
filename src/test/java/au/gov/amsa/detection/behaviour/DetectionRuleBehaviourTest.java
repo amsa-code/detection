@@ -193,6 +193,58 @@ public class DetectionRuleBehaviourTest {
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
+    @Test
+    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionGreaterThanMinIntervalButIsEntranceAndBeenOutsideLongEnough() {
+        DetectionRule dr = mock(DetectionRule.class);
+
+        PositionInRegion p = createPositionInRegionEvent(6000, true).currentTime(new Date(9000))
+                .lastExitTimeFromRegion(new Date(0)).lastTimeEntered(new Date(9000))
+                .isEntrance(true).build();
+        when(dr.getMustCross()).thenReturn(Boolean.TRUE);
+        when(dr.getStartTime()).thenReturn(new Date(0));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
+        when(dr.getMinIntervalSecs()).thenReturn(30);
+        when(dr.getMinIntervalSecsOut()).thenReturn(1);
+        Detection d = mock(Detection.class);
+        when(dr.getDetection_R18()).thenReturn(d);
+        // last detection report time is before position time for p
+        when(d.getReportTime()).thenReturn(new Date(5000));
+        when(d.getCreatedTime()).thenReturn(new Date(6000));
+        MessageTemplate template = mock(MessageTemplate.class);
+        when(dr.getMessageTemplate_R8()).thenReturn(template);
+        when(template.getStartTime()).thenReturn(new Date(0));
+        when(template.getEndTime()).thenReturn(new Date(20000));
+        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(4000));
+
+        assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
+    }
+
+    @Test
+    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionGreaterThanMinIntervalButIsEntranceAndNotBeenOutsideLongEnough() {
+        DetectionRule dr = mock(DetectionRule.class);
+
+        PositionInRegion p = createPositionInRegionEvent(6000, true).currentTime(new Date(9000))
+                .lastExitTimeFromRegion(new Date(0)).lastTimeEntered(new Date(1000))
+                .isEntrance(true).build();
+        when(dr.getMustCross()).thenReturn(Boolean.TRUE);
+        when(dr.getStartTime()).thenReturn(new Date(0));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
+        when(dr.getMinIntervalSecs()).thenReturn(30);
+        when(dr.getMinIntervalSecsOut()).thenReturn(2);
+        Detection d = mock(Detection.class);
+        when(dr.getDetection_R18()).thenReturn(d);
+        // last detection report time is before position time for p
+        when(d.getReportTime()).thenReturn(new Date(5000));
+        when(d.getCreatedTime()).thenReturn(new Date(6000));
+        MessageTemplate template = mock(MessageTemplate.class);
+        when(dr.getMessageTemplate_R8()).thenReturn(template);
+        when(template.getStartTime()).thenReturn(new Date(0));
+        when(template.getEndTime()).thenReturn(new Date(20000));
+        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(4000));
+
+        assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
+    }
+
     private PositionInRegion.Builder createPositionInRegionEventBuilder() {
         return DetectionRule.Events.PositionInRegion.builder().hasBeenOutsideRegion(false)
                 .latitude(-10.0).longitude(135.0).lastExitTimeFromRegion(new Date(0))
