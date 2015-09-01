@@ -89,21 +89,21 @@ public class DetectionRuleBehaviour implements Behaviour {
                 if (Util.beforeOrEquals(event.getTime(), latestDetection.get().getReportTime())) {
                 // ignore if position time before latest detection position time
                 createDetection = false;
-            } else {
-                if (forcedUpdateRequired(self, event.getCurrentTime(), latestDetection.get())) {
-                    createDetection = true;
-                } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                        .getTime() >= self.getMinIntervalSecs() * 1000) {
-                    createDetection = true;
-                } else if (event.getLastTimeEntered().getTime()
+            } else if (forcedUpdateRequired(self, event.getCurrentTime(), latestDetection.get())) {
+                createDetection = true;
+            } else if (event.getTime().getTime()
+                    - latestDetection.get().getCreatedTime().getTime() >= self.getMinIntervalSecs()
+                            * 1000) {
+                createDetection = true;
+            } else
+                if (event.getLastTimeEntered().getTime()
                         - event.getLastExitTimeFromRegion().getTime() >= self
                                 .getMinIntervalSecsOut() * 1000
                         && event.getTime().getTime() - latestDetection.get().getCreatedTime()
                                 .getTime() >= self.getMinIntervalSecsOut() * 1000) {
-                    createDetection = true;
-                } else
-                    createDetection = false;
-            }
+                createDetection = true;
+            } else
+                createDetection = false;
         } else
             createDetection = false;
 

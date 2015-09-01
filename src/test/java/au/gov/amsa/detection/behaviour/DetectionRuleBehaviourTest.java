@@ -100,8 +100,8 @@ public class DetectionRuleBehaviourTest {
     public void testCreateDetectionIfLastDetectionCreationTimeBeforeForceUpdateTime() {
         DetectionRule dr = mock(DetectionRule.class);
 
-        PositionInRegion p = createPositionInRegionEvent(6);
-        when(dr.getMustCross()).thenReturn(Boolean.FALSE);
+        PositionInRegion p = createPositionInRegionEvent(6, true);
+        when(dr.getMustCross()).thenReturn(Boolean.TRUE);
         when(dr.getStartTime()).thenReturn(new Date(0));
         when(dr.getEndTime()).thenReturn(new Date(20));
         Detection d = mock(Detection.class);
@@ -118,15 +118,24 @@ public class DetectionRuleBehaviourTest {
         assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
-    private PositionInRegion createPositionInRegionEvent(long currentTime) {
-        return DetectionRule.Events.PositionInRegion.builder().hasBeenOutsideRegion(false)
-                .latitude(-10.0).longitude(135.0).lastExitTimeFromRegion(new Date(0))
-                .lastTimeEntered(new Date(0)).time(new Date(10)).craftID("abc").altitudeMetres(0.0)
-                .currentTime(new Date(currentTime)).build();
+    private PositionInRegion createPositionInRegionEvent(long currentTime,
+            boolean hasBeenOutsideRegion) {
+        return DetectionRule.Events.PositionInRegion.builder()
+                .hasBeenOutsideRegion(hasBeenOutsideRegion).latitude(-10.0).longitude(135.0)
+                .lastExitTimeFromRegion(new Date(0)).lastTimeEntered(new Date(0)).time(new Date(10))
+                .craftID("abc").altitudeMetres(0.0).currentTime(new Date(currentTime)).build();
     }
 
     private PositionInRegion createPositionInRegionEvent() {
-        return createPositionInRegionEvent(15);
+        return createPositionInRegionEvent(15, false);
+    }
+
+    private PositionInRegion createPositionInRegionEvent(long currentTime) {
+        return createPositionInRegionEvent(currentTime, false);
+    }
+
+    private PositionInRegion createPositionInRegionEvent(boolean hasBeenOutsideRegion) {
+        return createPositionInRegionEvent(15, hasBeenOutsideRegion);
     }
 
 }
