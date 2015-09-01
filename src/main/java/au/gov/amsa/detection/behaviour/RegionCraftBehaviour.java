@@ -56,7 +56,7 @@ public class RegionCraftBehaviour implements Behaviour {
                 .latitude(event.getLatitude()).longitude(event.getLongitude()).time(event.getTime())
                 .lastTimeEntered(self.getLastTimeEntered()).hasBeenOutsideRegion(hasBeenOutside)
                 .lastExitTimeFromRegion(self.getLastExitTimeFromRegion()).currentTime(new Date())
-                .build();
+                .isEntrance(isEntrance).build();
 
         self.getRegion_R5().getDetectionRule_R1().forEach(dr -> dr.signal(positionInRegion));
     }

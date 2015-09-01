@@ -122,7 +122,8 @@ public class DetectionRuleBehaviourTest {
     public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionGreaterThanMinInterval() {
         DetectionRule dr = mock(DetectionRule.class);
 
-        PositionInRegion p = createPositionInRegionEvent(6000, true).build();
+        PositionInRegion p = createPositionInRegionEvent(6000, true).currentTime(new Date(9000))
+                .build();
         when(dr.getMustCross()).thenReturn(Boolean.TRUE);
         when(dr.getStartTime()).thenReturn(new Date(0));
         when(dr.getEndTime()).thenReturn(new Date(20000));
@@ -145,7 +146,8 @@ public class DetectionRuleBehaviourTest {
     public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionEqualToMinInterval() {
         DetectionRule dr = mock(DetectionRule.class);
 
-        PositionInRegion p = createPositionInRegionEvent(6000, true).build();
+        PositionInRegion p = createPositionInRegionEvent(6000, true).currentTime(new Date(10000))
+                .build();
         when(dr.getMustCross()).thenReturn(Boolean.TRUE);
         when(dr.getStartTime()).thenReturn(new Date(0));
         when(dr.getEndTime()).thenReturn(new Date(20000));
