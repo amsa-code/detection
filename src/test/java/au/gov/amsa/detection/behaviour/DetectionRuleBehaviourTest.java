@@ -22,7 +22,7 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.FALSE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(10));
+        when(dr.getEndTime()).thenReturn(new Date(10000));
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
@@ -32,7 +32,7 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.FALSE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(9));
+        when(dr.getEndTime()).thenReturn(new Date(9000));
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
@@ -42,7 +42,7 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.TRUE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(20));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
@@ -52,7 +52,7 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.FALSE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(20));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> false));
     }
 
@@ -62,7 +62,7 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.FALSE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(20));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
         assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
@@ -73,11 +73,11 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.FALSE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(20));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
         Detection d = mock(Detection.class);
         when(dr.getDetection_R18()).thenReturn(d);
         // last detection report time is after position time for p
-        when(d.getReportTime()).thenReturn(new Date(16));
+        when(d.getReportTime()).thenReturn(new Date(16000));
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
@@ -88,11 +88,11 @@ public class DetectionRuleBehaviourTest {
         PositionInRegion p = createPositionInRegionEvent();
         when(dr.getMustCross()).thenReturn(Boolean.FALSE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(20));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
         Detection d = mock(Detection.class);
         when(dr.getDetection_R18()).thenReturn(d);
         // last detection report time is same as position time for p
-        when(d.getReportTime()).thenReturn(new Date(10));
+        when(d.getReportTime()).thenReturn(new Date(10000));
         assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
@@ -100,20 +100,43 @@ public class DetectionRuleBehaviourTest {
     public void testCreateDetectionIfLastDetectionCreationTimeBeforeForceUpdateTime() {
         DetectionRule dr = mock(DetectionRule.class);
 
-        PositionInRegion p = createPositionInRegionEvent(6, true);
+        PositionInRegion p = createPositionInRegionEvent(6000, true);
         when(dr.getMustCross()).thenReturn(Boolean.TRUE);
         when(dr.getStartTime()).thenReturn(new Date(0));
-        when(dr.getEndTime()).thenReturn(new Date(20));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
         Detection d = mock(Detection.class);
         when(dr.getDetection_R18()).thenReturn(d);
         // last detection report time is before position time for p
-        when(d.getReportTime()).thenReturn(new Date(5));
-        when(d.getCreatedTime()).thenReturn(new Date(6));
+        when(d.getReportTime()).thenReturn(new Date(5000));
+        when(d.getCreatedTime()).thenReturn(new Date(6000));
         MessageTemplate template = mock(MessageTemplate.class);
         when(dr.getMessageTemplate_R8()).thenReturn(template);
         when(template.getStartTime()).thenReturn(new Date(0));
-        when(template.getEndTime()).thenReturn(new Date(20));
-        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(8));
+        when(template.getEndTime()).thenReturn(new Date(20000));
+        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(8000));
+
+        assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
+    }
+
+    @Test
+    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTime() {
+        DetectionRule dr = mock(DetectionRule.class);
+
+        PositionInRegion p = createPositionInRegionEvent(6000, true);
+        when(dr.getMustCross()).thenReturn(Boolean.TRUE);
+        when(dr.getStartTime()).thenReturn(new Date(0));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
+        when(dr.getMinIntervalSecs()).thenReturn(0);
+        Detection d = mock(Detection.class);
+        when(dr.getDetection_R18()).thenReturn(d);
+        // last detection report time is before position time for p
+        when(d.getReportTime()).thenReturn(new Date(5000));
+        when(d.getCreatedTime()).thenReturn(new Date(6000));
+        MessageTemplate template = mock(MessageTemplate.class);
+        when(dr.getMessageTemplate_R8()).thenReturn(template);
+        when(template.getStartTime()).thenReturn(new Date(0));
+        when(template.getEndTime()).thenReturn(new Date(20000));
+        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(4000));
 
         assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
@@ -122,12 +145,13 @@ public class DetectionRuleBehaviourTest {
             boolean hasBeenOutsideRegion) {
         return DetectionRule.Events.PositionInRegion.builder()
                 .hasBeenOutsideRegion(hasBeenOutsideRegion).latitude(-10.0).longitude(135.0)
-                .lastExitTimeFromRegion(new Date(0)).lastTimeEntered(new Date(0)).time(new Date(10))
-                .craftID("abc").altitudeMetres(0.0).currentTime(new Date(currentTime)).build();
+                .lastExitTimeFromRegion(new Date(0)).lastTimeEntered(new Date(0))
+                .time(new Date(10000)).craftID("abc").altitudeMetres(0.0)
+                .currentTime(new Date(currentTime)).build();
     }
 
     private PositionInRegion createPositionInRegionEvent() {
-        return createPositionInRegionEvent(15, false);
+        return createPositionInRegionEvent(15000, false);
     }
 
     private PositionInRegion createPositionInRegionEvent(long currentTime) {
@@ -135,7 +159,7 @@ public class DetectionRuleBehaviourTest {
     }
 
     private PositionInRegion createPositionInRegionEvent(boolean hasBeenOutsideRegion) {
-        return createPositionInRegionEvent(15, hasBeenOutsideRegion);
+        return createPositionInRegionEvent(15000, hasBeenOutsideRegion);
     }
 
 }
