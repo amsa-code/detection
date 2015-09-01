@@ -194,7 +194,7 @@ public class DetectionRuleBehaviourTest {
     private PositionInRegion.Builder createPositionInRegionEventBuilder() {
         return DetectionRule.Events.PositionInRegion.builder().hasBeenOutsideRegion(false)
                 .latitude(-10.0).longitude(135.0).lastExitTimeFromRegion(new Date(0))
-                .lastTimeEntered(new Date(0)).time(new Date(10000)).craftID("abc")
+                .lastTimeEntered(new Date(0)).time(new Date(10000)).craftID("abc").isEntrance(false)
                 .altitudeMetres(0.0).currentTime(new Date(15000));
     }
 
