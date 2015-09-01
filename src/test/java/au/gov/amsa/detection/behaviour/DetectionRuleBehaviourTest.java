@@ -119,14 +119,14 @@ public class DetectionRuleBehaviourTest {
     }
 
     @Test
-    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTime() {
+    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionGreaterThanMinInterval() {
         DetectionRule dr = mock(DetectionRule.class);
 
         PositionInRegion p = createPositionInRegionEvent(6000, true);
         when(dr.getMustCross()).thenReturn(Boolean.TRUE);
         when(dr.getStartTime()).thenReturn(new Date(0));
         when(dr.getEndTime()).thenReturn(new Date(20000));
-        when(dr.getMinIntervalSecs()).thenReturn(0);
+        when(dr.getMinIntervalSecs()).thenReturn(3);
         Detection d = mock(Detection.class);
         when(dr.getDetection_R18()).thenReturn(d);
         // last detection report time is before position time for p
@@ -139,6 +139,55 @@ public class DetectionRuleBehaviourTest {
         when(template.getForceUpdateBeforeTime()).thenReturn(new Date(4000));
 
         assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
+    }
+
+    @Test
+    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionEqualToMinInterval() {
+        DetectionRule dr = mock(DetectionRule.class);
+
+        PositionInRegion p = createPositionInRegionEvent(6000, true);
+        when(dr.getMustCross()).thenReturn(Boolean.TRUE);
+        when(dr.getStartTime()).thenReturn(new Date(0));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
+        when(dr.getMinIntervalSecs()).thenReturn(4);
+        Detection d = mock(Detection.class);
+        when(dr.getDetection_R18()).thenReturn(d);
+        // last detection report time is before position time for p
+        when(d.getReportTime()).thenReturn(new Date(5000));
+        when(d.getCreatedTime()).thenReturn(new Date(6000));
+        MessageTemplate template = mock(MessageTemplate.class);
+        when(dr.getMessageTemplate_R8()).thenReturn(template);
+        when(template.getStartTime()).thenReturn(new Date(0));
+        when(template.getEndTime()).thenReturn(new Date(20000));
+        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(4000));
+
+        assertTrue(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
+    }
+
+    @Test
+    public void testCreateDetectionIfLastDetectionCreationTimeAfterForceUpdateTimeAndIntervalSinceLastDetectionLessThanMinInterval() {
+        DetectionRule dr = mock(DetectionRule.class);
+
+        PositionInRegion p = createPositionInRegionEvent(6000, true);
+        when(dr.getMustCross()).thenReturn(Boolean.TRUE);
+        when(dr.getStartTime()).thenReturn(new Date(0));
+        when(dr.getEndTime()).thenReturn(new Date(20000));
+        // big interval
+        when(dr.getMinIntervalSecs()).thenReturn(30);
+        when(dr.getMinIntervalSecsOut()).thenReturn(30);
+        // last detection
+        Detection d = mock(Detection.class);
+        when(dr.getDetection_R18()).thenReturn(d);
+        // last detection report time is before position time for p
+        when(d.getReportTime()).thenReturn(new Date(5000));
+        when(d.getCreatedTime()).thenReturn(new Date(6000));
+        MessageTemplate template = mock(MessageTemplate.class);
+        when(dr.getMessageTemplate_R8()).thenReturn(template);
+        when(template.getStartTime()).thenReturn(new Date(0));
+        when(template.getEndTime()).thenReturn(new Date(20000));
+        when(template.getForceUpdateBeforeTime()).thenReturn(new Date(4000));
+
+        assertFalse(DetectionRuleBehaviour.shouldCreateDetection(dr, p, x -> true));
     }
 
     private PositionInRegion createPositionInRegionEvent(long currentTime,
