@@ -54,10 +54,17 @@
                     <Identifier Number="2" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Description" Type="MediumString" />
-                <IndependentAttribute Name="Start Time" Type="timestamp" />
+                <IndependentAttribute Name="Start Time" Type="timestamp">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>Start Time is earliest position time that will be accepted for processing by this Detection Rule</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
                 <IndependentAttribute Name="End Time" Type="timestamp" />
-                <IndependentAttribute Name="Resend Interval S" Type="Interval Seconds" />
-                <IndependentAttribute Name="Resend Interval S Out" Type="Interval Seconds" />
+                <IndependentAttribute Name="Min Interval Secs" Type="Interval Seconds" />
+                <IndependentAttribute Name="Min Interval Secs Out" Type="Interval Seconds" />
                 <IndependentAttribute Name="Must Cross" Type="boolean" />
                 <IndependentAttribute Name="Craft Identifier Pattern" Type="Craft Identifier Pattern" />
                 <ReferentialAttribute Name="Region">
@@ -79,8 +86,8 @@
                             <StateModelParameter Name="StartTime" Type="timestamp" />
                             <StateModelParameter Name="EndTime" Type="timestamp" />
                             <StateModelParameter Name="Region ID" Type="Arbitrary ID" />
-                            <StateModelParameter Name="Resend Interval S" Type="Interval Seconds" />
-                            <StateModelParameter Name="Resend Interval S Out"
+                            <StateModelParameter Name="Min Interval Secs" Type="Interval Seconds" />
+                            <StateModelParameter Name="Min Interval Secs Out"
                                 Type="Interval Seconds" />
                             <StateModelParameter Name="Must Cross" Type="boolean" />
                             <StateModelParameter Name="Craft Identifier Pattern"
@@ -105,6 +112,12 @@
                     <Transition State="Created" EventID="2" Destination="Position In Region" />
                     <Transition State="Position In Region" EventID="2" Destination="Position In Region" />
                 </Lifecycle>
+                <Extension>
+                    <xt:Documentation>
+                        <xt:Content>Criteria that when applied to a position found in a single region of interest (may be a compound region) will determine whether that a message is generated to either the craft described by the position or an email contact.</xt:Content>
+                        <xt:MimeType>text/plain</xt:MimeType>
+                    </xt:Documentation>
+                </Extension>
             </Class>
 
             <Class Name="Region">

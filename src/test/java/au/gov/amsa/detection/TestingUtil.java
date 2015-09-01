@@ -51,8 +51,8 @@ public class TestingUtil {
                         .description(
                                 "detect entry into Australian EEZ and send information to vessels")
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).mustCross(true)
-                .resendIntervalS((int) TimeUnit.DAYS.toSeconds(30))
-                .resendIntervalSOut((int) TimeUnit.DAYS.toSeconds(7))
+                .minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
+                .minIntervalSecsOut((int) TimeUnit.DAYS.toSeconds(7))
                 .craftIdentifierPattern("MMSI=5.*").regionID(region.getRegion_R4().getId())
                 .build());
 

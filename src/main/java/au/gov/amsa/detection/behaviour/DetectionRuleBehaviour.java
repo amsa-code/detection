@@ -35,8 +35,8 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setDescription(event.getDescription());
         self.setStartTime(event.getStartTime());
         self.setEndTime(event.getEndTime());
-        self.setResendIntervalSOut(event.getResendIntervalSOut());
-        self.setResendIntervalS(event.getResendIntervalS());
+        self.setMinIntervalSecs(event.getMinIntervalSecs());
+        self.setMinIntervalSecsOut(event.getMinIntervalSecsOut());
         self.setMustCross(event.getMustCross());
         self.setCraftIdentifierPattern(event.getCraftIdentifierPattern());
         self.relateAcrossR1(Region.find(event.getRegionID()).get());
@@ -94,13 +94,13 @@ public class DetectionRuleBehaviour implements Behaviour {
                 if (forcedUpdateRequired(self, now, latestDetection.get())) {
                     createDetection = true;
                 } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                        .getTime() >= self.getResendIntervalS() * 1000) {
+                        .getTime() >= self.getMinIntervalSecs() * 1000) {
                     createDetection = true;
                 } else if (event.getLastTimeEntered().getTime()
                         - event.getLastExitTimeFromRegion().getTime() >= self
-                                .getResendIntervalSOut() * 1000
+                                .getMinIntervalSecsOut() * 1000
                         && event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                                .getTime() >= self.getResendIntervalSOut() * 1000) {
+                                .getTime() >= self.getMinIntervalSecsOut() * 1000) {
                     createDetection = true;
                 } else
                     createDetection = false;
