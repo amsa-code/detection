@@ -1,9 +1,11 @@
 package au.gov.amsa.detection.behaviour;
 
 import java.util.Date;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
@@ -57,20 +59,30 @@ public class DetectionRuleBehaviour implements Behaviour {
     }
 
     private boolean shouldCreateDetection(PositionInRegion event) {
+
+        // use a lambda for this bit so we can mock it out for unit testing
+        Predicate<PositionInRegion> matchesCraftIdentifierPattern = p -> {
+            Craft craft = Craft.find(p.getCraftID()).get();
+            String craftIdentifier = craft.getCraftIdentifierType_R20().getName() + "="
+                    + craft.getIdentifier();
+            return Pattern.matches(self.getCraftIdentifierPattern(), craftIdentifier);
+        };
+
+        return shouldCreateDetection(self, event, matchesCraftIdentifierPattern,
+                System.currentTimeMillis());
+    }
+
+    @VisibleForTesting
+    static boolean shouldCreateDetection(DetectionRule self, PositionInRegion event,
+            Predicate<PositionInRegion> matchesCraftIdentifierPattern, long now) {
         final boolean createDetection;
         if (self.getMustCross() && !event.getHasBeenOutsideRegion()) {
             createDetection = false;
         } else {
-            Craft craft = Craft.find(event.getCraftID()).get();
-            String craftIdentifier = craft.getCraftIdentifierType_R20().getName() + "="
-                    + craft.getIdentifier();
-            if (!Pattern.matches(self.getCraftIdentifierPattern(), craftIdentifier))
+            if (!matchesCraftIdentifierPattern.test(event))
                 createDetection = false;
-            else if ((event.getTime().after(self.getStartTime())
-                    || event.getTime().equals(event.getTime()))
-                    && event.getTime().before(self.getEndTime())) {
+            else if (Util.between(event.getTime(), self.getStartTime(), self.getEndTime())) {
 
-                long now = System.currentTimeMillis();
                 Optional<Detection> latestDetection = Optional
                         .fromNullable(self.getDetection_R18());
 
@@ -82,7 +94,7 @@ public class DetectionRuleBehaviour implements Behaviour {
                     // time
                     createDetection = false;
                 } else {
-                    Stream<MessageTemplate> templates = getTemplate(new Date(now));
+                    Stream<MessageTemplate> templates = getTemplate(self, new Date(now));
                     boolean forcedUpdateRequired = templates.filter(t -> latestDetection.get()
                             .getCreatedTime().before(t.getForceUpdateBeforeTime())).findAny()
                             .isPresent();
@@ -104,6 +116,7 @@ public class DetectionRuleBehaviour implements Behaviour {
                 createDetection = false;
         }
         return createDetection;
+
     }
 
     private Detection createNewDetection(PositionInRegion event) {
@@ -123,7 +136,7 @@ public class DetectionRuleBehaviour implements Behaviour {
         return detection;
     }
 
-    private Stream<MessageTemplate> getTemplate(Date now) {
+    private static Stream<MessageTemplate> getTemplate(DetectionRule self, Date now) {
         return Streams.fromNullable(self.getMessageTemplate_R8())
                 // only between time range
                 .filter(template -> Util.between(now, template.getStartTime(),
