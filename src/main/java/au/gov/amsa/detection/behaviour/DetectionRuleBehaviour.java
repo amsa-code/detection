@@ -78,45 +78,46 @@ public class DetectionRuleBehaviour implements Behaviour {
         final boolean createDetection;
         if (self.getMustCross() && !event.getHasBeenOutsideRegion()) {
             createDetection = false;
-        } else {
-            if (!matchesCraftIdentifierPattern.test(event))
-                createDetection = false;
-            else if (Util.between(event.getTime(), self.getStartTime(), self.getEndTime())) {
+        } else if (!matchesCraftIdentifierPattern.test(event))
+            createDetection = false;
+        else if (Util.between(event.getTime(), self.getStartTime(), self.getEndTime())) {
 
-                Optional<Detection> latestDetection = Optional
-                        .fromNullable(self.getDetection_R18());
+            Optional<Detection> latestDetection = Optional.fromNullable(self.getDetection_R18());
 
-                if (!latestDetection.isPresent()) {
-                    createDetection = true;
-                } else if (Util.beforeOrEquals(event.getTime(),
-                        latestDetection.get().getReportTime())) {
-                    // ignore if position time before latest detection position
-                    // time
-                    createDetection = false;
-                } else {
-                    Stream<MessageTemplate> templates = getTemplate(self, new Date(now));
-                    boolean forcedUpdateRequired = templates.filter(t -> latestDetection.get()
-                            .getCreatedTime().before(t.getForceUpdateBeforeTime())).findAny()
-                            .isPresent();
-                    if (forcedUpdateRequired) {
-                        createDetection = true;
-                    } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                            .getTime() >= self.getResendIntervalS() * 1000) {
-                        createDetection = true;
-                    } else if (event.getLastTimeEntered().getTime()
-                            - event.getLastExitTimeFromRegion().getTime() >= self
-                                    .getResendIntervalSOut() * 1000
-                            && event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                                    .getTime() >= self.getResendIntervalSOut() * 1000) {
-                        createDetection = true;
-                    } else
-                        createDetection = false;
-                }
+            if (!latestDetection.isPresent()) {
+                createDetection = true;
             } else
+                if (Util.beforeOrEquals(event.getTime(), latestDetection.get().getReportTime())) {
+                // ignore if position time before latest detection position time
                 createDetection = false;
-        }
+            } else {
+                if (forcedUpdateRequired(self, now, latestDetection.get())) {
+                    createDetection = true;
+                } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
+                        .getTime() >= self.getResendIntervalS() * 1000) {
+                    createDetection = true;
+                } else if (event.getLastTimeEntered().getTime()
+                        - event.getLastExitTimeFromRegion().getTime() >= self
+                                .getResendIntervalSOut() * 1000
+                        && event.getTime().getTime() - latestDetection.get().getCreatedTime()
+                                .getTime() >= self.getResendIntervalSOut() * 1000) {
+                    createDetection = true;
+                } else
+                    createDetection = false;
+            }
+        } else
+            createDetection = false;
+
         return createDetection;
 
+    }
+
+    private static boolean forcedUpdateRequired(DetectionRule self, long now,
+            Detection latestDetection) {
+        Stream<MessageTemplate> templates = getTemplate(self, new Date(now));
+        return templates
+                .filter(t -> latestDetection.getCreatedTime().before(t.getForceUpdateBeforeTime()))
+                .findAny().isPresent();
     }
 
     private Detection createNewDetection(PositionInRegion event) {
