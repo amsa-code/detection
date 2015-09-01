@@ -262,12 +262,4 @@ public class DetectionRuleBehaviourTest {
         return createPositionInRegionEvent(15000, false);
     }
 
-    private PositionInRegion.Builder createPositionInRegionEvent(long currentTime) {
-        return createPositionInRegionEvent(currentTime, false);
-    }
-
-    private PositionInRegion.Builder createPositionInRegionEvent(boolean hasBeenOutsideRegion) {
-        return createPositionInRegionEvent(15000, hasBeenOutsideRegion);
-    }
-
 }
