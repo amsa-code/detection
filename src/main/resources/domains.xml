@@ -348,7 +348,7 @@
                     <State Name="Created" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
-                            <!-- Not used because state machine not used to instanitate -->
+                            <!-- Not used because state machine not used to instantiate -->
                         </EventSignature>
                     </CreationEvent>
                 </Lifecycle>
@@ -517,7 +517,7 @@
                 <IndependentAttribute Name="Force Update Before Time" Type="timestamp">
                     <Extension>
                         <xt:Documentation>
-                            <xt:Content>If the last detection message </xt:Content>
+                            <xt:Content>If the last detection creation time for the detection rule is before this time then send a new message (regardless of the minimum interval between messages settings on the detection rule). As a consequence of this be careful not to set this value to a time in the future otherwise every new position report for a craft will generate a detection!</xt:Content>
                             <xt:MimeType>text/plain</xt:MimeType>
                         </xt:Documentation>
                     </Extension>
