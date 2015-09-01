@@ -114,6 +114,7 @@
                                 Type="timestamp" />
                             <StateModelParameter Name="Has Been Outside Region"
                                 Type="boolean" />
+                            <StateModelParameter Name="Current Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="Position In Region" />

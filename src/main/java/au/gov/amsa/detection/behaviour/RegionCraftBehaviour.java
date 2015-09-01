@@ -1,5 +1,7 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.util.Date;
+
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.DetectionRule.Events.PositionInRegion;
 import au.gov.amsa.detection.model.RegionCraft;
@@ -41,7 +43,8 @@ public class RegionCraftBehaviour implements Behaviour {
                 .altitudeMetres(event.getAltitudeMetres()).craftID(self.getCraft_R15().getId())
                 .latitude(event.getLatitude()).longitude(event.getLongitude()).time(event.getTime())
                 .lastTimeEntered(self.getLastTimeEntered()).hasBeenOutsideRegion(hasBeenOutside)
-                .lastExitTimeFromRegion(self.getLastExitTimeFromRegion()).build();
+                .lastExitTimeFromRegion(self.getLastExitTimeFromRegion()).currentTime(new Date())
+                .build();
 
         self.getRegion_R5().getDetectionRule_R1().forEach(dr -> dr.signal(positionInRegion));
     }

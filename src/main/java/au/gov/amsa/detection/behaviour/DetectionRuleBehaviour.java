@@ -68,13 +68,12 @@ public class DetectionRuleBehaviour implements Behaviour {
             return Pattern.matches(self.getCraftIdentifierPattern(), craftIdentifier);
         };
 
-        return shouldCreateDetection(self, event, matchesCraftIdentifierPattern,
-                System.currentTimeMillis());
+        return shouldCreateDetection(self, event, matchesCraftIdentifierPattern);
     }
 
     @VisibleForTesting
     static boolean shouldCreateDetection(DetectionRule self, PositionInRegion event,
-            Predicate<PositionInRegion> matchesCraftIdentifierPattern, long now) {
+            Predicate<PositionInRegion> matchesCraftIdentifierPattern) {
         final boolean createDetection;
         if (self.getMustCross() && !event.getHasBeenOutsideRegion()) {
             createDetection = false;
@@ -91,7 +90,7 @@ public class DetectionRuleBehaviour implements Behaviour {
                 // ignore if position time before latest detection position time
                 createDetection = false;
             } else {
-                if (forcedUpdateRequired(self, now, latestDetection.get())) {
+                if (forcedUpdateRequired(self, event.getCurrentTime(), latestDetection.get())) {
                     createDetection = true;
                 } else if (event.getTime().getTime() - latestDetection.get().getCreatedTime()
                         .getTime() >= self.getMinIntervalSecs() * 1000) {
@@ -112,9 +111,9 @@ public class DetectionRuleBehaviour implements Behaviour {
 
     }
 
-    private static boolean forcedUpdateRequired(DetectionRule self, long now,
+    private static boolean forcedUpdateRequired(DetectionRule self, Date detectionCreateTime,
             Detection latestDetection) {
-        Stream<MessageTemplate> templates = getTemplate(self, new Date(now));
+        Stream<MessageTemplate> templates = getTemplate(self, detectionCreateTime);
         return templates
                 .filter(t -> latestDetection.getCreatedTime().before(t.getForceUpdateBeforeTime()))
                 .findAny().isPresent();
@@ -128,7 +127,7 @@ public class DetectionRuleBehaviour implements Behaviour {
         detection.setReportLatitude(event.getLatitude());
         detection.setReportLongitude(event.getLongitude());
         detection.setReportTime(event.getTime());
-        detection.setCreatedTime(new Date());
+        detection.setCreatedTime(event.getCurrentTime());
         // establish latest detection for rule
         detection.relateAcrossR18(self);
         detection.relateAcrossR7(self);
@@ -137,10 +136,11 @@ public class DetectionRuleBehaviour implements Behaviour {
         return detection;
     }
 
-    private static Stream<MessageTemplate> getTemplate(DetectionRule self, Date now) {
+    private static Stream<MessageTemplate> getTemplate(DetectionRule self,
+            Date detectionCreateTime) {
         return Streams.fromNullable(self.getMessageTemplate_R8())
                 // only between time range
-                .filter(template -> Util.between(now, template.getStartTime(),
+                .filter(template -> Util.between(detectionCreateTime, template.getStartTime(),
                         template.getEndTime()));
     }
 
