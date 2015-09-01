@@ -57,12 +57,19 @@
                 <IndependentAttribute Name="Start Time" Type="timestamp">
                     <Extension>
                         <xt:Documentation>
-                            <xt:Content>Start Time is earliest position time that will be accepted for processing by this Detection Rule</xt:Content>
+                            <xt:Content>Start Time is earliest position time (inclusive) that will be accepted for processing by this Detection Rule.</xt:Content>
                             <xt:MimeType>text/plain</xt:MimeType>
                         </xt:Documentation>
                     </Extension>
                 </IndependentAttribute>
-                <IndependentAttribute Name="End Time" Type="timestamp" />
+                <IndependentAttribute Name="End Time" Type="timestamp">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>End Time is latest position time (exclusive) that will be accepted for processing by this Detection Rule.</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
                 <IndependentAttribute Name="Min Interval Secs" Type="Interval Seconds" />
                 <IndependentAttribute Name="Min Interval Secs Out" Type="Interval Seconds" />
                 <IndependentAttribute Name="Must Cross" Type="boolean" />
@@ -491,9 +498,30 @@
                 </IndependentAttribute>
                 <IndependentAttribute Name="Subject" Type="MessageSubject" />
                 <IndependentAttribute Name="Body" Type="MessageBody" />
-                <IndependentAttribute Name="StartTime" Type="timestamp" />
-                <IndependentAttribute Name="EndTime" Type="timestamp" />
-                <IndependentAttribute Name="ForceUpdateBeforeTime" Type="timestamp" />
+                <IndependentAttribute Name="Start Time" Type="timestamp">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>Start Time is earliest (inclusive) detection creation time that can provoke a detection message being sent.</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
+                <IndependentAttribute Name="End Time" Type="timestamp">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>End Time is latest (exclusive) detection creation time that can provoke a detection message being sent.</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
+                <IndependentAttribute Name="Force Update Before Time" Type="timestamp">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>If the last detection message </xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
                 <Lifecycle>
                     <State Name="Created" />
                     <CreationEvent Name="Create" ID="1" State="Created">
@@ -527,7 +555,7 @@
                 </ReferentialAttribute>
                 <IndependentAttribute Name="Subject" Type="MessageSubject" />
                 <IndependentAttribute Name="Body" Type="MessageBody" />
-                <IndependentAttribute Name="SentTime" Type="timestamp" />
+                <IndependentAttribute Name="Sent Time" Type="timestamp" />
                 <ReferentialAttribute Name="Detection">
                     <ToOneReference Relationship="11" Attribute="ID" />
                 </ReferentialAttribute>
