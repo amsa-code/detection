@@ -91,16 +91,14 @@ public class DetectionRuleBehaviour implements Behaviour {
                 createDetection = false;
             } else if (forcedUpdateRequired(self, event.getCurrentTime(), latestDetection.get())) {
                 createDetection = true;
-            } else if (event.getTime().getTime()
+            } else if (event.getCurrentTime().getTime()
                     - latestDetection.get().getCreatedTime().getTime() >= self.getMinIntervalSecs()
                             * 1000) {
                 createDetection = true;
             } else
-                if (event.getLastTimeEntered().getTime()
-                        - event.getLastExitTimeFromRegion().getTime() >= self
-                                .getMinIntervalSecsOut() * 1000
-                        && event.getTime().getTime() - latestDetection.get().getCreatedTime()
-                                .getTime() >= self.getMinIntervalSecsOut() * 1000) {
+                // if been outside for a while and
+                if (event.getIsEntrance()
+                        && timeOutside(event) >= self.getMinIntervalSecsOut() * 1000) {
                 createDetection = true;
             } else
                 createDetection = false;
@@ -109,6 +107,10 @@ public class DetectionRuleBehaviour implements Behaviour {
 
         return createDetection;
 
+    }
+
+    private static long timeOutside(PositionInRegion event) {
+        return event.getLastTimeEntered().getTime() - event.getLastExitTimeFromRegion().getTime();
     }
 
     private static boolean forcedUpdateRequired(DetectionRule self, Date detectionCreateTime,

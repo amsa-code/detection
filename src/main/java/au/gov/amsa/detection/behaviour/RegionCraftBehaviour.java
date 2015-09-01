@@ -26,15 +26,27 @@ public class RegionCraftBehaviour implements Behaviour {
 
     @Override
     public void onEntryInside(In event) {
-        in(event, true);
+        in(event, true, false);
     }
 
     @Override
     public void onEntryNeverOutside(In event) {
-        in(event, false);
+        in(event, false, false);
     }
 
-    private void in(In event, boolean hasBeenOutside) {
+    @Override
+    public void onEntryOutside(Out event) {
+        if (self.getLastExitTimeFromRegion().before(self.getLastTimeInRegion())) {
+            self.setLastExitTimeFromRegion(event.getTime());
+        }
+    }
+
+    @Override
+    public void onEntryEntered(In event) {
+        in(event, true, true);
+    }
+
+    private void in(In event, boolean hasBeenOutside, boolean isEntrance) {
         if (self.getLastExitTimeFromRegion().after(self.getLastTimeInRegion())) {
             self.setLastTimeEntered(event.getTime());
             self.setLastTimeInRegion(event.getTime());
@@ -47,13 +59,6 @@ public class RegionCraftBehaviour implements Behaviour {
                 .build();
 
         self.getRegion_R5().getDetectionRule_R1().forEach(dr -> dr.signal(positionInRegion));
-    }
-
-    @Override
-    public void onEntryOutside(Out event) {
-        if (self.getLastExitTimeFromRegion().before(self.getLastTimeInRegion())) {
-            self.setLastExitTimeFromRegion(event.getTime());
-        }
     }
 
 }

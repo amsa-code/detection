@@ -70,8 +70,22 @@
                         </xt:Documentation>
                     </Extension>
                 </IndependentAttribute>
-                <IndependentAttribute Name="Min Interval Secs" Type="Interval Seconds" />
-                <IndependentAttribute Name="Min Interval Secs Out" Type="Interval Seconds" />
+                <IndependentAttribute Name="Min Interval Secs" Type="Interval Seconds">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>If current time minus the last detection creation time is greater than min interval secs then send a message.</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
+                <IndependentAttribute Name="Min Interval Secs Out" Type="Interval Seconds">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>If Min Interval Secs is not exceeded and the position report is for an entrance into the region and the time spent outside is more than Min Interval Secs Out then a message is sent.</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
                 <IndependentAttribute Name="Must Cross" Type="boolean" />
                 <IndependentAttribute Name="Craft Identifier Pattern" Type="Craft Identifier Pattern" />
                 <ReferentialAttribute Name="Region">
@@ -115,6 +129,7 @@
                             <StateModelParameter Name="Has Been Outside Region"
                                 Type="boolean" />
                             <StateModelParameter Name="Current Time" Type="timestamp" />
+                            <StateModelParameter Name="Is Entrance" Type="boolean" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="Position In Region" />
@@ -389,6 +404,7 @@
                     <State Name="Never Outside" />
                     <State Name="Outside" />
                     <State Name="Inside" />
+                    <State Name="Entered" />
                     <CreationEvent Name="Create" ID="1" State="Created">
                         <EventSignature>
                             <StateModelParameter Name="Latitude" Type="Latitude" />
@@ -416,10 +432,17 @@
                             <StateModelParameter Name="Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
-                    <Transition State="Inside" Destination="Outside" EventID="3" />
                     <Transition State="Created" Destination="Never Outside" EventID="2" />
                     <Transition State="Created" Destination="Outside" EventID="3" />
-                    <Transition State="Outside" Destination="Inside" EventID="2" />
+                    <Transition State="Never Outside" Destination="Outside" EventID="3" />
+                    <Transition State="Never Outside" Destination="Never Outside"
+                        EventID="2" />
+                    <Transition State="Outside" Destination="Entered" EventID="2" />
+                    <Transition State="Outside" Destination="Outside" EventID="3" />
+                    <Transition State="Entered" Destination="Inside" EventID="2" />
+                    <Transition State="Entered" Destination="Outside" EventID="3" />
+                    <Transition State="Inside" Destination="Outside" EventID="3" />
+                    <Transition State="Inside" Destination="Inside" EventID="2" />
                 </Lifecycle>
             </Class>
 
