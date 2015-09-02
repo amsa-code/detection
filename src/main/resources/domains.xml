@@ -39,7 +39,9 @@
     <IntegerType Name="MMSI" LowerLimit="0" UpperLimit="999999999" DefaultValue="0"
         Units="mmsi" />
     <IntegerType Name="Interval Seconds" LowerLimit="0" UpperLimit="999999999"
-        DefaultValue="0" Units="mmsi" />
+        DefaultValue="0" Units="seconds" />
+    <IntegerType Name="Interval Ms" LowerLimit="0" UpperLimit="999999999999"
+        DefaultValue="0" Units="milliseconds" />
     <SymbolicType Name="Craft Identifier Pattern" DefaultValue=".*" MinLength="1"
         MaxLength="512" ValidationPattern=".*" Prefix="" Suffix="" />
     <BooleanType Name="boolean" DefaultValue="false" />
@@ -654,6 +656,7 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
+                <IndependentAttribute Name="Retry Interval Ms" Type="Interval Ms"/>
                 <ReferentialAttribute Name="Message Recipient">
                     <GeneralizationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
@@ -665,6 +668,7 @@
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
                             <StateModelParameter Name="Start Time" Type="timestamp" />
                             <StateModelParameter Name="End Time" Type="timestamp" />
+                            <StateModelParameter Name="Retry Interval Ms" Type="Interval Ms"/>
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Send" ID="2">
@@ -691,6 +695,7 @@
                         </xt:Documentation>
                     </Extension>
                 </IndependentAttribute>
+                <IndependentAttribute Name="Retry Interval Ms" Type="Interval Ms"/>
                 <ReferentialAttribute Name="Message Recipient">
                     <GeneralizationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
@@ -705,6 +710,7 @@
                                 Type="Email Subject Prefix" />
                             <StateModelParameter Name="Start Time" Type="timestamp" />
                             <StateModelParameter Name="End Time" Type="timestamp" />
+                            <StateModelParameter Name="Retry Interval Ms" Type="Interval Ms"/>
                         </EventSignature>
                     </CreationEvent>
                     <LocalEffectiveSignalingEvent Name="Send" ID="2">

@@ -1,5 +1,7 @@
 package au.gov.amsa.detection.behaviour;
 
+import java.util.concurrent.TimeUnit;
+
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Contact;
 import au.gov.amsa.detection.model.Contact.Behaviour;
@@ -8,6 +10,7 @@ import au.gov.amsa.detection.model.Contact.Events.Send;
 import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageRecipient;
+import scala.concurrent.duration.Duration;
 
 public class ContactBehaviour implements Behaviour {
 
@@ -24,6 +27,7 @@ public class ContactBehaviour implements Behaviour {
         self.setId(ArbitraryId.next());
         self.setEmail(event.getEmail());
         self.setEmailSubjectPrefix(event.getEmailSubjectPrefix());
+        self.setRetryIntervalMs(event.getRetryIntervalMs());
         MessageRecipient r = MessageRecipient.create(ArbitraryId.next());
         r.setStartTime(event.getStartTime());
         r.setEndTime(event.getEndTime());
@@ -36,7 +40,12 @@ public class ContactBehaviour implements Behaviour {
     @Override
     public void onEntrySent(Send event) {
         DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
-        sender.send(self.getEmail(), self.getEmailSubjectPrefix() + m.getSubject(), m.getBody());
+        try {
+            sender.send(self.getEmail(), self.getEmailSubjectPrefix() + m.getSubject(),
+                    m.getBody());
+        } catch (RuntimeException e) {
+            self.signal(event, Duration.create(self.getRetryIntervalMs(), TimeUnit.MILLISECONDS));
+        }
     }
 
 }

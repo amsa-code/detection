@@ -72,11 +72,13 @@ public class TestingUtil {
         // send message to detected craft and to an email address
 
         DetectedCraft.create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId())
-                .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).build());
+                .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
+                .endTime(new Date(Long.MAX_VALUE)).build());
 
         Contact.create(Contact.Events.Create.builder().email("fred@gmail.com")
-                .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
-                .detectionRuleID(dr.getId()).emailSubjectPrefix("FYI: ").build());
+                .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
+                .endTime(new Date(Long.MAX_VALUE)).detectionRuleID(dr.getId())
+                .emailSubjectPrefix("FYI: ").build());
 
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")
                 .description("A ship or other floating craft").build());
