@@ -13,18 +13,11 @@ public class GeneratorMain {
         Domains domains = new Marshaller()
                 .unmarshal(GeneratorMain.class.getResourceAsStream("/domains.xml"));
 
-        String domain = "detection-domain";
-        String packageName = "au.gov.amsa.detection.model";
-        String schema = "DETECTION";
-        File outputSourceDirectory = new File("target/generated-sources");
-        File resourcesDirectory = new File("target/generated-resources");
-        String implementationPackageName = "au.gov.amsa.detection.model";
-        File implementationSourceDirectory = new File("target/generated-sources");
-        boolean generatePersistenceXml = false;
-        boolean implementationOverwrite = true;
-        new CodeGeneratorJava(domains, domain, packageName, schema, outputSourceDirectory,
-                resourcesDirectory, implementationPackageName, implementationSourceDirectory,
-                generatePersistenceXml, implementationOverwrite).generate();
+        CodeGeneratorJava.builder().domains(domains).domainName("detection-domain")
+                .domainSchema("DETECTION").domainPackageName("au.gov.amsa.detection.model")
+                .generatedSourcesDirectory(new File("target/generated-sources"))
+                .generatedResourcesDirectory(new File("target/generated-resources"))
+                .generatePersistenceXml(false).build().generate();
     }
 
 }
