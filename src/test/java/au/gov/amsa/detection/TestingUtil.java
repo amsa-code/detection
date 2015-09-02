@@ -50,7 +50,7 @@ public class TestingUtil {
                 .regionID(region.getRegion_R4().getId()).include(false).build());
 
         DetectionRule dr = DetectionRule
-                .create(DetectionRule.Events.Create.builder().name("Name")
+                .create(DetectionRule.Events.Create.builder().name("EEZ")
                         .description(
                                 "detect entry into Australian EEZ and send information to vessels")
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).mustCross(true)
