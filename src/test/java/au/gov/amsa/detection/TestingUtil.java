@@ -85,8 +85,7 @@ public class TestingUtil {
 
     public static void startup() {
         Context.setEntityActorListenerFactory(id -> SignalProcessorListenerTesting.instance());
-        App.startup("testPersistenceUnit", new CraftSenderViaInmarsat(),
-                new ContactSenderViaEmail());
+        App.startup("testPersistenceUnit", new CraftSenderImpl(), new ContactSenderImpl());
     }
 
     public static void shutdown() {

@@ -4,6 +4,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -11,7 +12,13 @@ import au.gov.amsa.gt.Shapefile;
 
 public final class Shapefiles {
 
-    public static final class Holder {
+    @VisibleForTesting
+    static final class Holder {
+
+        private Holder() {
+            // prevent instantiation
+        }
+
         private static final Shapefiles INSTANCE = new Shapefiles();
     }
 
