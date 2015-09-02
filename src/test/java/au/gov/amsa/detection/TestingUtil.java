@@ -38,21 +38,21 @@ public class TestingUtil {
                 .create(SimpleRegionType.Events.Create.builder().name("Zipped Shapefile")
                         .description("ArcGIS Shapefile format as zipped archive").build());
 
-        SimpleRegion region = SimpleRegion.create(SimpleRegion.Events.Create.builder().name("EEZ")
-                .description("Australian Exclusive Economic Zone").bytes(bytes)
+        SimpleRegion region = SimpleRegion.create(SimpleRegion.Events.Create.builder()
+                .name("Coral Sea ATBA").description("Coral Sea Area To Be Avoided").bytes(bytes)
                 .simpleRegionTypeID(srt.getId()).build());
 
         CompositeRegion compositeRegion = CompositeRegion
-                .create(CompositeRegion.Events.Create.builder().name("Outside EEZ")
-                        .description("Australian Exclusive Economic Zone as composite").build());
+                .create(CompositeRegion.Events.Create.builder().name("Outside Coral Sea ATBA")
+                        .description("Region outside of Coral Sea Area To Be Avoided").build());
 
         compositeRegion.signal(CompositeRegion.Events.AddRegion.builder()
                 .regionID(region.getRegion_R4().getId()).include(false).build());
 
         DetectionRule dr = DetectionRule
-                .create(DetectionRule.Events.Create.builder().name("EEZ")
+                .create(DetectionRule.Events.Create.builder().name("Coral Sea ATBA")
                         .description(
-                                "detect entry into Australian EEZ and send information to vessels")
+                                "detect entry into Coral Sea Area To Be Avoided and send information to vessels")
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).mustCross(true)
                 .minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
                 .minIntervalSecsOut((int) TimeUnit.DAYS.toSeconds(7))
@@ -61,10 +61,10 @@ public class TestingUtil {
 
         MessageTemplate.create(MessageTemplate.Events.Create.builder()
                 .body("Your vessel identified by ${craft.identifier.type}"
-                        + " ${craft.identifier} was detected entering ${region.name}"
+                        + " ${craft.identifier} was detected in ${region.name}"
                         + " at ${position.time} with position ${position.lat.formatted.html}"
                         + " ${position.lon.formatted.html}. Please be aware of the following:")
-                .subject("Welcome to the Australian EEZ").startTime(new Date(0))
+                .subject("You are in an Area To Be Avoided").startTime(new Date(0))
                 .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
                 .detectionRuleID(dr.getId()).build());
 
