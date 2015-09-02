@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import au.gov.amsa.detection.model.CompositeRegion;
+import au.gov.amsa.detection.model.Contact;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftIdentifierType;
@@ -68,8 +69,14 @@ public class TestingUtil {
                 .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
                 .detectionRuleID(dr.getId()).build());
 
+        // send message to detected craft and to an email address
+
         DetectedCraft.create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId())
                 .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).build());
+
+        Contact.create(Contact.Events.Create.builder().email("fred@gmail.com")
+                .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE))
+                .detectionRuleID(dr.getId()).emailSubjectPrefix("FYI: ").build());
 
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")
                 .description("A ship or other floating craft").build());

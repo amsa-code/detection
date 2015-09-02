@@ -23,6 +23,7 @@ public class ContactBehaviour implements Behaviour {
     public void onEntryCreated(Create event) {
         self.setId(ArbitraryId.next());
         self.setEmail(event.getEmail());
+        self.setEmailSubjectPrefix(event.getEmailSubjectPrefix());
         MessageRecipient r = MessageRecipient.create(ArbitraryId.next());
         r.setStartTime(event.getStartTime());
         r.setEndTime(event.getEndTime());
@@ -35,7 +36,7 @@ public class ContactBehaviour implements Behaviour {
     @Override
     public void onEntrySent(Send event) {
         DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
-        sender.send(self.getEmail(), m.getSubject(), m.getBody());
+        sender.send(self.getEmail(), self.getEmailSubjectPrefix() + m.getSubject(), m.getBody());
     }
 
 }

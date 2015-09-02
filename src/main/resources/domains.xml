@@ -18,6 +18,8 @@
     <SymbolicType Name="Email" MinLength="1" MaxLength="512" Prefix="" Suffix=""
         ValidationPattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"
         DefaultValue="" />
+    <SymbolicType Name="Email Subject Prefix" MinLength="1" MaxLength="50" Prefix=""
+        Suffix="" ValidationPattern=".*" DefaultValue="" />
     <SymbolicType Name="Bytes" MinLength="1" MaxLength="100000000" Prefix="" Suffix=""
         ValidationPattern=".*" DefaultValue=""></SymbolicType>
     <SymbolicType Name="Craft Identifier" MinLength="1" MaxLength="255" Prefix=""
@@ -681,6 +683,14 @@
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <IndependentAttribute Name="Email" Type="Email" />
+                <IndependentAttribute Name="Email Subject Prefix" Type="Email Subject Prefix">
+                    <Extension>
+                        <xt:Documentation>
+                            <xt:Content>When an email is to be sent to a contact then prefix with Email Subject Prefix. A use case example for this is to prefix the subject with "FW: " or "FYI: " on a craft warning when sending it to craft monitoring staff.</xt:Content>
+                            <xt:MimeType>text/plain</xt:MimeType>
+                        </xt:Documentation>
+                    </Extension>
+                </IndependentAttribute>
                 <ReferentialAttribute Name="Message Recipient">
                     <GeneralizationReference Relationship="14" Attribute="ID" />
                 </ReferentialAttribute>
@@ -691,6 +701,8 @@
                         <EventSignature>
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
                             <StateModelParameter Name="Email" Type="Email" />
+                            <StateModelParameter Name="Email Subject Prefix"
+                                Type="Email Subject Prefix" />
                             <StateModelParameter Name="Start Time" Type="timestamp" />
                             <StateModelParameter Name="End Time" Type="timestamp" />
                         </EventSignature>
