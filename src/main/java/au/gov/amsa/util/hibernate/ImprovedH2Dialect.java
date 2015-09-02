@@ -9,11 +9,13 @@ import org.hibernate.dialect.H2Dialect;
  * 
  */
 public class ImprovedH2Dialect extends H2Dialect {
-    @Override
-    public String getDropSequenceString(String sequenceName) {
-        // Adding the "if exists" clause to avoid warnings
-        return "drop sequence if exists " + sequenceName;
-    }
+    // no sequences used so commenting this override out
+
+    // @Override
+    // public String getDropSequenceString(String sequenceName) {
+    // // Adding the "if exists" clause to avoid warnings
+    // return "drop sequence if exists " + sequenceName;
+    // }
 
     @Override
     public boolean dropConstraints() {

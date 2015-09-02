@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -41,15 +40,13 @@ public class AppTest {
 
         long t = TimeUnit.DAYS.toMillis(100);
 
-        // in EEZ
-        craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-35.0)
+        // outside Coral Sea ATBA
+        craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-35.0)
                 .longitude(142.0).time(new Date(t)).build());
 
-        IntStream.range(0, 100).forEach(i -> {
-            // in coral sea ATBA
-            craft.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-17.020463)
-                    .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
-        });
+        // in Coral Sea ATBA a year later
+        craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-17.020463)
+                .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
 
         TestingUtil.waitForSignalsToBeProcessed(false, 1000);
 

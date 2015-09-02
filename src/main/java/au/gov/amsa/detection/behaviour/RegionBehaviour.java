@@ -66,6 +66,7 @@ public class RegionBehaviour implements Behaviour {
                             .latitude(event.getLatitude()).longitude(event.getLongitude())
                             .lastTimeEntered(rc.getLastTimeEntered())
                             .lastExitTimeFromRegion(rc.getLastExitTimeFromRegion())
+                            .currentTime(new Date()).hasBeenOutsideRegion(false).isEntrance(false)
                             .time(event.getTime()).build()));
         } else {
             rc.setLastTimeEntered(event.getTime());
