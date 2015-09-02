@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import au.gov.amsa.detection.CraftSenderImpl.Send;
@@ -20,14 +20,15 @@ public class AppTest {
     private static CraftSenderImpl craftSender = new CraftSenderImpl();
     private static ContactSenderImpl contactSender = new ContactSenderImpl();
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
+        reset();
         Context.setEntityActorListenerFactory(id -> SignalProcessorListenerTesting.instance());
         App.startup("testPersistenceUnit", craftSender, contactSender);
     }
 
-    @AfterClass
-    public static void shutdown() {
+    @After
+    public void shutdown() {
         TestingUtil.shutdown();
     }
 
@@ -48,7 +49,7 @@ public class AppTest {
         craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-17.020463)
                 .longitude(150.738315).time(new Date(t + TimeUnit.DAYS.toMillis(365))).build());
 
-        TestingUtil.waitForSignalsToBeProcessed(false, 1000);
+        TestingUtil.waitForSignalsToBeProcessed(false, 300);
 
         String expectedBody = "Your vessel identified by MMSI 523456789 was detected in Coral Sea ATBA "
                 + "at 1971-04-11 00:00 UTC with position" + " 17&deg;01.23'S 150&deg;44.30'E. "
@@ -69,6 +70,24 @@ public class AppTest {
             assertEquals("fred@gmail.com", send.email);
             assertEquals(expectedBody, send.body);
         }
+    }
+
+    @Test
+    public void testFirstPositionFromCraftIsInsideRegion()
+            throws InterruptedException, IOException {
+
+        Craft craft = TestingUtil.createData();
+        long t = TimeUnit.DAYS.toMillis(100);
+        // in Coral Sea ATBA a year later
+        craft.signal(Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-17.020463)
+                .longitude(150.738315).time(new Date(t)).build());
+        TestingUtil.waitForSignalsToBeProcessed(false, 300);
+    }
+
+    private static void reset() {
+        craftSender.list.clear();
+        contactSender.list.clear();
+        SignalProcessorListenerTesting.instance().exceptions().clear();
     }
 
 }
