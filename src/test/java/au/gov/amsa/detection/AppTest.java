@@ -61,7 +61,7 @@ public class AppTest {
                 "Your vessel identified by MMSI 523456789 was detected entering EEZ "
                         + "at 1971-04-11 00:00 UTC with position"
                         + " 17&deg;01.23'S 150&deg;44.30'E. " + "Please be aware of the following:",
-                send.subject);
+                send.body);
     }
 
 }
