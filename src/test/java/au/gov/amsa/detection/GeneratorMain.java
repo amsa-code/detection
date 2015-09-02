@@ -15,7 +15,7 @@ public class GeneratorMain {
                 .domainSchema("DETECTION").domainPackageName("au.gov.amsa.detection.model")
                 .generatedSourcesDirectory("target/generated-sources")
                 .generatedResourcesDirectory("target/generated-resources")
-                .generatePersistenceXml(false).build().generate();
+                .generatePersistenceXml(true).build().generate();
     }
 
 }
