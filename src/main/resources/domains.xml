@@ -192,9 +192,12 @@
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Identifier Type">
+                    <Identifier Number="2" />
                     <ToOneReference Attribute="ID" Relationship="20" />
                 </ReferentialAttribute>
-                <IndependentAttribute Name="Identifier" Type="Craft Identifier" />
+                <IndependentAttribute Name="Identifier" Type="Craft Identifier">
+                    <Identifier Number="2" />                    
+                </IndependentAttribute>
                 <Lifecycle>
                     <State Name="Created" />
                     <State Name="HasPosition" />
@@ -358,6 +361,7 @@
                 </IndependentAttribute>
                 <IndependentAttribute Name="Include" Type="boolean" />
                 <ReferentialAttribute Name="Region">
+                    <Identifier Number="2" />
                     <ToOneReference Relationship="9" Attribute="ID" />
                 </ReferentialAttribute>
                 <ReferentialAttribute Name="Composite Region">
