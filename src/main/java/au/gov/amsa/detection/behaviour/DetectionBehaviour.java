@@ -58,7 +58,6 @@ public class DetectionBehaviour implements Behaviour {
                                 .detectionMessageID(m.getId()).build());
                     });
                 });
-
     }
 
     private String replaceParameters(String s) {

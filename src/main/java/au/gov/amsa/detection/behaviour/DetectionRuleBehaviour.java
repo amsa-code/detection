@@ -40,7 +40,6 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setMustCross(event.getMustCross());
         self.setCraftIdentifierPattern(event.getCraftIdentifierPattern());
         self.relateAcrossR1(Region.find(event.getRegionID()).get());
-
     }
 
     @Override
