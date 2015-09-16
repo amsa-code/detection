@@ -12,4 +12,8 @@ State diagram for *Region Craft*:
 
 <img src="https://raw.githubusercontent.com/amsa-code/detection/master/src/docs/region-craft-state-diagram.png"/>
 
-Generate state diagram by running `StateDiagramViewerMain.java` in `src/test/java/`.
+Generate state diagram by running
+
+* `StateDiagramViewerMain.java` in `src/test/java/` in your IDE
+or
+* `mvn exec:java -P state` from the command line.
