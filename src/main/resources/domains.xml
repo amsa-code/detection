@@ -303,7 +303,9 @@
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />
                 </IndependentAttribute>
-                <IndependentAttribute Name="Bytes" Type="Bytes" />
+                <ReferentialAttribute Name="Binary">
+                    <ToOneReference Attribute="ID" Relationship="21"/>
+                </ReferentialAttribute>
                 <ReferentialAttribute Name="Type">
                     <ToOneReference Attribute="ID" Relationship="19" />
                 </ReferentialAttribute>
@@ -325,6 +327,20 @@
                 </Lifecycle>
 
             </Class>
+
+            <Class Name="Binary">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <IndependentAttribute Name="Bytes" Type="Bytes" />
+            </Class>
+
+            <BinaryAssociation Rnum="21">
+                <ActivePerspective Phrase="defines" ViewedClass="Simple Region"
+                    OnePerspective="false" Conditional="true" />
+                <PassivePerspective Phrase="is defined by" ViewedClass="Binary"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
 
             <Class Name="Composite Region">
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">

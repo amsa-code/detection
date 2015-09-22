@@ -1,6 +1,7 @@
 package au.gov.amsa.detection.behaviour;
 
 import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.model.Binary;
 import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.SimpleRegion;
 import au.gov.amsa.detection.model.SimpleRegion.Behaviour;
@@ -18,7 +19,10 @@ public class SimpleRegionBehaviour implements Behaviour {
     @Override
     public void onEntryCreated(Create event) {
         self.setId(ArbitraryId.next());
-        self.setBytes(event.getBytes());
+        Binary binary = Binary.create(ArbitraryId.next());
+        binary.setBytes(event.getBytes());
+        binary.persist();
+        self.setBinary_R21(binary);
         self.relateAcrossR19(SimpleRegionType.find(event.getSimpleRegionTypeID()).get());
         Region region = Region.create(ArbitraryId.next());
         region.setName(event.getName());

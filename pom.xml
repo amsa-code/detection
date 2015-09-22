@@ -42,7 +42,7 @@
         <dependency>
             <groupId>au.gov.amsa.risky</groupId>
             <artifactId>geotools-extras</artifactId>
-            <version>0.4.1.1-SNAPSHOT</version>
+            <version>${risky.version}</version>
         </dependency>
 
         <!-- test dependencies -->
@@ -84,6 +84,12 @@
             <groupId>au.gov.amsa.risky</groupId>
             <artifactId>formats</artifactId>
             <version>${risky.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>au.gov.amsa.er</groupId>
+            <artifactId>shapefile-eez-polygon</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -205,6 +211,29 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>load</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.4.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>au.gov.amsa.detection.AppLoadTestMain</mainClass>
+                            <classpathScope>test</classpathScope>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
-    
+
 </project>
