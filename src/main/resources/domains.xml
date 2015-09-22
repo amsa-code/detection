@@ -50,29 +50,6 @@
     <ModeledDomain Name="detection-domain">
 
         <Subsystem Name="detection" Floor="1" Ceiling="30">
-            <Class Name="Controller">
-                <IndependentAttribute Name="ID" Type="Arbitrary ID">
-                    <Identifier Number="1" />
-                </IndependentAttribute>
-                <Lifecycle>
-                    <State Name="Created" />
-                    <State Name="Position Arrived" />
-                    <CreationEvent Name="Create" ID="1" State="Created"></CreationEvent>
-                    <LocalEffectiveSignalingEvent Name="Position" ID="2">
-                        <EventSignature>
-                            <StateModelParameter Name="Identifier Type Name" Type="ShortString"/>
-                            <StateModelParameter Name="Identifier" Type="Craft Identifier"/>
-                            <StateModelParameter Name="Latitude" Type="Latitude" />
-                            <StateModelParameter Name="Longitude" Type="Longitude" />
-                            <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
-                            <StateModelParameter Name="Time" Type="timestamp" />
-                        </EventSignature>
-                    </LocalEffectiveSignalingEvent>
-                    <Transition State="Created" EventID="2" Destination="Position Arrived"/>
-                    <Transition State="Position Arrived" EventID="2" Destination="Position Arrived"/>
-                </Lifecycle>
-            </Class>
-
             <Class Name="Detection Rule">
                 <IndependentAttribute Name="ID" Type="Arbitrary ID">
                     <Identifier Number="1" />

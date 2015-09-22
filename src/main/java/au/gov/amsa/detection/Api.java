@@ -26,6 +26,7 @@ public interface Api {
 
     void modifyMessageRecipient();
 
-    void reportPosition();
+    void reportPosition(String craftIdentifierTypeName, String craftIdentifier, double latitude,
+            double longitude, double altitudeMetres, long time);
 
 }
