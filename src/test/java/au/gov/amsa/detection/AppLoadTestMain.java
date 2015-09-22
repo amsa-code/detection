@@ -80,6 +80,8 @@ public class AppLoadTestMain {
         System.out.println("Elapsed time=" + (System.currentTimeMillis() - t) / 1000.0 + "s");
         System.out.println("Database size="
                 + new File("target/load-db.mv.db").length() / 1024.0 / 1024 + "MB");
+        System.out.println("Number contact emails sent=" + contactSends.get());
+        System.out.println("Number craft emails sent=" + craftSends.get());
     }
 
     private static void setupEezEntryDetection() throws IOException {
