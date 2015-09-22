@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.Contact;
 import au.gov.amsa.detection.model.Context;
+import au.gov.amsa.detection.model.Controller;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.CraftIdentifierType;
 import au.gov.amsa.detection.model.CraftType;
@@ -34,6 +35,8 @@ public class TestingUtil {
     public static Craft createData() throws IOException {
         byte[] bytes = IOUtils.toByteArray(
                 AppTest.class.getResourceAsStream("/shapefile-coral-sea-atba-polygon.zip"));
+
+        Controller.create(Controller.Events.Create.builder().build());
 
         SimpleRegionType srt = SimpleRegionType
                 .create(SimpleRegionType.Events.Create.builder().name("Zipped Shapefile")
@@ -88,7 +91,7 @@ public class TestingUtil {
                 .craftTypeID(vessel.getId()).build());
 
         Craft craft = Craft.create(Craft.Events.Create.builder().craftIdentifierTypeName("MMSI")
-                .craftTypeID(vessel.getId()).craftIdentifier("523456789").build());
+                .craftIdentifier("523456789").build());
         return craft;
     }
 

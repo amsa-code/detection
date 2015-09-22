@@ -12,6 +12,7 @@
         <xuml.tools.version>0.4.2-SNAPSHOT</xuml.tools.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <risky.version>0.5.1.1-SNAPSHOT</risky.version>
     </properties>
     <dependencies>
 
@@ -78,6 +79,11 @@
             <artifactId>xuml-model-compiler</artifactId>
             <version>${xuml.tools.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.gov.amsa.risky</groupId>
+            <artifactId>formats</artifactId>
+            <version>${risky.version}</version>
         </dependency>
     </dependencies>
     <build>

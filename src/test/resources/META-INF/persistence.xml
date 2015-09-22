@@ -4,6 +4,7 @@
     version="1.0">
 
     <persistence-unit name="testPersistenceUnit">
+        <class>au.gov.amsa.detection.model.Controller</class>
         <class>au.gov.amsa.detection.model.Craft</class>
         <class>au.gov.amsa.detection.model.CraftPosition</class>
         <class>au.gov.amsa.detection.model.CraftIdentifierType</class>
@@ -31,6 +32,41 @@
             <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
             <property name="hibernate.connection.url"
                 value="jdbc:h2:mem:test-db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DETECTION" />
+            <property name="hibernate.connection.pool_size" value="5" />
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="loadTest">
+        <class>au.gov.amsa.detection.model.Controller</class>
+        <class>au.gov.amsa.detection.model.Craft</class>
+        <class>au.gov.amsa.detection.model.CraftPosition</class>
+        <class>au.gov.amsa.detection.model.CraftIdentifierType</class>
+        <class>au.gov.amsa.detection.model.CraftType</class>
+        <class>au.gov.amsa.detection.model.Region</class>
+        <class>au.gov.amsa.detection.model.RegionCraft</class>
+        <class>au.gov.amsa.detection.model.RegionInclusion</class>
+        <class>au.gov.amsa.detection.model.RegionExclusion</class>
+        <class>au.gov.amsa.detection.model.CompositeRegion</class>
+        <class>au.gov.amsa.detection.model.SimpleRegion</class>
+        <class>au.gov.amsa.detection.model.SimpleRegionType</class>
+        <class>au.gov.amsa.detection.model.DetectionRule</class>
+        <class>au.gov.amsa.detection.model.MessageTemplate</class>
+        <class>au.gov.amsa.detection.model.Detection</class>
+        <class>au.gov.amsa.detection.model.DetectionMessage</class>
+        <class>au.gov.amsa.detection.model.MessageRecipient</class>
+        <class>au.gov.amsa.detection.model.DetectedCraft</class>
+        <class>au.gov.amsa.detection.model.Contact</class>
+        <class>au.gov.amsa.detection.model.CompositeRegionMember</class>
+        <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="au.gov.amsa.util.hibernate.ImprovedH2Dialect" />
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
+            <property name="hibernate.connection.url"
+                value="jdbc:h2:file:~/target/load-db;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS DETECTION" />
             <property name="hibernate.connection.pool_size" value="5" />
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.format_sql" value="true" />
