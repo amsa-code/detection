@@ -61,7 +61,7 @@ public class AppLoadTestMain {
                 // group by mmsi in memory
                 .groupBy(fix -> fix.mmsi())
                 // downsample
-                .flatMap(g -> g.compose(Downsample.minTimeStep(8, TimeUnit.HOURS)));
+                .flatMap(g -> g.compose(Downsample.minTimeStep(30, TimeUnit.MINUTES)));
         // System.out.println(source.count().toBlocking().single());
         source.lift(Logging.<Fix> logger().every(1000).showCount("countK").log())
                 // run in background
