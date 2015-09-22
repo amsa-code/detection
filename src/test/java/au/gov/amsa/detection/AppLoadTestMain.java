@@ -24,8 +24,9 @@ public class AppLoadTestMain {
         ContactSender contactSender = (email, subject, body) -> contactSends.incrementAndGet();
         App.startup("loadTest", craftSender, contactSender);
         TestingUtil.createData();
-        Context.createEntityManager();
         ApiEngine api = new ApiEngine();
+
+        long t = System.currentTimeMillis();
         BinaryFixes
                 .from(new File("/media/an/daily-fixes/2014/2014-02-01.fix"), true,
                         BinaryFixesFormat.WITH_MMSI)
@@ -33,7 +34,7 @@ public class AppLoadTestMain {
                     api.reportPosition("MMSI", fix.mmsi() + "", fix.lat(), fix.lon(), 0.0,
                             fix.time());
                 });
-        Thread.sleep(1000);
+        Thread.sleep(10000);
         while (true) {
             if (Context.queueSize() == 0)
                 break;
@@ -41,6 +42,10 @@ public class AppLoadTestMain {
             Thread.sleep(500);
         }
         TestingUtil.shutdown();
+        System.out.println("Elapsed time=" + (System.currentTimeMillis() - t) / 1000.0 + "s");
+        System.out.println("Database size="
+                + new File("target/load-db.mv.db").length() / 1024.0 / 1024 + "MB");
+
     }
 
 }
