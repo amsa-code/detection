@@ -2,6 +2,9 @@ package au.gov.amsa.detection;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -45,7 +48,12 @@ public class AppLoadTestMain {
             contactSends.incrementAndGet();
             System.out.println("sent to " + email);
         };
-        App.startup("loadTest", craftSender, contactSender);
+        try (Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "")) {
+            c.prepareStatement("create schema DETECTION authorization sa").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        App.startup("testHsql", craftSender, contactSender);
 
         TestingUtil.createData();
 
@@ -100,7 +108,7 @@ public class AppLoadTestMain {
                     .create(DetectionRule.Events.Create.builder().name("EEZ Entry Advice")
                             .description(
                                     "detect entry into Australian EEZ and send information to foreign flagged vessels")
-                    .startTime(new Date(0)).endTime(new Date(Long.MAX_VALUE)).mustCross(true)
+                    .startTime(new Date(0)).endTime(TestingUtil.FUTURE).mustCross(true)
                     .minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
                     .minIntervalSecsOut((int) TimeUnit.DAYS.toSeconds(7))
                     .craftIdentifierPattern("^(?!MMSI=503).+")
@@ -112,18 +120,18 @@ public class AppLoadTestMain {
                             + " at ${position.time} with position ${position.lat.formatted.html}"
                             + " ${position.lon.formatted.html}. Please be aware of the following:")
                     .subject("Advice for Australian Waters").startTime(new Date(0))
-                    .endTime(new Date(Long.MAX_VALUE)).forceUpdateBeforeTime(new Date(0))
+                    .endTime(TestingUtil.FUTURE).forceUpdateBeforeTime(new Date(0))
                     .detectionRuleID(dr.getId()).build());
 
             // send message to detected craft and to an email address
 
             DetectedCraft.create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId())
                     .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
-                    .endTime(new Date(Long.MAX_VALUE)).build());
+                    .endTime(TestingUtil.FUTURE).build());
 
             Contact.create(Contact.Events.Create.builder().email("fred@gmail.com")
                     .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
-                    .endTime(new Date(Long.MAX_VALUE)).detectionRuleID(dr.getId())
+                    .endTime(TestingUtil.FUTURE).detectionRuleID(dr.getId())
                     .emailSubjectPrefix("FYI: ").build());
 
         } finally {

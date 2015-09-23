@@ -2,6 +2,7 @@ package au.gov.amsa.detection.behaviour;
 
 import java.io.ByteArrayInputStream;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Optional;
 
@@ -70,7 +71,7 @@ public class RegionBehaviour implements Behaviour {
                             .time(event.getTime()).build()));
         } else {
             rc.setLastTimeEntered(event.getTime());
-            rc.setLastExitTimeFromRegion(new Date(Long.MAX_VALUE));
+            rc.setLastExitTimeFromRegion(new Date(TimeUnit.DAYS.toMillis(1000000)));
             rc.setState(RegionCraft.State.OUTSIDE);
         }
         Craft craft = Craft.find(event.getCraftID()).get();

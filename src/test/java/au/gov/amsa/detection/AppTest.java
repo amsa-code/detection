@@ -2,6 +2,7 @@ package au.gov.amsa.detection;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,9 @@ import org.junit.Test;
 import au.gov.amsa.detection.CraftSenderImpl.Send;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
+import au.gov.amsa.risky.format.BinaryFixes;
+import au.gov.amsa.risky.format.BinaryFixesFormat;
+import au.gov.amsa.risky.format.Downsample;
 import xuml.tools.model.compiler.runtime.SignalProcessorListenerTesting;
 
 public class AppTest {
@@ -88,6 +92,19 @@ public class AppTest {
         craftSender.list.clear();
         contactSender.list.clear();
         SignalProcessorListenerTesting.instance().exceptions().clear();
+    }
+
+    public static void main(String[] args) {
+        int count = BinaryFixes
+                .from(new File("/media/an/daily-fixes/2014/2014-02-01.fix"), true,
+                        BinaryFixesFormat.WITH_MMSI)
+                .filter(fix -> !(fix.mmsi() + "").startsWith("503"))
+                // group by mmsi in memory
+                .groupBy(fix -> fix.mmsi())
+                // downsample
+                .flatMap(g -> g.compose(Downsample.minTimeStep(30, TimeUnit.MINUTES))).count()
+                .toBlocking().single();
+        System.out.println(count);
     }
 
 }
