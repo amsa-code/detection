@@ -50,6 +50,7 @@
             <groupId>com.github.davidmoten</groupId>
             <artifactId>state-diagram-viewer</artifactId>
             <version>${xuml.tools.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

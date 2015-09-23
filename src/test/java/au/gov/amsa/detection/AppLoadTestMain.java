@@ -48,12 +48,16 @@ public class AppLoadTestMain {
             contactSends.incrementAndGet();
             System.out.println("sent to " + email);
         };
-        try (Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "")) {
-            c.prepareStatement("create schema DETECTION authorization sa").execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+        String persistenceName = "testHsql";
+        if (persistenceName.equals("testHsql")) {
+            try (Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "")) {
+                c.prepareStatement("create schema DETECTION authorization sa").execute();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-        App.startup("testHsql", craftSender, contactSender);
+        App.startup(persistenceName, craftSender, contactSender);
 
         TestingUtil.createData();
 
@@ -69,7 +73,7 @@ public class AppLoadTestMain {
                 // group by mmsi in memory
                 .groupBy(fix -> fix.mmsi())
                 // downsample
-                .flatMap(g -> g.compose(Downsample.minTimeStep(30, TimeUnit.MINUTES)));
+                .flatMap(g -> g.compose(Downsample.minTimeStep(30, TimeUnit.MINUTES))).take(10000);
         // System.out.println(source.count().toBlocking().single());
         source.lift(Logging.<Fix> logger().every(1000).showCount("countK").log())
                 // run in background
