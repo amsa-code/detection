@@ -22,7 +22,7 @@ public class MessageTemplateBehaviour implements Behaviour {
         self.setStartTime(event.getStartTime());
         self.setEndTime(event.getEndTime());
         self.setForceUpdateBeforeTime(event.getForceUpdateBeforeTime());
-        DetectionRule.find(event.getDetectionRuleID()).get().relateAcrossR8(self);
+        DetectionRule.find(event.getDetectionRuleID()).get().setMessageTemplate_R8(self);
     }
 
 }

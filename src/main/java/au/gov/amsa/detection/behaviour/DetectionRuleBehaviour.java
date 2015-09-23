@@ -39,7 +39,7 @@ public class DetectionRuleBehaviour implements Behaviour {
         self.setMinIntervalSecsOut(event.getMinIntervalSecsOut());
         self.setMustCross(event.getMustCross());
         self.setCraftIdentifierPattern(event.getCraftIdentifierPattern());
-        self.relateAcrossR1(Region.find(event.getRegionID()).get());
+        self.setRegion_R1(Region.find(event.getRegionID()).get());
     }
 
     @Override
@@ -131,7 +131,7 @@ public class DetectionRuleBehaviour implements Behaviour {
         detection.setCreatedTime(event.getCurrentTime());
         // establish latest detection for rule
         detection.relateAcrossR18(self);
-        detection.relateAcrossR7(self);
+        detection.setDetectionRule_R7(self);
         detection.setState(Detection.State.CREATED);
         detection.persist();
         return detection;

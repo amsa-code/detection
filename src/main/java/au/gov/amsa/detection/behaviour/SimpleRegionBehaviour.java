@@ -23,7 +23,7 @@ public class SimpleRegionBehaviour implements Behaviour {
         binary.setBytes(event.getBytes());
         binary.persist();
         self.setBinary_R21(binary);
-        self.relateAcrossR19(SimpleRegionType.find(event.getSimpleRegionTypeID()).get());
+        self.setSimpleRegionType_R19(SimpleRegionType.find(event.getSimpleRegionTypeID()).get());
         Region region = Region.create(ArbitraryId.next());
         region.setName(event.getName());
         region.setDescription(event.getDescription());

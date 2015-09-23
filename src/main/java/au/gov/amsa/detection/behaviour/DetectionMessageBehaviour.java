@@ -21,8 +21,8 @@ public class DetectionMessageBehaviour implements Behaviour {
         self.setSubject(event.getSubject());
         self.setBody(event.getBody());
         self.setSentTime(event.getSentTime());
-        self.relateAcrossR11(Detection.find(event.getDetectionID()).get());
-        self.relateAcrossR13(MessageRecipient.find(event.getMessageRecipientID()).get());
+        self.setDetection_R11(Detection.find(event.getDetectionID()).get());
+        self.setMessageRecipient_R13(MessageRecipient.find(event.getMessageRecipientID()).get());
     }
 
 }

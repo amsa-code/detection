@@ -75,8 +75,8 @@ public class RegionBehaviour implements Behaviour {
             rc.setState(RegionCraft.State.OUTSIDE);
         }
         Craft craft = Craft.find(event.getCraftID()).get();
-        rc.relateAcrossR5(self);
-        rc.relateAcrossR15(craft);
+        rc.setRegion_R5(self);
+        rc.setCraft_R15(craft);
         rc.persist();
     }
 

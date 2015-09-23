@@ -51,7 +51,8 @@ public class AppLoadTestMain {
 
         String persistenceName = "testHsql";
         if (persistenceName.equals("testHsql")) {
-            try (Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:testdb", "sa", "")) {
+            try (Connection c = DriverManager.getConnection("jdbc:hsqldb:file:target/testdb", "sa",
+                    "")) {
                 c.prepareStatement("create schema DETECTION authorization sa").execute();
             } catch (SQLException e) {
                 throw new RuntimeException(e);

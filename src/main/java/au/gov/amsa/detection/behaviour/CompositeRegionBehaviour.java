@@ -33,8 +33,8 @@ public class CompositeRegionBehaviour implements Behaviour {
         // create without using state machine
         CompositeRegionMember m = CompositeRegionMember.create(ArbitraryId.next());
         m.setInclude(event.getInclude());
-        m.relateAcrossR10(self);
-        m.relateAcrossR9(Region.find(event.getRegionID()).get());
+        m.setCompositeRegion_R10(self);
+        m.setRegion_R9(Region.find(event.getRegionID()).get());
         m.setState(CompositeRegionMember.State.CREATED);
         m.persist();
     }
