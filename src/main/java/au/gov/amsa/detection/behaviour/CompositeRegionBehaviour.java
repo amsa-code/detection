@@ -34,7 +34,7 @@ public class CompositeRegionBehaviour implements Behaviour {
         CompositeRegionMember m = CompositeRegionMember.create(ArbitraryId.next());
         m.setInclude(event.getInclude());
         m.setCompositeRegion_R10(self);
-        m.setRegion_R9(Region.find(event.getRegionID()).get());
+        m.relateAcrossR9(Region.find(event.getRegionID()).get());
         m.setState(CompositeRegionMember.State.CREATED);
         m.persist();
     }

@@ -76,7 +76,7 @@ public class RegionBehaviour implements Behaviour {
         }
         Craft craft = Craft.find(event.getCraftID()).get();
         rc.setRegion_R5(self);
-        rc.setCraft_R15(craft);
+        rc.relateAcrossR15(craft);
         rc.persist();
     }
 

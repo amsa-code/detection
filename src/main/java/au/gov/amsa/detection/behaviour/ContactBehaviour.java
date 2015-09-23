@@ -36,7 +36,7 @@ public class ContactBehaviour implements Behaviour {
         MessageRecipient r = MessageRecipient.create(ArbitraryId.next());
         r.setStartTime(event.getStartTime());
         r.setEndTime(event.getEndTime());
-        r.setDetectionRule_R16(DetectionRule.find(event.getDetectionRuleID()).get());
+        r.relateAcrossR16(DetectionRule.find(event.getDetectionRuleID()).get());
         r.setState(MessageRecipient.State.CREATED);
         r.relateAcrossR14(self);
         r.persist();
