@@ -7,14 +7,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.EntityManager;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.davidmoten.rx.slf4j.Logging;
 
+import au.gov.amsa.detection.Clock.ClockManual;
 import au.gov.amsa.detection.behaviour.ContactSender;
 import au.gov.amsa.detection.behaviour.CraftSender;
 import au.gov.amsa.detection.model.Contact;
@@ -32,7 +36,9 @@ import rx.Observable;
 import rx.schedulers.Schedulers;
 import xuml.tools.model.compiler.runtime.SignalProcessorListenerSlf4j;
 
-public class AppLoadTestMain {
+public final class AppLoadTestMain {
+
+    private static final Logger log = LoggerFactory.getLogger(AppLoadTestMain.class);
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -40,24 +46,25 @@ public class AppLoadTestMain {
         Context.setEntityActorListenerFactory(id -> signalProcessor);
         AtomicLong craftSends = new AtomicLong();
         AtomicLong contactSends = new AtomicLong();
+
         CraftSender craftSender = (craftIdentifierType, craftIdentifier, subject, body) -> {
             craftSends.incrementAndGet();
-            System.out.println("sent to " + craftIdentifier);
+            log.info("sent to " + craftIdentifier + ": " + subject);
         };
         ContactSender contactSender = (email, subject, body) -> {
             contactSends.incrementAndGet();
-            System.out.println("sent to " + email);
+            log.info("sent to " + email + ": " + subject);
         };
 
         String persistenceName = "testHsql";
         if (persistenceName.equals("testHsql")) {
-            try (Connection c = DriverManager.getConnection("jdbc:hsqldb:file:target/testdb", "sa",
-                    "")) {
-                c.prepareStatement("create schema DETECTION authorization sa").execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            setupHsqlTestDb();
         }
+
+        // control timestamps on messages sent out
+        ClockManual clock = new ClockManual();
+        Clock.setClock(clock);
+
         App.startup(persistenceName, craftSender, contactSender);
 
         TestingUtil.createData();
@@ -66,35 +73,65 @@ public class AppLoadTestMain {
 
         ApiEngine api = new ApiEngine();
 
+        AtomicBoolean finishedRead = new AtomicBoolean(true);
+
         long t = System.currentTimeMillis();
-        // setup source of fixes for a whole day
-        Observable<Fix> source = BinaryFixes
-                .from(new File("/media/an/daily-fixes/2014/2014-02-01.fix"), true,
-                        BinaryFixesFormat.WITH_MMSI)
-                // group by mmsi in memory
-                .groupBy(fix -> fix.mmsi())
-                // downsample
-                .flatMap(g -> g.compose(Downsample.minTimeStep(30, TimeUnit.MINUTES))).take(10000);
-        // System.out.println(source.count().toBlocking().single());
-        source.lift(Logging.<Fix> logger().every(1000).showCount("countK").log())
-                // run in background
-                .subscribeOn(Schedulers.computation())
-                // report positions
-                .forEach(fix -> {
-                    api.reportPosition("MMSI", fix.mmsi() + "", fix.lat(), fix.lon(), 0.0,
-                            fix.time());
-                });
+
+        readAndReportFixes(clock, api, finishedRead);
+
+        // wait till finished reporting and queue empty
         Observable.interval(1, TimeUnit.SECONDS).takeUntil(i -> {
             long size = Context.queueSize();
-            System.out.println("queueSize=" + size);
-            return size == 0;
+            log.info("queueSize=" + size);
+            return finishedRead.get() && size == 0;
         }).count().toBlocking().single();
+
         TestingUtil.shutdown();
         System.out.println("Elapsed time=" + (System.currentTimeMillis() - t) / 1000.0 + "s");
         System.out.println("Database size="
                 + new File("target/load-db.mv.db").length() / 1024.0 / 1024 + "MB");
         System.out.println("Number contact emails sent=" + contactSends.get());
         System.out.println("Number craft emails sent=" + craftSends.get());
+    }
+
+    private static void setupHsqlTestDb() {
+        {
+            for (File f : new File("/media/an/testing/")
+                    .listFiles(file -> file.getName().startsWith("testdb"))) {
+                f.delete();
+            }
+        }
+
+        try (Connection c = DriverManager.getConnection("jdbc:hsqldb:file:/media/an/testing/testdb",
+                "sa", "")) {
+            c.prepareStatement("create schema DETECTION authorization sa").execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void readAndReportFixes(ClockManual clock, ApiEngine api,
+            AtomicBoolean finishedRead) {
+        // setup source of fixes for a whole day
+        BinaryFixes
+                .from(new File("/media/an/daily-fixes/2014/2014-02-01.fix"), true,
+                        BinaryFixesFormat.WITH_MMSI)
+                // group by mmsi in memory
+                .groupBy(fix -> fix.mmsi())
+                // downsample
+                .flatMap(g -> g.compose(Downsample.minTimeStep(30, TimeUnit.MINUTES)))
+                // log
+                .lift(Logging.<Fix> logger().every(1000).showCount("countK").log())
+                // run in background
+                .subscribeOn(Schedulers.computation())
+                //
+                .doOnCompleted(() -> finishedRead.set(true))
+                // report positions
+                .forEach(fix -> {
+                    clock.set(fix.time());
+                    api.reportPosition("MMSI", fix.mmsi() + "", fix.lat(), fix.lon(), 0.0,
+                            fix.time());
+                });
     }
 
     private static void setupEezEntryDetection() throws IOException {

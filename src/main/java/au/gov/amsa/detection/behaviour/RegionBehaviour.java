@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.Clock;
 import au.gov.amsa.detection.Shapefiles;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionRule;
@@ -67,8 +68,8 @@ public class RegionBehaviour implements Behaviour {
                             .latitude(event.getLatitude()).longitude(event.getLongitude())
                             .lastTimeEntered(rc.getLastTimeEntered())
                             .lastExitTimeFromRegion(rc.getLastExitTimeFromRegion())
-                            .currentTime(new Date()).hasBeenOutsideRegion(false).isEntrance(false)
-                            .time(event.getTime()).build()));
+                            .currentTime(new Date(Clock.now())).hasBeenOutsideRegion(false)
+                            .isEntrance(false).time(event.getTime()).build()));
         } else {
             rc.setLastTimeEntered(event.getTime());
             rc.setLastExitTimeFromRegion(new Date(TimeUnit.DAYS.toMillis(1000000)));

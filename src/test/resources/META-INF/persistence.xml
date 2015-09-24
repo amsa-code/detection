@@ -29,7 +29,7 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <shared-cache-mode>ALL</shared-cache-mode>
-        
+
         <properties>
             <property name="hibernate.dialect" value="au.gov.amsa.util.hibernate.ImprovedH2Dialect" />
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
@@ -80,15 +80,11 @@
     </persistence-unit>
 
     <persistence-unit name="testHsql">
-        <class>au.gov.amsa.detection.model.Controller</class>
         <class>au.gov.amsa.detection.model.Craft</class>
-        <class>au.gov.amsa.detection.model.CraftPosition</class>
         <class>au.gov.amsa.detection.model.CraftIdentifierType</class>
         <class>au.gov.amsa.detection.model.CraftType</class>
         <class>au.gov.amsa.detection.model.Region</class>
         <class>au.gov.amsa.detection.model.RegionCraft</class>
-        <class>au.gov.amsa.detection.model.RegionInclusion</class>
-        <class>au.gov.amsa.detection.model.RegionExclusion</class>
         <class>au.gov.amsa.detection.model.CompositeRegion</class>
         <class>au.gov.amsa.detection.model.SimpleRegion</class>
         <class>au.gov.amsa.detection.model.SimpleRegionType</class>
@@ -107,14 +103,24 @@
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
             <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />
-            <property name="hibernate.connection.url" value="jdbc:hsqldb:file:target/testdb" />
+            <!-- <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" /> -->
+            <!-- <property name="hibernate.connection.url" value="jdbc:hsqldb:file:/media/an/testing/testdb" 
+                /> -->
             <property name="hibernate.default_schema" value="DETECTION" />
-            <property name="hibernate.connection.pool_size" value="5" />
+            <property name="hibernate.connection.pool_size" value="12" />
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.format_sql" value="true" />
-            <property name="javax.persistence.jdbc.user" value="sa" />
-            <property name="javax.persistence.jdbc.password" value="" />
+            <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
+            <property name="hibernate.hikari.minimumIdle" value="5" />
+            <property name="hibernate.hikari.maximumPoolSize" value="10" />
+            <property name="hibernate.hikari.idleTimeout" value="30000" />
+            <property name="hibernate.hikari.connectionTimeout" value="300000000" />
+            <property name="hibernate.hikari.dataSourceClassName" value="org.hsqldb.jdbc.JDBCDataSource" />
+            <property name="hibernate.hikari.dataSource.url" value="jdbc:hsqldb:file:/media/an/testing/testdb" />
+            <property name="hibernate.hikari.dataSource.user" value="sa" />
+            <property name="hibernate.hikari.dataSource.password" value="" />
+            <!-- <property name="javax.persistence.jdbc.user" value="sa" /> -->
+            <!-- <property name="javax.persistence.jdbc.password" value="" /> -->
         </properties>
     </persistence-unit>
 </persistence>
