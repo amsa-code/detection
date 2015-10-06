@@ -114,7 +114,7 @@ public final class AppLoadTestMain {
             AtomicBoolean finishedRead) {
         // setup source of fixes for a whole day
         BinaryFixes
-                .from(new File("/media/an/daily-fixes/2014/2014-02-01.fix"), true,
+                .from(new File("/media/an/daily-fixes-5-minute/2014/2014-02-01.fix"), true,
                         BinaryFixesFormat.WITH_MMSI)
                 // group by mmsi in memory
                 .groupBy(fix -> fix.mmsi())
