@@ -34,8 +34,8 @@ public class CraftBehaviour implements Craft.Behaviour {
         // send the position to all detection rules
         Region.Events.Position position = Region.Events.Position.builder()
                 .altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
-                .longitude(event.getLongitude()).time(event.getTime()).craftID(self.getId())
-                .build();
+                .longitude(event.getLongitude()).time(event.getTime())
+                .currentTime(event.getCurrentTime()).craftID(self.getId()).build();
 
         Predicate<DetectionRule> isInTimeRange = dr -> Util.between(position.getTime(),
                 dr.getStartTime(), dr.getEndTime());

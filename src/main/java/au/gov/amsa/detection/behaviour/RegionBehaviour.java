@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
-import au.gov.amsa.detection.Clock;
 import au.gov.amsa.detection.Shapefiles;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionRule;
@@ -40,9 +39,10 @@ public class RegionBehaviour implements Behaviour {
         boolean inside = contains(self, event.getLatitude(), event.getLongitude());
         if (rc.isPresent()) {
             if (inside) {
-                rc.get().signal(RegionCraft.Events.In.builder()
-                        .altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
-                        .longitude(event.getLongitude()).time(event.getTime()).build());
+                rc.get().signal(
+                        RegionCraft.Events.In.builder().altitudeMetres(event.getAltitudeMetres())
+                                .latitude(event.getLatitude()).longitude(event.getLongitude())
+                                .time(event.getTime()).currentTime(event.getCurrentTime()).build());
             } else {
                 rc.get().signal(RegionCraft.Events.Out.builder()
                         .altitudeMetres(event.getAltitudeMetres()).latitude(event.getLatitude())
@@ -68,7 +68,7 @@ public class RegionBehaviour implements Behaviour {
                             .latitude(event.getLatitude()).longitude(event.getLongitude())
                             .lastTimeEntered(rc.getLastTimeEntered())
                             .lastExitTimeFromRegion(rc.getLastExitTimeFromRegion())
-                            .currentTime(new Date(Clock.now())).hasBeenOutsideRegion(false)
+                            .currentTime(event.getCurrentTime()).hasBeenOutsideRegion(false)
                             .isEntrance(false).time(event.getTime()).build()));
         } else {
             rc.setLastTimeEntered(event.getTime());

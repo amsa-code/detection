@@ -101,7 +101,8 @@ public class ApiEngine implements Api {
             c = craft.get();
         }
         c.signal(Craft.Events.Position.builder().altitudeMetres(0.0).latitude(latitude)
-                .longitude(longitude).time(new Date(time)).build());
+                .longitude(longitude).time(new Date(time)).currentTime(new Date(Clock.now()))
+                .build());
 
     }
 

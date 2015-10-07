@@ -172,6 +172,7 @@
                             <StateModelParameter Name="Longitude" Type="Longitude" />
                             <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
                             <StateModelParameter Name="Time" Type="timestamp" />
+                            <StateModelParameter Name="Current Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="HasPosition" />
@@ -214,6 +215,7 @@
                             <StateModelParameter Name="Longitude" Type="Longitude" />
                             <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
                             <StateModelParameter Name="Time" Type="timestamp" />
+                            <StateModelParameter Name="Current Time" Type="timestamp"/>
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="HasPosition" />
@@ -445,6 +447,7 @@
                             <StateModelParameter Name="Longitude" Type="Longitude" />
                             <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
                             <StateModelParameter Name="Time" Type="timestamp" />
+                            <StateModelParameter Name="Current Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <LocalEffectiveSignalingEvent Name="Out" ID="3">

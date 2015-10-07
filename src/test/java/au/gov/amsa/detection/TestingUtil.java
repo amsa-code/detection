@@ -55,9 +55,8 @@ public class TestingUtil {
                 .create(DetectionRule.Events.Create.builder().name("Coral Sea ATBA")
                         .description(
                                 "detect entry into Coral Sea Area To Be Avoided and send information to vessels")
-                .startTime(new Date(0))
-                .endTime(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(50000)))
-                .mustCross(true).minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
+                .startTime(new Date(0)).endTime(FUTURE).mustCross(true)
+                .minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
                 .minIntervalSecsOut((int) TimeUnit.DAYS.toSeconds(7))
                 .craftIdentifierPattern("MMSI=5.*").regionID(region.getRegion_R4().getId())
                 .build());
