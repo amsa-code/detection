@@ -84,23 +84,29 @@ public class DetectionRuleBehaviour implements Behaviour {
             return Pattern.matches(self.getCraftIdentifierPattern(), craftIdentifier);
         };
 
-        return shouldCreateDetection(self, event, matchesCraftIdentifierPattern);
+        return shouldCreateDetection(self, event, matchesCraftIdentifierPattern,
+                (craftId, detectionRuleId) -> DetectionRuleCraft
+                        .select(DetectionRuleCraft.Attribute.craft_R18_id.eq(craftId)
+                                .and(DetectionRuleCraft.Attribute.detectionRule_R17_id
+                                        .eq(detectionRuleId)))
+                        .any());
+    }
+
+    static interface DetectionRuleCraftProvider {
+        Optional<DetectionRuleCraft> find(String craftId, String detectionRuleId);
     }
 
     @VisibleForTesting
     static boolean shouldCreateDetection(DetectionRule self, PositionInRegion event,
-            Predicate<PositionInRegion> matchesCraftIdentifierPattern) {
+            Predicate<PositionInRegion> matchesCraftIdentifierPattern,
+            DetectionRuleCraftProvider drcProvider) {
         final boolean createDetection;
         if (self.getMustCross() && !event.getHasBeenOutsideRegion()) {
             createDetection = false;
         } else if (!matchesCraftIdentifierPattern.test(event))
             createDetection = false;
         else if (Util.between(event.getTime(), self.getStartTime(), self.getEndTime())) {
-
-            Optional<DetectionRuleCraft> drc = DetectionRuleCraft
-                    .select(DetectionRuleCraft.Attribute.craft_R18_id.eq(event.getCraftID()).and(
-                            DetectionRuleCraft.Attribute.detectionRule_R17_id.eq(self.getId())))
-                    .any();
+            Optional<DetectionRuleCraft> drc = drcProvider.find(event.getCraftID(), self.getId());
             final Optional<Detection> latestDetection;
             if (drc.isPresent()) {
                 latestDetection = Optional.of(drc.get().getDetection_R12());

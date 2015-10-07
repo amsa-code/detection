@@ -64,6 +64,7 @@
         <class>au.gov.amsa.detection.model.Contact</class>
         <class>au.gov.amsa.detection.model.CompositeRegionMember</class>
         <class>au.gov.amsa.detection.model.Binary</class>
+        <class>au.gov.amsa.detection.model.DetectionRuleCraft</class>
         <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <shared-cache-mode>ALL</shared-cache-mode>
@@ -97,6 +98,7 @@
         <class>au.gov.amsa.detection.model.Contact</class>
         <class>au.gov.amsa.detection.model.CompositeRegionMember</class>
         <class>au.gov.amsa.detection.model.Binary</class>
+        <class>au.gov.amsa.detection.model.DetectionRuleCraft</class>
         <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <shared-cache-mode>ALL</shared-cache-mode>
