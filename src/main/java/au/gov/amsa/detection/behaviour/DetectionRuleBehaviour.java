@@ -1,6 +1,7 @@
 package au.gov.amsa.detection.behaviour;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -81,7 +82,6 @@ public class DetectionRuleBehaviour implements Behaviour {
         else if (Util.between(event.getTime(), self.getStartTime(), self.getEndTime())) {
 
             Optional<Detection> latestDetection = Optional.fromNullable(self.getDetection_R18());
-
             if (!latestDetection.isPresent()) {
                 createDetection = true;
             } else if (Util.beforeOrEquals(event.getTime(),
@@ -91,8 +91,8 @@ public class DetectionRuleBehaviour implements Behaviour {
             } else if (forcedUpdateRequired(self, event.getCurrentTime(), latestDetection.get())) {
                 createDetection = true;
             } else if (event.getCurrentTime().getTime()
-                    - latestDetection.get().getCreatedTime().getTime() >= self.getMinIntervalSecs()
-                            * 1000) {
+                    - latestDetection.get().getCreatedTime().getTime() >= TimeUnit.SECONDS
+                            .toMillis(self.getMinIntervalSecs())) {
                 createDetection = true;
             } else
             // if been outside for a while and
