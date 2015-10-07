@@ -1,9 +1,5 @@
 package au.gov.amsa.detection.behaviour;
 
-import au.gov.amsa.detection.ArbitraryId;
-import au.gov.amsa.detection.model.Craft;
-import au.gov.amsa.detection.model.Detection;
-import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.DetectionRuleCraft;
 import au.gov.amsa.detection.model.DetectionRuleCraft.Behaviour;
 import au.gov.amsa.detection.model.DetectionRuleCraft.Events.Create;
@@ -18,10 +14,7 @@ public class DetectionRuleCraftBehaviour implements Behaviour {
 
     @Override
     public void onEntryCreated(Create event) {
-        self.setId(ArbitraryId.next());
-        self.setCraft_R18(Craft.find(event.getCraftID()).get());
-        self.setDetectionRule_R17(DetectionRule.find(event.getDetectionRuleID()).get());
-        self.relateAcrossR12(Detection.find(event.getDetectionID()).get());
+        throw new RuntimeException("should not be called");
     }
 
 }
