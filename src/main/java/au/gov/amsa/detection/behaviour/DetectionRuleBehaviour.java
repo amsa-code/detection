@@ -60,10 +60,7 @@ public class DetectionRuleBehaviour implements Behaviour {
                     drc.get().relateAcrossR12(detection);
                 }
             } else {
-                DetectionRuleCraft d = DetectionRuleCraft
-                        .create(DetectionRuleCraft.Events.Create.builder()
-                                .craftID(event.getCraftID()).detectionRuleID(self.getId()).build());
-                d.setDetection_R12(detection);
+                createDetectionRuleCraft(detection, event.getCraftID());
             }
 
             // because detection is not self this signal will run in a distinct
@@ -164,6 +161,15 @@ public class DetectionRuleBehaviour implements Behaviour {
         detection.setState(Detection.State.CREATED);
         detection.persist();
         return detection;
+    }
+
+    private void createDetectionRuleCraft(Detection detection, String craftId) {
+        DetectionRuleCraft drc = DetectionRuleCraft.create(ArbitraryId.next());
+        drc.setDetectionRule_R17(self);
+        drc.setDetection_R12(detection);
+        drc.setCraft_R18(Craft.find(craftId).get());
+        drc.setState(DetectionRuleCraft.State.CREATED);
+        drc.persist();
     }
 
     private static Stream<MessageTemplate> getTemplate(DetectionRule self,

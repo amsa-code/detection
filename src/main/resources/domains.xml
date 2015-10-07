@@ -546,6 +546,7 @@
                         <EventSignature>
                             <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
                             <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Detection ID" Type="Arbitrary ID" />
                         </EventSignature>
                     </CreationEvent>
                 </Lifecycle>
