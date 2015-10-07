@@ -28,7 +28,7 @@ public class AppTest {
     public void setup() {
         reset();
         Context.setEntityActorListenerFactory(id -> SignalProcessorListenerTesting.instance());
-        App.startup("testPersistenceUnit", craftSender, contactSender);
+        App.startup("testH2", craftSender, contactSender);
     }
 
     @After

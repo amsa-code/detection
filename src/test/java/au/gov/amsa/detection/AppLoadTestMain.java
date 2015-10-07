@@ -2,6 +2,12 @@ package au.gov.amsa.detection;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -95,11 +101,26 @@ public final class AppLoadTestMain {
     }
 
     private static void setupHsqlTestDb() {
-        {
-            for (File f : new File("/media/an/testing/")
-                    .listFiles(file -> file.getName().startsWith("testdb"))) {
-                f.delete();
-            }
+        Path directory = Paths.get("/media/an/testing");
+        try {
+            Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                        throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                        throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+
+            });
+        } catch (IOException e1) {
+            throw new RuntimeException(e1);
         }
 
         try (Connection c = DriverManager.getConnection("jdbc:hsqldb:file:/media/an/testing/testdb",

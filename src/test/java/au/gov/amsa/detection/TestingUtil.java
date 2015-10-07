@@ -93,7 +93,7 @@ public class TestingUtil {
 
     public static void startup() {
         Context.setEntityActorListenerFactory(id -> SignalProcessorListenerTesting.instance());
-        App.startup("testPersistenceUnit", new CraftSenderImpl(), new ContactSenderImpl());
+        App.startup("testH2", new CraftSenderImpl(), new ContactSenderImpl());
     }
 
     public static void shutdown() {

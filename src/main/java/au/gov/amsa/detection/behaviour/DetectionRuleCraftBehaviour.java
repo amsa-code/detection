@@ -6,10 +6,8 @@ import au.gov.amsa.detection.model.DetectionRuleCraft.Events.Create;
 
 public class DetectionRuleCraftBehaviour implements Behaviour {
 
-    private final DetectionRuleCraft self;
-
     public DetectionRuleCraftBehaviour(DetectionRuleCraft self) {
-        this.self = self;
+        // do nothing
     }
 
     @Override

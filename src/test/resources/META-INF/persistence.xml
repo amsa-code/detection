@@ -3,7 +3,7 @@
     http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
     version="2.0">
 
-    <persistence-unit name="testPersistenceUnit">
+    <persistence-unit name="testH2">
         <class>au.gov.amsa.detection.model.Controller</class>
         <class>au.gov.amsa.detection.model.Craft</class>
         <class>au.gov.amsa.detection.model.CraftPosition</class>
