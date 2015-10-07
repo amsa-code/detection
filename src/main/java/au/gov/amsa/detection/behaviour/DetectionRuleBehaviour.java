@@ -96,8 +96,8 @@ public class DetectionRuleBehaviour implements Behaviour {
                 createDetection = true;
             } else
             // if been outside for a while and
-            if (event.getIsEntrance()
-                    && timeOutside(event) >= self.getMinIntervalSecsOut() * 1000) {
+            if (event.getIsEntrance() && timeOutside(event) >= TimeUnit.SECONDS
+                    .toMillis(self.getMinIntervalSecsOut())) {
                 createDetection = true;
             } else
                 createDetection = false;
