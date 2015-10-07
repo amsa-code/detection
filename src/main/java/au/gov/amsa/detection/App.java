@@ -15,6 +15,7 @@ import au.gov.amsa.detection.behaviour.DetectedCraftBehaviourFactory;
 import au.gov.amsa.detection.behaviour.DetectionBehaviour;
 import au.gov.amsa.detection.behaviour.DetectionMessageBehaviour;
 import au.gov.amsa.detection.behaviour.DetectionRuleBehaviour;
+import au.gov.amsa.detection.behaviour.DetectionRuleCraftBehaviour;
 import au.gov.amsa.detection.behaviour.MessageRecipientBehaviour;
 import au.gov.amsa.detection.behaviour.MessageTemplateBehaviour;
 import au.gov.amsa.detection.behaviour.RegionBehaviour;
@@ -32,6 +33,7 @@ import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.Detection;
 import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionRule;
+import au.gov.amsa.detection.model.DetectionRuleCraft;
 import au.gov.amsa.detection.model.MessageRecipient;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.Region;
@@ -71,6 +73,7 @@ public final class App {
         Contact.setBehaviourFactory(new ContactBehaviourFactory(contactSender));
         SimpleRegionType.setBehaviourFactory(SimpleRegionTypeBehaviour.class);
         CraftIdentifierType.setBehaviourFactory(CraftIdentifierTypeBehaviour.class);
+        DetectionRuleCraft.setBehaviourFactory(DetectionRuleCraftBehaviour.class);
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();

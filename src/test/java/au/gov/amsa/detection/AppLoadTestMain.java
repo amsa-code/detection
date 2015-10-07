@@ -116,7 +116,7 @@ public final class AppLoadTestMain {
         BinaryFixes
                 .from(new File("/media/an/daily-fixes-5-minute/2014/2014-02-01.fix"), true,
                         BinaryFixesFormat.WITH_MMSI)
-                .filter(fix -> fix.mmsi() == 235676000)
+                // .filter(fix -> fix.mmsi() == 235676000)
                 // group by mmsi in memory
                 .groupBy(fix -> fix.mmsi())
                 // downsample

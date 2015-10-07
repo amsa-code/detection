@@ -98,9 +98,6 @@
                 <ReferentialAttribute Name="Message Template Default">
                     <ToOneReference Relationship="8" Attribute="ID" />
                 </ReferentialAttribute>
-                <ReferentialAttribute Name="Last Detection">
-                    <ToOneReference Attribute="ID" Relationship="18" />
-                </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
                     <State Name="Position In Region" />
@@ -215,7 +212,7 @@
                             <StateModelParameter Name="Longitude" Type="Longitude" />
                             <StateModelParameter Name="Altitude Metres" Type="Altitude Metres" />
                             <StateModelParameter Name="Time" Type="timestamp" />
-                            <StateModelParameter Name="Current Time" Type="timestamp"/>
+                            <StateModelParameter Name="Current Time" Type="timestamp" />
                         </EventSignature>
                     </LocalEffectiveSignalingEvent>
                     <Transition State="Created" EventID="2" Destination="HasPosition" />
@@ -306,7 +303,7 @@
                     <Identifier Number="1" />
                 </IndependentAttribute>
                 <ReferentialAttribute Name="Binary">
-                    <ToOneReference Attribute="ID" Relationship="21"/>
+                    <ToOneReference Attribute="ID" Relationship="21" />
                 </ReferentialAttribute>
                 <ReferentialAttribute Name="Type">
                     <ToOneReference Attribute="ID" Relationship="19" />
@@ -501,8 +498,8 @@
                 <ReferentialAttribute Name="Detection Rule">
                     <ToOneReference Relationship="7" Attribute="ID" />
                 </ReferentialAttribute>
-                <ReferentialAttribute Name="Detection Rule Last For">
-                    <ToOneReference Attribute="ID" Relationship="18" />
+                <ReferentialAttribute Name="Detection Rule Craft">
+                    <ToOneReference Relationship="12" Attribute="ID" />
                 </ReferentialAttribute>
                 <Lifecycle>
                     <State Name="Created" />
@@ -527,6 +524,53 @@
                     <Transition State="Sent" EventID="2" Destination="Sent" />
                 </Lifecycle>
             </Class>
+
+            <Class Name="Detection Rule Craft">
+                <IndependentAttribute Name="ID" Type="Arbitrary ID">
+                    <Identifier Number="1" />
+                </IndependentAttribute>
+                <ReferentialAttribute Name="Detection Rule">
+                    <Identifier Number="2" />
+                    <ToOneReference Relationship="17" Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Craft">
+                    <Identifier Number="2" />
+                    <ToOneReference Relationship="18" Attribute="ID" />
+                </ReferentialAttribute>
+                <ReferentialAttribute Name="Detection">
+                    <ToOneReference Relationship="12" Attribute="ID" />
+                </ReferentialAttribute>
+                <Lifecycle>
+                    <State Name="Created" />
+                    <CreationEvent Name="Create" ID="1" State="Created">
+                        <EventSignature>
+                            <StateModelParameter Name="Craft ID" Type="Arbitrary ID" />
+                            <StateModelParameter Name="Detection Rule ID" Type="Arbitrary ID" />
+                        </EventSignature>
+                    </CreationEvent>
+                </Lifecycle>
+            </Class>
+
+            <BinaryAssociation Rnum="17">
+                <ActivePerspective Phrase="relates to craft via" ViewedClass="Detection Rule Craft"
+                    OnePerspective="false" Conditional="true" />
+                <PassivePerspective Phrase="relates craft to" ViewedClass="Detection Rule"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
+
+            <BinaryAssociation Rnum="18">
+                <ActivePerspective Phrase="relates to det rule via" ViewedClass="Detection Rule Craft"
+                    OnePerspective="false" Conditional="true" />
+                <PassivePerspective Phrase="relates det rule to" ViewedClass="Craft"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
+
+            <BinaryAssociation Rnum="12">
+                <ActivePerspective Phrase="is latest for" ViewedClass="Detection Rule Craft"
+                    OnePerspective="true" Conditional="true" />
+                <PassivePerspective Phrase="has latest" ViewedClass="Detection"
+                    OnePerspective="true" Conditional="false" />
+            </BinaryAssociation>
 
             <BinaryAssociation Rnum="6">
                 <ActivePerspective Phrase="position triggers a" ViewedClass="Detection"
@@ -756,13 +800,6 @@
                     Conditional="true" ViewedClass="Message Recipient" />
                 <PassivePerspective Phrase="receives messages for"
                     OnePerspective="true" Conditional="false" ViewedClass="Detection Rule" />
-            </BinaryAssociation>
-
-            <BinaryAssociation Rnum="18">
-                <ActivePerspective Phrase="has latest" OnePerspective="true"
-                    Conditional="true" ViewedClass="Detection" />
-                <PassivePerspective Phrase="is latest for" OnePerspective="true"
-                    Conditional="true" ViewedClass="Detection Rule" />
             </BinaryAssociation>
 
             <BinaryAssociation Rnum="19">

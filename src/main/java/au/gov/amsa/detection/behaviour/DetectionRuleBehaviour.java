@@ -18,6 +18,7 @@ import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.DetectionRule.Behaviour;
 import au.gov.amsa.detection.model.DetectionRule.Events.Create;
 import au.gov.amsa.detection.model.DetectionRule.Events.PositionInRegion;
+import au.gov.amsa.detection.model.DetectionRuleCraft;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.Region;
 
@@ -49,6 +50,21 @@ public class DetectionRuleBehaviour implements Behaviour {
         // create a detection only if certain criteria satisfied
         if (shouldCreateDetection(event)) {
             Detection detection = createNewDetection(event);
+            Optional<DetectionRuleCraft> drc = DetectionRuleCraft
+                    .select(DetectionRuleCraft.Attribute.craft_R18_id.eq(event.getCraftID()).and(
+                            DetectionRuleCraft.Attribute.detectionRule_R17_id.eq(self.getId())))
+                    .any();
+            if (drc.isPresent()) {
+                if (detection.getCreatedTime()
+                        .after(drc.get().getDetection_R12().getCreatedTime())) {
+                    drc.get().relateAcrossR12(detection);
+                }
+            } else {
+                DetectionRuleCraft d = DetectionRuleCraft
+                        .create(DetectionRuleCraft.Events.Create.builder()
+                                .craftID(event.getCraftID()).detectionRuleID(self.getId()).build());
+                d.setDetection_R12(detection);
+            }
 
             // because detection is not self this signal will run in a distinct
             // transaction after this method has had its transaction committed
@@ -81,7 +97,16 @@ public class DetectionRuleBehaviour implements Behaviour {
             createDetection = false;
         else if (Util.between(event.getTime(), self.getStartTime(), self.getEndTime())) {
 
-            Optional<Detection> latestDetection = Optional.fromNullable(self.getDetection_R18());
+            Optional<DetectionRuleCraft> drc = DetectionRuleCraft
+                    .select(DetectionRuleCraft.Attribute.craft_R18_id.eq(event.getCraftID()).and(
+                            DetectionRuleCraft.Attribute.detectionRule_R17_id.eq(self.getId())))
+                    .any();
+            final Optional<Detection> latestDetection;
+            if (drc.isPresent()) {
+                latestDetection = Optional.of(drc.get().getDetection_R12());
+            } else {
+                latestDetection = Optional.absent();
+            }
             if (!latestDetection.isPresent()) {
                 createDetection = true;
             } else if (Util.beforeOrEquals(event.getTime(),
@@ -129,8 +154,6 @@ public class DetectionRuleBehaviour implements Behaviour {
         detection.setReportLongitude(event.getLongitude());
         detection.setReportTime(event.getTime());
         detection.setCreatedTime(event.getCurrentTime());
-        // establish latest detection for rule
-        detection.relateAcrossR18(self);
         detection.setDetectionRule_R7(self);
         detection.setState(Detection.State.CREATED);
         detection.persist();
