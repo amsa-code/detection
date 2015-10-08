@@ -9,6 +9,8 @@ import java.lang.reflect.Modifier;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.EntityManager;
+
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +31,20 @@ import xuml.tools.model.compiler.runtime.SignalProcessorListenerTesting;
 
 public class TestingUtil {
 
-    public static final Date FUTURE = new Date(TimeUnit.DAYS.toMillis(1000000));
     private static final Logger log = LoggerFactory.getLogger(TestingUtil.class);
 
     public static Craft createData() throws IOException {
         byte[] bytes = IOUtils.toByteArray(
                 AppTest.class.getResourceAsStream("/shapefile-coral-sea-atba-polygon.zip"));
-
+        EntityManager em = Context.createEntityManager();
+        try {
+            if (SimpleRegionType.select(SimpleRegionType.Attribute.name.eq("Zipped Shapefile"))
+                    .any(em).isPresent()) {
+                return null;
+            }
+        } finally {
+            em.close();
+        }
         SimpleRegionType srt = SimpleRegionType
                 .create(SimpleRegionType.Events.Create.builder().name("Zipped Shapefile")
                         .description("ArcGIS Shapefile format as zipped archive").build());
@@ -55,7 +64,7 @@ public class TestingUtil {
                 .create(DetectionRule.Events.Create.builder().name("Coral Sea ATBA")
                         .description(
                                 "detect entry into Coral Sea Area To Be Avoided and send information to vessels")
-                .startTime(new Date(0)).endTime(FUTURE).mustCross(true)
+                .startTime(new Date(0)).endTime(Dates.MAX).mustCross(true)
                 .minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
                 .minIntervalSecsOut((int) TimeUnit.DAYS.toSeconds(7))
                 .craftIdentifierPattern("MMSI=5.*").regionID(region.getRegion_R4().getId())
@@ -66,18 +75,20 @@ public class TestingUtil {
                         + " ${craft.identifier} was detected in ${region.name}"
                         + " at ${position.time} with position ${position.lat.formatted.html}"
                         + " ${position.lon.formatted.html}. Please be aware of the following:")
-                .subject("You are in an Area To Be Avoided").startTime(new Date(0)).endTime(FUTURE)
-                .forceUpdateBeforeTime(new Date(0)).detectionRuleID(dr.getId()).build());
+                .subject("You are in an Area To Be Avoided").startTime(new Date(0))
+                .endTime(Dates.MAX).forceUpdateBeforeTime(new Date(0)).detectionRuleID(dr.getId())
+                .build());
 
         // send message to detected craft and to an email address
 
         DetectedCraft.create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId())
                 .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
-                .endTime(FUTURE).build());
+                .endTime(Dates.MAX).build());
 
         Contact.create(Contact.Events.Create.builder().email("fred@gmail.com")
                 .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
-                .endTime(FUTURE).detectionRuleID(dr.getId()).emailSubjectPrefix("FYI: ").build());
+                .endTime(Dates.MAX).detectionRuleID(dr.getId()).emailSubjectPrefix("FYI: ")
+                .build());
 
         CraftType vessel = CraftType.create(CraftType.Events.Create.builder().name("Vessel")
                 .description("A ship or other floating craft").build());

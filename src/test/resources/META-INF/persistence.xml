@@ -126,4 +126,44 @@
             <!-- <property name="javax.persistence.jdbc.password" value="" /> -->
         </properties>
     </persistence-unit>
+
+    <persistence-unit name="testOracle">
+        <class>au.gov.amsa.detection.model.Craft</class>
+        <class>au.gov.amsa.detection.model.CraftIdentifierType</class>
+        <class>au.gov.amsa.detection.model.CraftType</class>
+        <class>au.gov.amsa.detection.model.Region</class>
+        <class>au.gov.amsa.detection.model.RegionCraft</class>
+        <class>au.gov.amsa.detection.model.CompositeRegion</class>
+        <class>au.gov.amsa.detection.model.SimpleRegion</class>
+        <class>au.gov.amsa.detection.model.SimpleRegionType</class>
+        <class>au.gov.amsa.detection.model.DetectionRule</class>
+        <class>au.gov.amsa.detection.model.MessageTemplate</class>
+        <class>au.gov.amsa.detection.model.Detection</class>
+        <class>au.gov.amsa.detection.model.DetectionMessage</class>
+        <class>au.gov.amsa.detection.model.MessageRecipient</class>
+        <class>au.gov.amsa.detection.model.DetectedCraft</class>
+        <class>au.gov.amsa.detection.model.Contact</class>
+        <class>au.gov.amsa.detection.model.CompositeRegionMember</class>
+        <class>au.gov.amsa.detection.model.Binary</class>
+        <class>au.gov.amsa.detection.model.DetectionRuleCraft</class>
+        <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <shared-cache-mode>ALL</shared-cache-mode>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.default_schema" value="DETECTION" />
+            <property name="hibernate.connection.pool_size" value="12" />
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
+            <property name="hibernate.hikari.minimumIdle" value="5" />
+            <property name="hibernate.hikari.maximumPoolSize" value="100" />
+            <property name="hibernate.hikari.idleTimeout" value="30000" />
+            <property name="hibernate.hikari.connectionTimeout" value="300000000" />
+            <property name="hibernate.hikari.dataSourceClassName" value="oracle.jdbc.pool.OracleDataSource" />
+            <property name="hibernate.hikari.dataSource.url"
+                value="jdbc:oracle:thin:detection/detection@devdbs.amsa.gov.au:1521/AUSDEV" />
+        </properties>
+    </persistence-unit>
 </persistence>

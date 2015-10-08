@@ -62,7 +62,7 @@ public final class AppLoadTestMain {
             log.info("sent to " + email + ": " + subject);
         };
 
-        String persistenceName = "testHsql";
+        String persistenceName = "testOracle";
         if (persistenceName.equals("testHsql")) {
             setupHsqlTestDb();
         }
@@ -172,7 +172,7 @@ public final class AppLoadTestMain {
                     .create(DetectionRule.Events.Create.builder().name("EEZ Entry Advice")
                             .description(
                                     "detect entry into Australian EEZ and send information to foreign flagged vessels")
-                    .startTime(new Date(0)).endTime(TestingUtil.FUTURE).mustCross(true)
+                    .startTime(new Date(0)).endTime(Dates.MAX).mustCross(true)
                     .minIntervalSecs((int) TimeUnit.DAYS.toSeconds(30))
                     .minIntervalSecsOut((int) TimeUnit.DAYS.toSeconds(7))
                     .craftIdentifierPattern("^(?!MMSI=503).+")
@@ -184,19 +184,19 @@ public final class AppLoadTestMain {
                             + " at ${position.time} with position ${position.lat.formatted.html}"
                             + " ${position.lon.formatted.html}. Please be aware of the following:")
                     .subject("Advice for Australian Waters").startTime(new Date(0))
-                    .endTime(TestingUtil.FUTURE).forceUpdateBeforeTime(new Date(0))
+                    .endTime(Dates.MAX).forceUpdateBeforeTime(new Date(0))
                     .detectionRuleID(dr.getId()).build());
 
             // send message to detected craft and to an email address
 
             DetectedCraft.create(DetectedCraft.Events.Create.builder().detectionRuleID(dr.getId())
                     .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
-                    .endTime(TestingUtil.FUTURE).build());
+                    .endTime(Dates.MAX).build());
 
             Contact.create(Contact.Events.Create.builder().email("fred@gmail.com")
                     .retryIntervalMs((int) TimeUnit.MINUTES.toMillis(15)).startTime(new Date(0))
-                    .endTime(TestingUtil.FUTURE).detectionRuleID(dr.getId())
-                    .emailSubjectPrefix("FYI: ").build());
+                    .endTime(Dates.MAX).detectionRuleID(dr.getId()).emailSubjectPrefix("FYI: ")
+                    .build());
 
         } finally {
             em.close();

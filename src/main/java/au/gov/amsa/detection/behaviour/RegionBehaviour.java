@@ -1,13 +1,12 @@
 package au.gov.amsa.detection.behaviour;
 
 import java.io.ByteArrayInputStream;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
+import au.gov.amsa.detection.Dates;
 import au.gov.amsa.detection.Shapefiles;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectionRule;
@@ -60,7 +59,7 @@ public class RegionBehaviour implements Behaviour {
         // triggering state machine
         RegionCraft rc = RegionCraft.create(ArbitraryId.next());
         if (inside) {
-            rc.setLastExitTimeFromRegion(new Date(Long.MIN_VALUE));
+            rc.setLastExitTimeFromRegion(Dates.MIN);
             rc.setLastTimeEntered(event.getTime());
             rc.setState(RegionCraft.State.NEVER_OUTSIDE);
             self.getDetectionRule_R1()
@@ -73,7 +72,7 @@ public class RegionBehaviour implements Behaviour {
                             .isEntrance(false).time(event.getTime()).build()));
         } else {
             rc.setLastTimeEntered(event.getTime());
-            rc.setLastExitTimeFromRegion(new Date(TimeUnit.DAYS.toMillis(1000000)));
+            rc.setLastExitTimeFromRegion(Dates.MAX);
             rc.setState(RegionCraft.State.OUTSIDE);
         }
         Craft craft = Craft.find(event.getCraftID()).get();

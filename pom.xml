@@ -68,6 +68,14 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>au.gov.amsa.er</groupId>
+            <artifactId>oracle</artifactId>
+            <version>6.0-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
