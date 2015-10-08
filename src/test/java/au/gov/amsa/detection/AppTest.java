@@ -1,20 +1,28 @@
 package au.gov.amsa.detection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import javax.persistence.EntityManager;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import au.gov.amsa.detection.CraftSenderImpl.Send;
+import au.gov.amsa.detection.behaviour.RegionBehaviour;
+import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
-import au.gov.amsa.detection.model.Craft.Events.Position.Builder;
+import au.gov.amsa.detection.model.Craft.Events.Position;
+import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.risky.format.BinaryFixes;
 import au.gov.amsa.risky.format.BinaryFixesFormat;
 import au.gov.amsa.risky.format.Downsample;
@@ -47,11 +55,11 @@ public class AppTest {
         long t = TimeUnit.DAYS.toMillis(100);
 
         // outside Coral Sea ATBA
-        craft.signal(outside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(outside(t));
 
         // in Coral Sea ATBA a year later
-        Date aYearLater = new Date(t + TimeUnit.DAYS.toMillis(365));
-        craft.signal(inside().time(aYearLater).currentTime(aYearLater).build());
+        long aYearLater = t + TimeUnit.DAYS.toMillis(365);
+        craft.signal(inside(aYearLater));
 
         TestingUtil.waitForSignalsToBeProcessed(false, 300);
 
@@ -76,13 +84,14 @@ public class AppTest {
         }
     }
 
-    private Builder inside() {
+    private static Position inside(long t) {
         return Craft.Events.Position.builder().altitudeMetres(10.0).latitude(-17.020463)
-                .longitude(150.738315);
+                .longitude(150.738315).time(new Date(t)).currentTime(new Date(t)).build();
     }
 
-    private Builder outside() {
-        return Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-35.0).longitude(142.0);
+    private static Position outside(long t) {
+        return Craft.Events.Position.builder().altitudeMetres(0.0).latitude(-35.0).longitude(142.0)
+                .time(new Date(t)).currentTime(new Date(t)).build();
     }
 
     @Test
@@ -91,7 +100,7 @@ public class AppTest {
 
         Craft craft = TestingUtil.createData();
         long t = TimeUnit.DAYS.toMillis(100);
-        craft.signal(inside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(inside(t));
         TestingUtil.waitForSignalsToBeProcessed(false, 300);
         assertEquals(0, craftSender.list.size());
     }
@@ -103,16 +112,16 @@ public class AppTest {
         Craft craft = TestingUtil.createData();
         long t = TimeUnit.DAYS.toMillis(100);
         // outside
-        craft.signal(outside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(outside(t));
         // inside
         t += TimeUnit.DAYS.toMillis(1);
-        craft.signal(inside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(inside(t));
         TestingUtil.waitForSignalsToBeProcessed(false, 300);
         assertEquals(1, craftSender.list.size());
 
         // inside again should not provoke message
         t += TimeUnit.DAYS.toMillis(1);
-        craft.signal(inside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(inside(t));
         TestingUtil.waitForSignalsToBeProcessed(false, 300);
         assertEquals(1, craftSender.list.size());
     }
@@ -124,18 +133,95 @@ public class AppTest {
         Craft craft = TestingUtil.createData();
         long t = TimeUnit.DAYS.toMillis(100);
         // outside
-        craft.signal(outside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(outside(t));
         // inside
         t += TimeUnit.DAYS.toMillis(1);
-        craft.signal(inside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(inside(t));
         TestingUtil.waitForSignalsToBeProcessed(false, 300);
         assertEquals(1, craftSender.list.size());
 
         // inside again much later should provoke message
         t += TimeUnit.DAYS.toMillis(100);
-        craft.signal(inside().time(new Date(t)).currentTime(new Date(t)).build());
+        craft.signal(inside(t));
         TestingUtil.waitForSignalsToBeProcessed(false, 300);
         assertEquals(2, craftSender.list.size());
+    }
+
+    @Test
+    public void testFirstPositionInsideAndSecondPositionInside()
+            throws InterruptedException, IOException {
+
+        Craft craft = TestingUtil.createData();
+        long t = TimeUnit.DAYS.toMillis(100);
+        // inside
+        craft.signal(inside(t));
+        // inside
+        t += TimeUnit.DAYS.toMillis(1);
+        craft.signal(inside(t));
+        TestingUtil.waitForSignalsToBeProcessed(false, 300);
+        assertEquals(0, craftSender.list.size());
+
+    }
+
+    @Test
+    public void testInsideOutsideOutside() throws InterruptedException, IOException {
+
+        Craft craft = TestingUtil.createData();
+        long t = TimeUnit.DAYS.toMillis(100);
+        // inside
+        craft.signal(inside(t));
+        // outside
+        t += TimeUnit.DAYS.toMillis(1);
+        craft.signal(outside(t));
+        TestingUtil.waitForSignalsToBeProcessed(false, 300);
+
+        // outside
+        t += TimeUnit.DAYS.toMillis(1);
+        craft.signal(outside(t));
+        TestingUtil.waitForSignalsToBeProcessed(false, 300);
+        assertEquals(0, craftSender.list.size());
+
+    }
+
+    @Test
+    public void testInsideOutsideInsideOutsideInsideOutside()
+            throws InterruptedException, IOException {
+
+        Craft craft = TestingUtil.createData();
+        long t = TimeUnit.DAYS.toMillis(100);
+        // inside
+        craft.signal(inside(t));
+
+        // outside
+        t += TimeUnit.DAYS.toMillis(1);
+        craft.signal(outside(t));
+        TestingUtil.waitForSignalsToBeProcessed(false, 300);
+
+        for (int i = 0; i < 2; i++) {
+            // inside
+            t += TimeUnit.DAYS.toMillis(1);
+            craft.signal(inside(t));
+            TestingUtil.waitForSignalsToBeProcessed(false, 300);
+            assertEquals(1, craftSender.list.size());
+
+            // outside
+            t += TimeUnit.DAYS.toMillis(1);
+            craft.signal(outside(t));
+            TestingUtil.waitForSignalsToBeProcessed(false, 300);
+            assertEquals(1, craftSender.list.size());
+        }
+
+    }
+
+    @Test
+    public void testCompositeRegionContains() throws IOException {
+        TestingUtil.createData();
+        EntityManager em = Context.createEntityManager();
+        CompositeRegion region = Region.select(Region.Attribute.name.eq("Outside Coral Sea ATBA"))
+                .one(em).get().getCompositeRegion_R4();
+        assertNotNull(region);
+        assertTrue(RegionBehaviour.contains(region.getRegion_R4(), 135.0, -35.0));
+        assertFalse(RegionBehaviour.contains(region.getRegion_R4(), -17.020463, 150.738315));
     }
 
     private static void reset() {

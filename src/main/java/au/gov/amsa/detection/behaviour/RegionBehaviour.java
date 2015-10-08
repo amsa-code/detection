@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
 import au.gov.amsa.detection.ArbitraryId;
@@ -81,7 +82,8 @@ public class RegionBehaviour implements Behaviour {
         rc.persist();
     }
 
-    private static boolean contains(Region region, Double lat, Double lon) {
+    @VisibleForTesting
+    public static boolean contains(Region region, Double lat, Double lon) {
         if (region.getSimpleRegion_R4() != null) {
             return simpleRegionContains(region.getSimpleRegion_R4(), lat, lon);
         } else {
