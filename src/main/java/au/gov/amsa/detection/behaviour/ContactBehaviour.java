@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Contact;
 import au.gov.amsa.detection.model.Contact.Behaviour;
@@ -45,6 +47,11 @@ public class ContactBehaviour implements Behaviour {
     @Override
     public void onEntrySent(Send event) {
         DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
+        doOnEntrySent(event, self, m, sender);
+    }
+
+    @VisibleForTesting
+    static void doOnEntrySent(Send event, Contact self, DetectionMessage m, ContactSender sender) {
         try {
             sender.send(self.getEmail(), self.getEmailSubjectPrefix() + m.getSubject(),
                     m.getBody());
