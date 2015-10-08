@@ -119,4 +119,14 @@ public class ApiEngine implements Api {
         }
     }
 
+    @Override
+    public long queueSize() {
+        return Context.queueSize();
+    }
+
+    @Override
+    public void clearQueue() {
+        throw new RuntimeException("not implemented");
+    }
+
 }

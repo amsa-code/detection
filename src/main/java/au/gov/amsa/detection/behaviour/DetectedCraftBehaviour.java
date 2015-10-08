@@ -1,6 +1,9 @@
 package au.gov.amsa.detection.behaviour;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
+import com.google.common.annotations.VisibleForTesting;
 
 import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Craft;
@@ -39,7 +42,15 @@ public class DetectedCraftBehaviour implements Behaviour {
 
     @Override
     public void onEntrySent(Send event) {
-        DetectionMessage m = DetectionMessage.find(event.getDetectionMessageID()).get();
+        doOnEntrySent(event, self, craftSender,
+                detectionMessageId -> DetectionMessage.find(detectionMessageId).get());
+    }
+
+    @VisibleForTesting
+    static void doOnEntrySent(Send event, DetectedCraft self, CraftSender craftSender,
+            Function<String, DetectionMessage> detectionMessageFinder) {
+
+        DetectionMessage m = detectionMessageFinder.apply(event.getDetectionMessageID());
         Craft craft = m.getDetection_R11().getCraft_R6();
         try {
             craftSender.send(craft.getCraftIdentifierType_R20().getName(), craft.getIdentifier(),

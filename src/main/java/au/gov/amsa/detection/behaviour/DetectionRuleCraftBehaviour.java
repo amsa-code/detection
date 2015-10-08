@@ -12,7 +12,7 @@ public class DetectionRuleCraftBehaviour implements Behaviour {
 
     @Override
     public void onEntryCreated(Create event) {
-        throw new RuntimeException("should not be called");
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -29,4 +29,8 @@ public interface Api {
     void reportPosition(String craftIdentifierTypeName, String craftIdentifier, double latitude,
             double longitude, double altitudeMetres, long time);
 
+    long queueSize();
+
+    void clearQueue();
+
 }
