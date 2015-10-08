@@ -164,6 +164,8 @@
             <property name="hibernate.hikari.dataSourceClassName" value="oracle.jdbc.pool.OracleDataSource" />
             <property name="hibernate.hikari.dataSource.url"
                 value="jdbc:oracle:thin:detection/detection@devdbs.amsa.gov.au:1521/AUSDEV" />
+            <property name="hibernate.cache.use_second_level_cache" value="true" />
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
         </properties>
     </persistence-unit>
 </persistence>
