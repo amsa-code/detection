@@ -55,10 +55,7 @@ public class DetectionRuleBehaviour implements Behaviour {
                             DetectionRuleCraft.Attribute.detectionRule_R17_id.eq(self.getId())))
                     .any();
             if (drc.isPresent()) {
-                if (detection.getCreatedTime()
-                        .after(drc.get().getDetection_R12().getCreatedTime())) {
-                    drc.get().relateAcrossR12(detection);
-                }
+                drc.get().relateAcrossR12(detection);
             } else {
                 createDetectionRuleCraft(detection, event.getCraftID());
             }
