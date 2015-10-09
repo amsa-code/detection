@@ -17,7 +17,6 @@
     <dependencies>
 
         <!-- compile dependencies -->
-
         <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>xuml-model-compiler-runtime</artifactId>
