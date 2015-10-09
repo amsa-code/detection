@@ -2,17 +2,17 @@ package au.gov.amsa.detection;
 
 public interface Api {
 
-    void addDetectionRule();
+    void createDetectionRule(String name, String description, long startTime, long endTime,
+            int minIntervalSeconds, int minIntervalSecondsOutsideRegion, boolean mustCross,
+            String craftIdentifierPattern, String regionId);
 
-    void modifyDetectionRule();
+    void updateDetectionRule(String name, String description, long startTime, long endTime,
+            int minIntervalSeconds, int minIntervalSecondsOutsideRegion, boolean mustCross,
+            String craftIdentifierPattern, String regionId);
 
-    void addCraftType();
+    void addSimpleRegion(String name, String description, String simpleRegionType, byte[] bytes);
 
-    void modifyCraftType();
-
-    void addSimpleRegion();
-
-    void modifySimpleRegion();
+    void modifySimpleRegion(String name, String description, String simpleRegionType, byte[] bytes);
 
     void addCompositeRegion();
 

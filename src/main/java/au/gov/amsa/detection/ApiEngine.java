@@ -13,42 +13,6 @@ import au.gov.amsa.detection.model.CraftIdentifierType;
 public class ApiEngine implements Api {
 
     @Override
-    public void addDetectionRule() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void modifyDetectionRule() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addCraftType() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void modifyCraftType() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addSimpleRegion() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void modifySimpleRegion() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void addCompositeRegion() {
         // TODO Auto-generated method stub
 
@@ -127,6 +91,36 @@ public class ApiEngine implements Api {
     @Override
     public void clearQueue() {
         throw new RuntimeException("not implemented");
+    }
+
+    @Override
+    public void createDetectionRule(String name, String description, long startTime, long endTime,
+            int minIntervalSeconds, int minIntervalSecondsOutsideRegion, boolean mustCross,
+            String craftIdentifierPattern, String regionId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void updateDetectionRule(String name, String description, long startTime, long endTime,
+            int minIntervalSeconds, int minIntervalSecondsOutsideRegion, boolean mustCross,
+            String craftIdentifierPattern, String regionId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void addSimpleRegion(String name, String description, String simpleRegionType,
+            byte[] bytes) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void modifySimpleRegion(String name, String description, String simpleRegionType,
+            byte[] bytes) {
+        // TODO Auto-generated method stub
+
     }
 
 }
