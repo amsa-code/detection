@@ -71,13 +71,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>au.gov.amsa.er</groupId>
-            <artifactId>oracle</artifactId>
-            <version>6.0-SNAPSHOT</version>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -100,15 +93,9 @@
             <version>${risky.version}</version>
         </dependency>
         <dependency>
-            <groupId>au.gov.amsa.er</groupId>
-            <artifactId>shapefile-eez-polygon</artifactId>
-            <version>1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>junit-extras</artifactId>
-            <version>0.3</version>
+            <version>0.3</version>  
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -233,6 +220,15 @@
         </profile>
         <profile>
             <id>load</id>
+            <dependencies>
+                <dependency>
+                    <groupId>au.gov.amsa.er</groupId>
+                    <artifactId>oracle</artifactId>
+                    <version>6.0-SNAPSHOT</version>
+                    <type>pom</type>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>

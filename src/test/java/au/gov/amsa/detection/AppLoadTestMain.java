@@ -70,7 +70,7 @@ public final class AppLoadTestMain {
             log.info("sent to " + email + ": " + subject);
         };
 
-        String persistenceName = "testOracle";
+        String persistenceName = "testHsql";
         if (persistenceName.equals("testHsql")) {
             setupHsqlTestDb();
         }
@@ -170,8 +170,8 @@ public final class AppLoadTestMain {
             SimpleRegionType shapefile = SimpleRegionType
                     .select(SimpleRegionType.Attribute.name.eq("Zipped Shapefile")).one(em).get();
 
-            byte[] bytes = IOUtils
-                    .toByteArray(AppTest.class.getResourceAsStream("/shapefile-eez-polygon.zip"));
+            byte[] bytes = IOUtils.toByteArray(
+                    AppTest.class.getResourceAsStream("/shapefile-mainland-eez-polygon.zip"));
             SimpleRegion region = SimpleRegion.create(SimpleRegion.Events.Create.builder()
                     .name("Australian EEZ").description("Australia's Economic Exclusion Zone")
                     .bytes(bytes).simpleRegionTypeID(shapefile.getId()).build());
