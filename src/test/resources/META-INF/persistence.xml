@@ -128,6 +128,7 @@
     </persistence-unit>
 
     <persistence-unit name="testOracle">
+        <mapping-file>META-INF/orm.xml</mapping-file>
         <class>au.gov.amsa.detection.model.Craft</class>
         <class>au.gov.amsa.detection.model.CraftIdentifierType</class>
         <class>au.gov.amsa.detection.model.CraftType</class>
@@ -148,7 +149,7 @@
         <class>au.gov.amsa.detection.model.DetectionRuleCraft</class>
         <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        <shared-cache-mode>ALL</shared-cache-mode>
+        <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
@@ -158,7 +159,7 @@
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
             <property name="hibernate.hikari.minimumIdle" value="1" />
-            <property name="hibernate.hikari.maximumPoolSize" value="1" />
+            <property name="hibernate.hikari.maximumPoolSize" value="20" />
             <property name="hibernate.hikari.idleTimeout" value="30000" />
             <property name="hibernate.hikari.connectionTimeout" value="300000000" />
             <property name="hibernate.hikari.dataSourceClassName" value="oracle.jdbc.pool.OracleDataSource" />
@@ -167,6 +168,7 @@
             <property name="hibernate.cache.use_second_level_cache" value="true" />
             <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
             <property name="hibernate.cache.use_query_cache" value="true" />
+            <!-- <property name="hibernate.generate_statistics" value="true"/> -->
         </properties>
     </persistence-unit>
 </persistence>

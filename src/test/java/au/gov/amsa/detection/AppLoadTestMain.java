@@ -2,6 +2,7 @@ package au.gov.amsa.detection;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.management.MBeanServer;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.io.IOUtils;
@@ -38,6 +40,8 @@ import au.gov.amsa.risky.format.BinaryFixes;
 import au.gov.amsa.risky.format.BinaryFixesFormat;
 import au.gov.amsa.risky.format.Downsample;
 import au.gov.amsa.risky.format.Fix;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.management.ManagementService;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import xuml.tools.model.compiler.runtime.SignalProcessorListenerSlf4j;
@@ -47,6 +51,10 @@ public final class AppLoadTestMain {
     private static final Logger log = LoggerFactory.getLogger(AppLoadTestMain.class);
 
     public static void main(String[] args) throws IOException, InterruptedException {
+
+        CacheManager manager = new CacheManager();
+        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+        ManagementService.registerMBeans(manager, mBeanServer, false, false, false, true);
 
         SignalProcessorListenerSlf4j signalProcessor = new SignalProcessorListenerSlf4j();
         Context.setEntityActorListenerFactory(id -> signalProcessor);
