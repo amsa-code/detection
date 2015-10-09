@@ -5,13 +5,15 @@ import java.util.concurrent.Callable;
 
 import org.junit.Test;
 
+import com.github.davidmoten.junit.Asserts;
+
 import au.gov.amsa.gt.Shapefile;
 
 public class ShapefilesTest {
 
     @Test
     public void testHolderConstructorIsPrivate() {
-        TestingUtil.callConstructorAndCheckIsPrivate(Shapefiles.Holder.class);
+        Asserts.assertIsUtilityClass(Shapefiles.Holder.class);
     }
 
     @Test(expected = RuntimeException.class)

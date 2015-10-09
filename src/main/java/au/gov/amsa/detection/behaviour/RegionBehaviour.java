@@ -5,7 +5,6 @@ import java.io.ByteArrayInputStream;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.Dates;
 import au.gov.amsa.detection.Shapefiles;
 import au.gov.amsa.detection.model.Craft;
@@ -17,6 +16,7 @@ import au.gov.amsa.detection.model.Region.Events.StateSignature_Created;
 import au.gov.amsa.detection.model.RegionCraft;
 import au.gov.amsa.detection.model.SimpleRegion;
 import au.gov.amsa.gt.Shapefile;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class RegionBehaviour implements Behaviour {
 

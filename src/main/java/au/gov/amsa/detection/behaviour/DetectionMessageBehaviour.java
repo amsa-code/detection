@@ -1,11 +1,11 @@
 package au.gov.amsa.detection.behaviour;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Detection;
 import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionMessage.Behaviour;
 import au.gov.amsa.detection.model.DetectionMessage.Events.Create;
 import au.gov.amsa.detection.model.MessageRecipient;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class DetectionMessageBehaviour implements Behaviour {
 

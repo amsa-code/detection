@@ -1,12 +1,12 @@
 package au.gov.amsa.detection.behaviour;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.CompositeRegion;
 import au.gov.amsa.detection.model.CompositeRegion.Behaviour;
 import au.gov.amsa.detection.model.CompositeRegion.Events.AddRegion;
 import au.gov.amsa.detection.model.CompositeRegion.Events.Create;
 import au.gov.amsa.detection.model.CompositeRegionMember;
 import au.gov.amsa.detection.model.Region;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class CompositeRegionBehaviour implements Behaviour {
 

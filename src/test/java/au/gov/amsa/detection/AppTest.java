@@ -16,6 +16,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.github.davidmoten.junit.Asserts;
+
 import au.gov.amsa.detection.CraftSenderImpl.Send;
 import au.gov.amsa.detection.behaviour.RegionBehaviour;
 import au.gov.amsa.detection.model.CompositeRegion;
@@ -48,7 +50,7 @@ public class AppTest {
     @Test
     public void testApp() throws InterruptedException, IOException {
 
-        TestingUtil.callConstructorAndCheckIsPrivate(App.class);
+        Asserts.assertIsUtilityClass(App.class);
 
         Craft craft = TestingUtil.createData();
 

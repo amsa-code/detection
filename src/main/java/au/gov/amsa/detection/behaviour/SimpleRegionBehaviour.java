@@ -1,12 +1,12 @@
 package au.gov.amsa.detection.behaviour;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Binary;
 import au.gov.amsa.detection.model.Region;
 import au.gov.amsa.detection.model.SimpleRegion;
 import au.gov.amsa.detection.model.SimpleRegion.Behaviour;
 import au.gov.amsa.detection.model.SimpleRegion.Events.Create;
 import au.gov.amsa.detection.model.SimpleRegionType;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class SimpleRegionBehaviour implements Behaviour {
 

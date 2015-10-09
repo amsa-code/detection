@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.github.davidmoten.junit.Asserts;
+
 public class StreamsTest {
 
     @Test
@@ -18,7 +20,7 @@ public class StreamsTest {
 
     @Test
     public void testConstructorIsPrivate() {
-        TestingUtil.callConstructorAndCheckIsPrivate(Streams.class);
+        Asserts.assertIsUtilityClass(Streams.class);
     }
 
 }

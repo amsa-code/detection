@@ -2,7 +2,6 @@ package au.gov.amsa.detection.behaviour;
 
 import java.util.function.Predicate;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.Util;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.Craft.Events.Create;
@@ -10,6 +9,7 @@ import au.gov.amsa.detection.model.Craft.Events.Position;
 import au.gov.amsa.detection.model.CraftIdentifierType;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.Region;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class CraftBehaviour implements Craft.Behaviour {
 

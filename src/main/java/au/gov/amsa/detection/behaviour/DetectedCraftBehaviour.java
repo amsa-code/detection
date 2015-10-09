@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.Craft;
 import au.gov.amsa.detection.model.DetectedCraft;
 import au.gov.amsa.detection.model.DetectedCraft.Behaviour;
@@ -15,6 +14,7 @@ import au.gov.amsa.detection.model.DetectionMessage;
 import au.gov.amsa.detection.model.DetectionRule;
 import au.gov.amsa.detection.model.MessageRecipient;
 import scala.concurrent.duration.Duration;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class DetectedCraftBehaviour implements Behaviour {
 

@@ -7,6 +7,8 @@ import java.util.Date;
 
 import org.junit.Test;
 
+import com.github.davidmoten.junit.Asserts;
+
 public class UtilTest {
 
     @Test
@@ -51,7 +53,7 @@ public class UtilTest {
 
     @Test
     public void testConstructorIsPrivate() {
-        TestingUtil.callConstructorAndCheckIsPrivate(Util.class);
+        Asserts.assertIsUtilityClass(Util.class);
     }
 
 }

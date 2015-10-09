@@ -1,9 +1,9 @@
 package au.gov.amsa.detection.behaviour;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.model.CraftType;
 import au.gov.amsa.detection.model.CraftType.Behaviour;
 import au.gov.amsa.detection.model.CraftType.Events.Create;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class CraftTypeBehaviour implements Behaviour {
 

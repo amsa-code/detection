@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 
-import au.gov.amsa.detection.ArbitraryId;
 import au.gov.amsa.detection.Streams;
 import au.gov.amsa.detection.Util;
 import au.gov.amsa.detection.model.Craft;
@@ -21,6 +20,7 @@ import au.gov.amsa.detection.model.DetectionRule.Events.PositionInRegion;
 import au.gov.amsa.detection.model.DetectionRuleCraft;
 import au.gov.amsa.detection.model.MessageTemplate;
 import au.gov.amsa.detection.model.Region;
+import xuml.tools.model.compiler.runtime.ArbitraryId;
 
 public class DetectionRuleBehaviour implements Behaviour {
 
