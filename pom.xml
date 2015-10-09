@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <xuml.tools.version>0.4.3-SNAPSHOT</xuml.tools.version>
+        <xuml.tools.version>0.4.3</xuml.tools.version>
         <risky.version>0.5.2</risky.version>
     </properties>
     <dependencies>
