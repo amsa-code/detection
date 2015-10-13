@@ -70,7 +70,8 @@ public final class AppLoadTestMain {
             log.info("sent to " + email + ": " + subject);
         };
 
-        String persistenceName = "testHsql";
+        // String persistenceName = "testHsql";
+        String persistenceName = System.getProperty("persistenceUnit", "testHsql");
         if (persistenceName.equals("testHsql")) {
             setupHsqlTestDb();
         }

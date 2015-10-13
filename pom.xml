@@ -94,7 +94,7 @@
         <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>junit-extras</artifactId>
-            <version>0.3</version>  
+            <version>0.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -194,13 +194,17 @@
         </pluginManagement>
     </build>
     <repositories>
-       <repository>
-         <id>sonatype-snapshots</id>
-         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-         <releases><enabled>false</enabled></releases>
-         <snapshots><enabled>true</enabled></snapshots>
-       </repository>
-     </repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <profiles>
         <profile>
             <id>state</id>
@@ -250,6 +254,12 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <systemProperties>
+                                <systemProperty>
+                                    <key>persistenceUnit</key>
+                                    <value>testOracle</value>
+                                </systemProperty>
+                            </systemProperties>
                             <mainClass>au.gov.amsa.detection.AppLoadTestMain</mainClass>
                             <classpathScope>test</classpathScope>
                         </configuration>
