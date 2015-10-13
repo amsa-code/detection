@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import com.github.davidmoten.junit.Asserts;
 
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+import xuml.tools.model.compiler.runtime.actor.EntityActor;
+
 public class UtilTest {
 
     @Test
@@ -54,6 +58,11 @@ public class UtilTest {
     @Test
     public void testConstructorIsPrivate() {
         Asserts.assertIsUtilityClass(Util.class);
+    }
+
+    public static void main(String[] args) {
+        ActorSystem system = ActorSystem.create();
+        system.actorOf(Props.create(EntityActor.class).withDispatcher("akka.entity-dispatcher"));
     }
 
 }
