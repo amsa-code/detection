@@ -1,7 +1,11 @@
 package au.gov.amsa.detection;
 
+import java.util.Map;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import com.google.common.collect.Maps;
 
 import au.gov.amsa.detection.behaviour.CompositeRegionBehaviour;
 import au.gov.amsa.detection.behaviour.CompositeRegionMemberBehaviour;
@@ -48,10 +52,14 @@ public final class App {
     }
 
     public static void startup(String persistenceUnit, CraftSender craftSender,
-            ContactSender contactSender, int connectionPoolSize) {
+            ContactSender contactSender, int connectionPoolSize, boolean readOnlyCache) {
 
+        Map<Object, Object> properties = Maps.newHashMap();
+        properties.put("hibernate.cache.default_cache_concurrency_strategy",
+                readOnlyCache ? "read-only" : null);
         // create the entity manager factory
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit,
+                properties);
 
         // pass the EntityManagerFactory to the generated xuml Context
         Context.setEntityManagerFactory(emf, connectionPoolSize);

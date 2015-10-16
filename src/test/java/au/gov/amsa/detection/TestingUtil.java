@@ -101,7 +101,7 @@ public class TestingUtil {
 
     public static void startup() {
         Context.setEntityActorListenerFactory(id -> SignalProcessorListenerTesting.instance());
-        App.startup("testH2", new CraftSenderImpl(), new ContactSenderImpl(), 20);
+        App.startup("testH2", new CraftSenderImpl(), new ContactSenderImpl(), 20, false);
     }
 
     public static void shutdown() {

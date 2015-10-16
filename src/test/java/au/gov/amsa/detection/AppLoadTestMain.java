@@ -80,11 +80,15 @@ public final class AppLoadTestMain {
         ClockManual clock = new ClockManual();
         Clock.setClock(clock);
 
-        App.startup(persistenceName, craftSender, contactSender, 20);
+        App.startup(persistenceName, craftSender, contactSender, 20, false);
 
         TestingUtil.createData();
-
         setupEezEntryDetection();
+
+        App.shutdown();
+
+        // now use read-only cache
+        App.startup(persistenceName, craftSender, contactSender, 20, true);
 
         ApiEngine api = new ApiEngine();
 
