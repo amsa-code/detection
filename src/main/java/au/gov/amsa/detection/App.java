@@ -48,12 +48,12 @@ public final class App {
     }
 
     public static void startup(String persistenceUnit, CraftSender craftSender,
-            ContactSender contactSender) {
+            ContactSender contactSender, int connectionPoolSize) {
         // create the entity manager factory
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit);
 
         // pass the EntityManagerFactory to the generated xuml Context
-        Context.setEntityManagerFactory(emf, 20);
+        Context.setEntityManagerFactory(emf, connectionPoolSize);
 
         // setup behaviour factories and assign them to Context here
 

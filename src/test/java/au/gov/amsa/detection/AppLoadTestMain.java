@@ -80,7 +80,7 @@ public final class AppLoadTestMain {
         ClockManual clock = new ClockManual();
         Clock.setClock(clock);
 
-        App.startup(persistenceName, craftSender, contactSender);
+        App.startup(persistenceName, craftSender, contactSender, 20);
 
         TestingUtil.createData();
 
