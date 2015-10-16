@@ -54,7 +54,7 @@ public final class App {
     public static void startup(String persistenceUnit, CraftSender craftSender,
             ContactSender contactSender, int connectionPoolSize, boolean readOnlyCache) {
 
-        Map<Object, Object> properties = Maps.newHashMap();
+        Map<String, String> properties = Maps.newHashMap();
         properties.put("hibernate.cache.default_cache_concurrency_strategy",
                 readOnlyCache ? "read-only" : null);
         // create the entity manager factory

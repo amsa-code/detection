@@ -149,7 +149,7 @@
         <class>au.gov.amsa.detection.model.DetectionRuleCraft</class>
         <class>xuml.tools.model.compiler.runtime.QueuedSignal</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
-        <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
@@ -168,7 +168,7 @@
             <property name="hibernate.cache.use_second_level_cache" value="true" />
             <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
             <property name="hibernate.cache.use_query_cache" value="true" />
-            <property name="hibernate.cache.default_cache_concurrency_strategy" value="nonstrict-read-write"/>
+           <!-- <property name="hibernate.cache.default_cache_concurrency_strategy" value="read-only"/> --> 
             <property name="net.sf.ehcache.configurationResourceName" value="/META-INF/ehcache.xml"/>
             <property name="hibernate.generate_statistics" value="false"/>
         </properties>
