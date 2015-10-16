@@ -49,6 +49,7 @@ public final class App {
 
     public static void startup(String persistenceUnit, CraftSender craftSender,
             ContactSender contactSender, int connectionPoolSize) {
+
         // create the entity manager factory
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit);
 

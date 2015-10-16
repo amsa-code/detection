@@ -3,7 +3,24 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/orm_2_0.xsd"
     version="2.0">
 
-    <entity class="xuml.tools.model.compiler.runtime.QueuedSignal" cacheable="false" />
+    <entity class="xuml.tools.model.compiler.runtime.QueuedSignal" cacheable="false">
+    
+    </entity>
     <entity class="au.gov.amsa.detection.model.DetectionMessage" cacheable="false" />
+    <entity class="au.gov.amsa.detection.model.DetectedCraft" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.Contact" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.MessageRecipient" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.Detection" cacheable="false" />
+    <entity class="au.gov.amsa.detection.model.DetectionRule" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.MessageTemplate" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.Craft" cacheable="false" />
+    <entity class="au.gov.amsa.detection.model.RegionCraft" cacheable="false" />
+    <entity class="au.gov.amsa.detection.model.Region" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.SimpleRegion" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.SimpleRegionType" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.CompositeRegion" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.CompositeRegionMember" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.CraftType" cacheable="true" />
+    <entity class="au.gov.amsa.detection.model.CraftIdentifierType" cacheable="true" />
 
 </entity-mappings>

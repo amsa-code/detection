@@ -155,7 +155,7 @@
             <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="hibernate.default_schema" value="DETECTION" />
             <property name="hibernate.connection.pool_size" value="12" />
-            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider" />
             <property name="hibernate.hikari.minimumIdle" value="1" />
@@ -168,7 +168,9 @@
             <property name="hibernate.cache.use_second_level_cache" value="true" />
             <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
             <property name="hibernate.cache.use_query_cache" value="true" />
-            <!-- <property name="hibernate.generate_statistics" value="true"/> -->
+            <property name="hibernate.cache.default_cache_concurrency_strategy" value="nonstrict-read-write"/>
+            <property name="net.sf.ehcache.configurationResourceName" value="/META-INF/ehcache.xml"/>
+            <property name="hibernate.generate_statistics" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
