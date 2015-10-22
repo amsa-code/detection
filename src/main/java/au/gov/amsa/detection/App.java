@@ -51,16 +51,8 @@ public final class App {
         // private constructor
     }
 
-    public static void startup(String persistenceUnit, CraftSender craftSender,
+    public static void startup(EntityManagerFactory emf, CraftSender craftSender,
             ContactSender contactSender, int connectionPoolSize, boolean readOnlyCache) {
-
-        Map<String, String> properties = Maps.newHashMap();
-        properties.put("hibernate.cache.default_cache_concurrency_strategy",
-                readOnlyCache ? "read-only" : null);
-        // create the entity manager factory
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit,
-                properties);
-
         // pass the EntityManagerFactory to the generated xuml Context
         Context.setEntityManagerFactory(emf, connectionPoolSize);
 
@@ -86,6 +78,19 @@ public final class App {
 
         // send any signals not processed from last shutdown
         Context.sendSignalsInQueue();
+
+    }
+
+    public static void startup(String persistenceUnit, CraftSender craftSender,
+            ContactSender contactSender, int connectionPoolSize, boolean readOnlyCache) {
+
+        Map<String, String> properties = Maps.newHashMap();
+        properties.put("hibernate.cache.default_cache_concurrency_strategy",
+                readOnlyCache ? "read-only" : null);
+        // create the entity manager factory
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit,
+                properties);
+        startup(emf, craftSender, contactSender, connectionPoolSize, readOnlyCache);
     }
 
     public static void shutdown() {
