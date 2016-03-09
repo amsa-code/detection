@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 
 import au.gov.amsa.detection.model.Context;
 import au.gov.amsa.detection.model.Craft;
@@ -14,43 +15,49 @@ public class ApiEngine implements Api {
 
     @Override
     public void addCompositeRegion() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void modifyCompositeRegion() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void addMessageTemplate() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void modifyMessageTemplate() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void addMessageRecipient() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void modifyMessageRecipient() {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void reportPosition(String craftIdentifierTypeName, String craftIdentifier,
             double latitude, double longitude, double altitudeMetres, long time) {
+        // don't need preconditions because all specified in data model
+
+        // just expect MMSI for the moment
+        Preconditions.checkArgument("MMSI".equals(craftIdentifierTypeName),
+                "craftIdentifierTypeName must be MMSI");
+
         Optional<Craft> craft = getCraft(craftIdentifierTypeName, craftIdentifier);
         Craft c;
         if (!craft.isPresent()) {
@@ -97,7 +104,7 @@ public class ApiEngine implements Api {
     public void createDetectionRule(String name, String description, long startTime, long endTime,
             int minIntervalSeconds, int minIntervalSecondsOutsideRegion, boolean mustCross,
             String craftIdentifierPattern, String regionId) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
@@ -105,21 +112,21 @@ public class ApiEngine implements Api {
     public void updateDetectionRule(String name, String description, long startTime, long endTime,
             int minIntervalSeconds, int minIntervalSecondsOutsideRegion, boolean mustCross,
             String craftIdentifierPattern, String regionId) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void addSimpleRegion(String name, String description, String simpleRegionType,
             byte[] bytes) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
     @Override
     public void modifySimpleRegion(String name, String description, String simpleRegionType,
             byte[] bytes) {
-        // TODO Auto-generated method stub
+        throw new RuntimeException("unimplemented");
 
     }
 
